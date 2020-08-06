@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- As of 2020-06-09 JS modules are still not supported in XHTML (XML)
+         documents in Chromium-based browsers! See crbug.com/717643
+         (no problems in Firefox though)
+         Therefore this document is a simple HTML5 doc :-(
+    -->
+
+    <title>JS JobSearch</title>
+    <meta name="author" content="https://github.com/Amarok24/" />
+    <meta name="description" content="A simple JobSearch using the jobs.com API" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="./css/main.css" />
+
+    <script src="./modules/jobSearch.mjs" type="module" defer="defer"></script>
+
+    <style>
+
+    </style>
+  </head>
+
+  <body>
+
+    <header class="topHeader">
+      <form>
+        <input type="text" id="inputTitle" placeholder="Job Title" autofocus="autofocus" />
+        <input type="text" id="inputLocation" placeholder="Location" />
+        <input type="submit" value="SEARCH" id="searchButton" />
+      </form>
+
+    </header>
+
+
+
+    <div class="container">
+
+      <section id="intro">
+
+        <h1>JobSearch (Germany)</h1>
+
+
+        <div class="dividerBook">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M1200,0H0V120H281.94C572.9,116.24,602.45,3.86,602.45,3.86h0S632,116.24,923,120h277Z" class="shape-fill"></path>
+          </svg>
+        </div>
+
+      </section>
+
+      <section id="messages">
+        <!-- output will come here -->
+      </section>
+
+
+      <div class="gridWrapper">
+
+        <section id="searchResults">
+          <!-- jobs search results here -->
+        </section>
+
+        <section id="jobDetailWrapper">
+          <!-- selected job-ad content here -->
+          <section id="jobDetailHeader">
+            <div id="flexWrapper">
+              <div>
+                <h2>Title</h2>
+                <h3>Company name</h3>
+                <h4>Location</h4>
+                <span class="datePublished">Last update</span>
+              </div>
+              <a href="#" target="_blank">APPLY</a>
+          </div>
+          </section>
+
+          <section id="jobDetailContent">
+            <div id="jobWrap"></div>
+          </section>
+        </section>
+
+      </div>
+
+
+    </div>
+
+
+
+    <template id="templateJob">
+      <!-- template for job search result (left column) -->
+      <article class="job" data-jobid="0">
+        <h3>Job title</h3>
+        <h4 class="company">Company name</h4>
+        <h4 class="location">Location</h4>
+        <img src="icons/logo-placeholder-optim.svg" class="companyLogoSmall" alt="Logo" />
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" />
+          <circle cx="12" cy="12" r="9" />
+          <polyline points="12 7 12 12 15 15" />
+        </svg> <span class="lastUpdate"></span>
+        <div class="summary"></div>
+
+      </article>
+
+    </template>
+
+
+
+  </body>
+</html>
