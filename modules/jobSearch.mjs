@@ -23,11 +23,16 @@ let _searchResults = document.getElementById("searchResults");
 let _jobDetailHeader = document.getElementById("jobDetailHeader");
 let _jobWrap = document.getElementById("jobWrap");
 let _searchButton = document.getElementById("searchButton");
-let _totalResults = 0;
-let _searchTerm = "";
-let _searchLocation = "";
+let _loadMoreButton = document.getElementById("loadMoreButton");
 
 let _currentResults = [];
+let _responseFingerprint = {
+  searchTerm: "",
+  searchLocation: "",
+  pageOffset: null,
+  pageSize: null,
+  totalSize: null
+};
 
 
 const _API_URL = "https://services.monster.io/jobs-svx-service/v2/search-jobs/samsearch/de-de";
@@ -44,14 +49,26 @@ function removeHTML(s) {
 }
 
 
-async function searchJobs(searchTerm, searchLocation) {
-  let dataQuery = {
+function setLoadMore(showButton = true) {
+  if (showButton) {
+    _searchResults.append(_loadMoreButton);
+    _loadMoreButton.style.display = "block";
+  } else {
+    _loadMoreButton.style.display = "none";
+    document.querySelector("body").prepend(_loadMoreButton);
+  }
+  //FIXME: bug. button should be moved at the correct position
+}
+
+
+async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
+  const dataQuery = {
     jobQuery: {
       locations: [{ address: searchLocation, country: "de" }],
       query: searchTerm
     },
-    offset: 0,
-    pageSize: 10
+    offset: pageOffset,
+    pageSize: pageSize
   };
 
   let responseData = null;
@@ -61,7 +78,10 @@ async function searchJobs(searchTerm, searchLocation) {
     //responseData = await jXhr.sendXhrData("POST", _API_URL, dataQuery, "json");
     responseData = await jXhr.sendXhrData("POST", _API_URL, JSON.stringify(dataQuery), "json");
     cout("responseData OK!");
-    processResults(responseData); // all errors insinde processResults will also be catched here
+    _responseFingerprint = processResults(responseData); // all errors insinde processResults will also be catched here
+    if (_responseFingerprint.totalSize > _responseFingerprint.pageOffset) {
+      setLoadMore();
+    }
   } catch (error) {
     cerr("catch block here, details: ", error);
     jHelpers.outTextBr(_messages, error.Error);
@@ -74,7 +94,6 @@ async function searchJobs(searchTerm, searchLocation) {
 
 function viewJob(id) {
   // view job details by jobID from search results
-
   let foundIndex = null;
   let myDate;
   let formattedDate = "";
@@ -116,14 +135,11 @@ function viewJob(id) {
 
 
 function jobClick(ev) {
-
   cout("ev = ", ev);
   cout("this = ", this);
 
   let jobID = this.getAttribute("data-jobid");
   cout(jobID);
-
-
 
   let resultNodeLists = _searchResults.querySelectorAll("article");
 
@@ -133,12 +149,18 @@ function jobClick(ev) {
   }
 
   this.classList.add("selected");
-
   viewJob(jobID);
 }
 
 
 function processResults(data) {
+  let response = {
+    searchTerm: "",
+    searchLocation: "",
+    pageOffset: data.jobRequest.jobQuery.offset,
+    pageSize: data.jobRequest.jobQuery.pageSize,
+    totalSize: null
+  };
   cout(data);
 
   if (!data) {
@@ -146,15 +168,15 @@ function processResults(data) {
     return 1;
   }
 
-  _totalResults = data.estimatedTotalSize;
-  _searchTerm = data.jobRequest.jobQuery.query;
-  _searchLocation = data.jobRequest.jobQuery.locations[0].address;
+  response.totalSize = data.estimatedTotalSize;
+  response.searchTerm = data.jobRequest.jobQuery.query;
+  response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
 
-  jHelpers.outText(_messages, _searchTerm, true);
+  jHelpers.outText(_messages, response.searchTerm, true);
   jHelpers.outText(_messages, " in ");
-  jHelpers.outText(_messages, _searchLocation, true);
+  jHelpers.outText(_messages, response.searchLocation, true);
   jHelpers.outText(_messages, ", results: ");
-  jHelpers.outTextBr(_messages, _totalResults, true);
+  jHelpers.outTextBr(_messages, response.totalSize, true);
 
   for (let i = 0; i < data.totalSize; i++) {
 
@@ -166,6 +188,7 @@ function processResults(data) {
     let countryCode = data.jobResults[i].jobPosting.jobLocation[0].address.addressCountry;
     //let refNum = data.jobResults[i].jobPosting.identifier.value; // customer's own refnum
     let companyName =  data.jobResults[i].jobPosting.hiringOrganization.name;
+    let logo = data.jobResults[i].jobPosting.hiringOrganization.logo;
     let jobID = data.jobResults[i].jobId;
     let summary = data.jobResults[i].jobPosting.description;
     summary = removeHTML(summary);
@@ -180,7 +203,9 @@ function processResults(data) {
     job.querySelector(".location").textContent = `${postalCode} ${locality} (${countryCode})`;
     job.querySelector(".lastUpdate").textContent = data.jobResults[i].dateRecency;
     job.querySelector(".summary").textContent = summary.substring(0, 160) + "... ";
-
+    if (logo) {
+      job.querySelector(".companyLogoSmall").src = logo;
+    }
 
     job.firstElementChild.addEventListener("click", jobClick);
 /*
@@ -200,6 +225,7 @@ function processResults(data) {
     jobClick.apply(_searchResults.querySelector("article"), [data.jobResults[0].jobId]);
   }
 
+  return response;
 }
 
 
@@ -225,22 +251,19 @@ function searchClick(ev) {
 }
 
 
-function main() {
-
-  //let apiSaveButton = document.getElementById("apiSaveButton");
-  //let apiKeyField = document.getElementById("apiKey");
-  _searchButton.addEventListener("click", searchClick);
-  //apiSaveButton.addEventListener("click", apiKeySave);
-  //apiKeyField.addEventListener("change", apiKeyChanged);
-
-  /*    if (localStorage.getItem("omdbKey")) {
-       _apiKey = localStorage.getItem("omdbKey");
-       apiKeyField.value = _apiKey;
-     } */
+function loadMoreClick() {
+  cout("loading more jobs...");
+  setLoadMore(false);
+  searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize );
 }
 
 
-cout("main.mjs here");
+function main() {
+  _searchButton.addEventListener("click", searchClick);
+  _loadMoreButton.addEventListener("click", loadMoreClick);
+}
+
+
 main();
 
 
