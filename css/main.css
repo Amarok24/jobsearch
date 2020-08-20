@@ -181,6 +181,17 @@ body {
 }
 
 
+#loadMoreButton {
+  display: none;
+  border: 0;
+  border-radius: 30px;
+  margin: 15px auto;
+  padding: 10px 15px;
+  background-color: var(--byzantium);
+  color: white;
+  cursor: pointer;
+}
+
 #messages {
   font-size: 1.2em;
   color: var(--indigo);
