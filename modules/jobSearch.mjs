@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.2
+  * @version 0.21
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -16,8 +16,8 @@ import * as jHelpers from "./jHelpers.mjs";
 import APILIST from "./apiResources.mjs";
 
 
-let cout = console.log;
-let cerr = console.error;
+const cout = console.log,
+      cerr = console.error;
 
 let _messages = document.getElementById("messages");
 let _templateJob = document.getElementById("templateJob");
@@ -27,7 +27,6 @@ let _jobWrap = document.getElementById("jobWrap");
 let _searchButton = document.getElementById("searchButton");
 let _loadMoreButton = document.getElementById("loadMoreButton");
 let _countrySelectBox = document.getElementById("countriesList");
-let _countrySelected = "US";
 
 let _currentResults = [];
 let _responseFingerprint = {
@@ -39,34 +38,35 @@ let _responseFingerprint = {
 };
 
 
+// -=-=-= Let's start with the real stuff now... \o/
 
 
-
-
-// removes all html tags from string, only basic functionality
-function removeHTML(s) {
-  let r = s.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span).*?>/gmi, " ");
+// @desc Removes all html tags from string. Only basic functionality.
+function removeHtmlTags(s) {
+  let r = s.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td).*?>/gmi, " ");
   return r;
 }
 
 
-function setLoadMore(showButton = true) {
+// @desc Shows or hides the "Load more" button below search results
+function showLoadMore(showButton = true) {
   if (showButton === true) {
-    cout("showing button");
+    cout("showing 'Load more' button");
     _searchResults.append(_loadMoreButton);
     _loadMoreButton.style.display = "block";
   } else {
-    cout("hiding button");
+    cout("hiding 'Load more' button");
     _loadMoreButton.style.display = "none";
     document.body.append(_loadMoreButton);
   }
 }
 
 
+// @desc Search for jobs is handled here :-)
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
   const dataQuery = {
     jobQuery: {
-      locations: [{ address: searchLocation, country: APILIST[_countrySelected].code }],
+      locations: [{ address: searchLocation, country: APILIST[_countrySelectBox.value].code }],
       query: searchTerm
     },
     offset: pageOffset,
@@ -76,18 +76,17 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
   let responseData = null;
   jLoader.showLoader();
 
-  cout("selected country: ", _countrySelected);
+  cout(`selected country: ${_countrySelectBox.value}`);
 
   try {
-    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelected].url, JSON.stringify(dataQuery), "json");
+    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json");
     cout("responseData OK!");
-    _responseFingerprint = processResults(responseData); // all errors insinde processResults will also be catched here
-    cout(_responseFingerprint);
+
+    // all errors occuring inside of processResults will also be caught here
+    _responseFingerprint = processResults(responseData);
+
     if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
-      cout("more jobs to come, showing button");
-      setLoadMore();
-    } else {
-      cout("no more jobs to come, button stays hidden");
+      showLoadMore();
     }
   } catch (error) {
     cerr("catch block here, details: ", error);
@@ -102,27 +101,23 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
 
 // @desc View job details by jobID from search results
 function viewJob(id) {
-  let foundIndex = null;
-  let myDate;
-  let formattedDate = "";
-  let jobTitle = "";
+  let foundIndex = null,
+      myDate,
+      formattedDate = "",
+      jobTitle = "";
 
-  cout(_currentResults);
-
-  for (let i=0; i<_currentResults.length; i++) {
+  for (let i = 0; i < _currentResults.length; i++) {
     if (_currentResults[i].jobId === id) {
-      cout("found!");
       foundIndex = i;
       break;
     }
   }
 
   if (foundIndex === null) {
-    cerr("foundIndex is null");
+    // this should never happen
+    cerr("viewJob() foundIndex is null");
     return -1;
   }
-
-  //cout(_jobDetailHeader);
 
   myDate = new Date(_currentResults[foundIndex].formattedDate);
   formattedDate = "Last update: " + (myDate.getUTCDate() + 1) + "." +  (myDate.getUTCMonth() + 1) + "." + myDate.getUTCFullYear();
@@ -138,21 +133,16 @@ function viewJob(id) {
   _jobDetailHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
 
   _jobWrap.innerHTML = _currentResults[foundIndex].jobPosting.description;
-
 }
 
 
-function jobClick(ev) {
-  cout("ev = ", ev);
-  cout("this = ", this);
-
-  let jobID = this.getAttribute("data-jobid");
-  cout(jobID);
-
-  let resultNodeLists = _searchResults.querySelectorAll("article");
+// @desc Click on individual job result will show the full job view.
+function jobClick() {
+  // 'this' is the node <article class="job">
+  const jobID = this.getAttribute("data-jobid");
+  const resultNodeLists = _searchResults.querySelectorAll("article");
 
   for (let i=0; i<resultNodeLists.length; i++) {
-    //cout(resultNodeLists);
     resultNodeLists[i].classList.remove("selected");
   }
 
@@ -170,12 +160,13 @@ function processResults(data) {
     totalResults: data.estimatedTotalSize
   };
 
-  cout(data);
+  cout("data:", data);
 
   if (!data) {
     jHelpers.outTextBr(_messages, "Unusual error, no data in processResults.");
     return 1;
   }
+
   if (response.totalResults === 0) {
     jHelpers.outTextBr(_messages, "0 jobs found");
     return response;
@@ -208,8 +199,9 @@ function processResults(data) {
     let companyName =  data.jobResults[i].jobPosting.hiringOrganization.name;
     let logo = data.jobResults[i].jobPosting.hiringOrganization.logo;
     let jobID = data.jobResults[i].jobId;
+    
     let summary = data.jobResults[i].jobPosting.description;
-    summary = removeHTML(summary);
+    summary = removeHtmlTags(summary);
 
     job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
     job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
@@ -217,30 +209,27 @@ function processResults(data) {
     if (!postalCode) {
       postalCode = "";
     }
+
     job.querySelector(".company").textContent = companyName;
     job.querySelector(".location").textContent = `${postalCode} ${locality} (${countryCode})`;
     job.querySelector(".lastUpdate").textContent = data.jobResults[i].dateRecency;
     job.querySelector(".summary").textContent = summary.substring(0, 160) + "... ";
+
     if (logo) {
       job.querySelector(".companyLogoSmall").src = logo;
     }
 
     job.firstElementChild.addEventListener("click", jobClick);
-/*
-    if (i===0) {
-      job.firstElementChild.classList.add("selected");
-      _jobWrap.innerHTML = data.jobResults[i].jobPosting.description;
-    }
- */
+
     _searchResults.append(job);
-
     _currentResults.push(data.jobResults[i]);
-
   }
+
+  cout("_currentResults:", _currentResults);
 
   if (response.pageOffset === 0) {
     // we are on 1st page, directly select (click) 1st job in results
-    jobClick.apply(_searchResults.querySelector("article"), [data.jobResults[0].jobId]);
+    jobClick.apply(_searchResults.querySelector("article"));
   }
 
   return response;
@@ -251,21 +240,20 @@ function searchClick(ev) {
   let title = document.getElementById("inputTitle").value;
   let location = document.getElementById("inputLocation").value;
   let intro = document.getElementById("intro");
+
   ev.preventDefault();
   intro.style.display = "none";
   jHelpers.removeChildrenOf(_messages);
   jHelpers.removeChildrenOf(_searchResults);
 
   searchJobs(title, location);
-  //processResults(JSON_SAMPLE);
-
   _searchButton.blur(); // remove focus
 }
 
 
 function loadMoreClick() {
   cout("loading more jobs...");
-  setLoadMore(false);
+  showLoadMore(false);
   searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize );
 }
 
@@ -273,7 +261,6 @@ function loadMoreClick() {
 function main() {
   _searchButton.addEventListener("click", searchClick);
   _loadMoreButton.addEventListener("click", loadMoreClick);
-  _countrySelectBox.addEventListener("change", () => {_countrySelected = _countrySelectBox.value; });
 }
 
 
