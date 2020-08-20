@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.11
+  * @version 0.2
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -13,7 +13,7 @@
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
 import * as jHelpers from "./jHelpers.mjs";
-import {API} from "./apiResources.mjs";
+import APILIST from "./apiResources.mjs";
 
 
 let cout = console.log;
@@ -66,7 +66,7 @@ function setLoadMore(showButton = true) {
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
   const dataQuery = {
     jobQuery: {
-      locations: [{ address: searchLocation, country: API[_countrySelected].code }],
+      locations: [{ address: searchLocation, country: APILIST[_countrySelected].code }],
       query: searchTerm
     },
     offset: pageOffset,
@@ -79,7 +79,7 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
   cout("selected country: ", _countrySelected);
 
   try {
-    responseData = await jXhr.sendXhrData("POST", API[_countrySelected].url, JSON.stringify(dataQuery), "json");
+    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelected].url, JSON.stringify(dataQuery), "json");
     cout("responseData OK!");
     _responseFingerprint = processResults(responseData); // all errors insinde processResults will also be catched here
     cout(_responseFingerprint);
