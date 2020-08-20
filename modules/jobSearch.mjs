@@ -188,7 +188,7 @@ function processResults(data) {
   jHelpers.outText(_messages, response.searchTerm, true);
   if (response.searchLocation.length !== 0) {
     jHelpers.outText(_messages, " in ");
-    jHelpers.outText(_messages, addressSearched, true);
+    jHelpers.outText(_messages, response.searchLocation, true);
   }
   jHelpers.outText(_messages, ", total results: ");
   jHelpers.outTextBr(_messages, response.totalResults, true);
