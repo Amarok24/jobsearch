@@ -29,11 +29,29 @@
   <body>
 
     <header class="topHeader">
+
       <form>
         <input type="text" id="inputTitle" placeholder="Job Title" autofocus="autofocus" />
         <input type="text" id="inputLocation" placeholder="Location" />
         <input type="submit" value="SEARCH" id="searchButton" />
+
+        <label class="countriesList">Country&nbsp;
+          <select id="countriesList">
+            <option value="US" selected="selected">US</option>
+            <option value="CA">CA</option>
+            <option value="DE">DE</option>
+            <option value="AT">AT</option>
+            <option value="GB">GB</option>
+            <option value="FR">FR</option>
+            <option value="ES">ES</option>
+            <option value="IT">IT</option>
+            <option value="CZ">CZ</option>
+          </select>
+        </label>
+
       </form>
+
+
 
     </header>
 
@@ -43,7 +61,7 @@
 
       <section id="intro">
 
-        <h1>JobSearch (Germany)</h1>
+        <h1>JobSearch</h1>
 
 
         <div class="dividerBook">
@@ -69,6 +87,9 @@
           <!-- selected job-ad content here -->
           <section id="jobDetailHeader">
             <div id="flexWrapper">
+<!--               <div>
+                <img src="icons/logo-placeholder-optim.svg" class="companyLogoBig" alt="Logo" />
+              </div> -->
               <div>
                 <h2>Title</h2>
                 <h3>Company name</h3>

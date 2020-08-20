@@ -64,6 +64,15 @@ body {
   top: 0;
   z-index: 100;
   padding: 1em 5%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center; /* main-axis alignment, default: flex-start */
+  align-items: center; /* cross-axis alignment, default: stretch */
+  align-content: stretch; /* cross-axis lines alignment, default: stretch */
+}
+
+.topHeader .countriesList {
+  margin-left: 20px;
 }
 
 .topHeader form {
@@ -190,6 +199,10 @@ body {
   background-color: var(--byzantium);
   color: white;
   cursor: pointer;
+}
+
+#loadMoreButton:hover {
+  background-color: var(--pearly-purple);
 }
 
 #messages {
@@ -328,7 +341,6 @@ body {
   justify-content: space-between; /* main-axis alignment, default: flex-start */
   align-items: flex-end; /* cross-axis alignment, default: stretch */
   align-content: stretch; /* cross-axis lines alignment, default: stretch */
-
 }
 
 .container #jobDetailHeader a {
@@ -372,6 +384,10 @@ svg.icon-tabler {
 
 img.companyLogoSmall {
   width: 100px;
+}
+
+img.companyLogoBig {
+  width: 120px;
 }
 
 

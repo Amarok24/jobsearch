@@ -13,6 +13,8 @@
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
 import * as jHelpers from "./jHelpers.mjs";
+import {API} from "./apiResources.mjs";
+
 
 let cout = console.log;
 let cerr = console.error;
@@ -24,6 +26,8 @@ let _jobDetailHeader = document.getElementById("jobDetailHeader");
 let _jobWrap = document.getElementById("jobWrap");
 let _searchButton = document.getElementById("searchButton");
 let _loadMoreButton = document.getElementById("loadMoreButton");
+let _countrySelectBox = document.getElementById("countriesList");
+let _countrySelected = "US";
 
 let _currentResults = [];
 let _responseFingerprint = {
@@ -35,9 +39,6 @@ let _responseFingerprint = {
 };
 
 
-const _API_URL = "https://services.monster.io/jobs-svx-service/v2/search-jobs/samsearch/de-de";
-//const _API_URL = "https://job-openings.monster.com/v2/job/pure-json-view";
-//const _API_URL = "https://stellenangebot.monster.de/v2/job/pure-json-view?jobid="; // GERMAN version
 
 
 
@@ -65,7 +66,7 @@ function setLoadMore(showButton = true) {
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
   const dataQuery = {
     jobQuery: {
-      locations: [{ address: searchLocation, country: "de" }],
+      locations: [{ address: searchLocation, country: API[_countrySelected].code }],
       query: searchTerm
     },
     offset: pageOffset,
@@ -75,8 +76,10 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
   let responseData = null;
   jLoader.showLoader();
 
+  cout("selected country: ", _countrySelected);
+
   try {
-    responseData = await jXhr.sendXhrData("POST", _API_URL, JSON.stringify(dataQuery), "json");
+    responseData = await jXhr.sendXhrData("POST", API[_countrySelected].url, JSON.stringify(dataQuery), "json");
     cout("responseData OK!");
     _responseFingerprint = processResults(responseData); // all errors insinde processResults will also be catched here
     cout(_responseFingerprint);
@@ -166,7 +169,6 @@ function processResults(data) {
     pageSize: data.jobRequest?.pageSize,
     totalResults: data.estimatedTotalSize
   };
-  let addressSearched = "";
 
   cout(data);
 
@@ -182,15 +184,12 @@ function processResults(data) {
   response.searchTerm = data.jobRequest.jobQuery.query;
   response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
 
-  addressSearched = response.searchLocation;
-  if (addressSearched.length === 0) {
-    addressSearched = "(bundesweit)";
-  }
-
   jHelpers.removeChildrenOf(_messages);
   jHelpers.outText(_messages, response.searchTerm, true);
-  jHelpers.outText(_messages, " in ");
-  jHelpers.outText(_messages, addressSearched, true);
+  if (response.searchLocation.length !== 0) {
+    jHelpers.outText(_messages, " in ");
+    jHelpers.outText(_messages, addressSearched, true);
+  }
   jHelpers.outText(_messages, ", total results: ");
   jHelpers.outTextBr(_messages, response.totalResults, true);
   jHelpers.outText(_messages, response.pageOffset + data.totalSize, true);
@@ -274,27 +273,8 @@ function loadMoreClick() {
 function main() {
   _searchButton.addEventListener("click", searchClick);
   _loadMoreButton.addEventListener("click", loadMoreClick);
+  _countrySelectBox.addEventListener("change", () => {_countrySelected = _countrySelectBox.value; });
 }
 
 
 main();
-
-
-/*
-
-
-POST
-https://services.monster.io/jobs-svx-service/v2/search-jobs/samsearch/de-de
-
-DATA WITH POST
-{"jobQuery":{"locations":[{"address":"Berlin, Land Berlin","country":"de"}],"query":"fahrer"},"offset":0,"pageSize":10}
-
-next query
-offset:10
-
-next query
-offset:20
-
-etc...
-
-*/
