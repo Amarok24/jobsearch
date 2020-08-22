@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/topHeader.css" />
 
     <script src="./modules/jobSearch.mjs" type="module" defer="defer"></script>
 
@@ -35,7 +36,9 @@
         <input type="text" id="inputLocation" placeholder="Location" />
         <input type="submit" value="SEARCH" id="searchButton" />
 
-        <label class="countriesList">Country&nbsp;
+        <label>Country&nbsp;
+
+
           <select id="countriesList">
             <option value="US" selected="selected">US</option>
             <option value="CA">CA</option>
@@ -46,8 +49,15 @@
             <option value="ES">ES</option>
             <option value="IT">IT</option>
             <option value="CZ">CZ</option>
+            <!-- Icon source https://github.com/lipis/flag-icon-css
+                 License: MIT License, see icons/flags/LICENSE.flags.txt -->
           </select>
+
+
+
         </label>
+
+
 
       </form>
 
@@ -59,7 +69,7 @@
 
     <div class="container">
 
-      <section id="intro">
+      <section class="intro" id="intro">
 
         <h1>JobSearch</h1>
 
@@ -72,36 +82,40 @@
 
       </section>
 
-      <section id="messages">
+      <section class="messages" id="messages">
         <!-- output will come here -->
       </section>
 
 
       <div class="gridWrapper">
 
-        <section id="searchResults">
+        <section class="searchResults" id="searchResults">
           <!-- jobs search results here -->
         </section>
 
-        <section id="jobDetailWrapper">
+        <section>
           <!-- selected job-ad content here -->
-          <section id="jobDetailHeader">
-            <div id="flexWrapper">
-<!--               <div>
+          <section class="jobDetailHeader" id="jobDetailHeader">
+
+              <div>
                 <img src="icons/logo-placeholder-optim.svg" class="companyLogoBig" alt="Logo" />
-              </div> -->
+              </div>
+
               <div>
                 <h2>Title</h2>
                 <h3>Company name</h3>
                 <h4>Location</h4>
                 <span class="datePublished">Last update</span>
               </div>
-              <a href="#" target="_blank">APPLY</a>
-          </div>
+
+              <div>
+                <a href="#" target="_blank">APPLY</a>
+              </div>
+
           </section>
 
-          <section id="jobDetailContent">
-            <div id="jobWrap"></div>
+          <section class="jobDetailContent" id="jobDetailContent">
+
           </section>
         </section>
 
@@ -125,14 +139,13 @@
           <polyline points="12 7 12 12 15 15" />
         </svg> <span class="lastUpdate"></span>
         <div class="summary"></div>
-
       </article>
 
     </template>
 
 
 
-   <button id="loadMoreButton">Load more&hellip;</button>
+   <button class="loadMoreButton" id="loadMoreButton">Load more&hellip;</button>
 
 
   </body>

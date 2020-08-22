@@ -1,7 +1,7 @@
 ﻿/**
   * @name jHelpers.mjs
   * @description A collection of useful functions (mostly pure functions).
-  * @version 0.11
+  * @version 0.12
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -48,6 +48,12 @@ export function removeChildrenOf(element) {
   while (element.firstChild) {
     element.removeChild(element.lastChild);
   }
+}
+
+
+// @desc Removes all html tags from string. Only basic functionality.
+function removeHtmlTags(str) {
+  return str.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td|br\/).*?>/gmi, " ");;
 }
 
 

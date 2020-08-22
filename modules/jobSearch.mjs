@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.21
+  * @version 0.22
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -10,47 +10,35 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+// @ts-nocheck
+
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
 import * as jHelpers from "./jHelpers.mjs";
 import APILIST from "./apiResources.mjs";
 
 
-const cout = console.log,
-      cerr = console.error;
+const elID = document.getElementById,
+      cout = console.log,
+      cerr = console.error,
+      DUMMY_LOGO = "icons/logo-placeholder-optim.svg";
 
-let _messages = document.getElementById("messages");
-let _templateJob = document.getElementById("templateJob");
-let _searchResults = document.getElementById("searchResults");
-let _jobDetailHeader = document.getElementById("jobDetailHeader");
-let _jobWrap = document.getElementById("jobWrap");
-let _searchButton = document.getElementById("searchButton");
-let _loadMoreButton = document.getElementById("loadMoreButton");
-let _countrySelectBox = document.getElementById("countriesList");
+let _messages = elID("messages"),
+    _templateJob = elID("templateJob"),
+    _searchResults = elID("searchResults"),
+    _jobDetailHeader = elID("jobDetailHeader"),
+    _jobDetailContent = elID("jobDetailContent"),
+    _searchButton = elID("searchButton"),
+    _loadMoreButton = elID("loadMoreButton"),
+    _countrySelectBox = elID("countriesList");
 
 let _currentResults = [];
-let _responseFingerprint = {
-  searchTerm: "",
-  searchLocation: "",
-  pageOffset: null,
-  pageSize: null,
-  totalResults: null
-};
-
-
-// -=-=-= Let's start with the real stuff now... \o/
-
-
-// @desc Removes all html tags from string. Only basic functionality.
-function removeHtmlTags(s) {
-  let r = s.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td).*?>/gmi, " ");
-  return r;
-}
+let _responseFingerprint = {};
 
 
 // @desc Shows or hides the "Load more" button below search results
 function showLoadMore(showButton = true) {
-  if (showButton === true) {
+  if (showButton) {
     cout("showing 'Load more' button");
     _searchResults.append(_loadMoreButton);
     _loadMoreButton.style.display = "block";
@@ -104,7 +92,8 @@ function viewJob(id) {
   let foundIndex = null,
       myDate,
       formattedDate = "",
-      jobTitle = "";
+      jobTitle = "",
+      logoSrc = "";
 
   for (let i = 0; i < _currentResults.length; i++) {
     if (_currentResults[i].jobId === id) {
@@ -122,6 +111,11 @@ function viewJob(id) {
   myDate = new Date(_currentResults[foundIndex].formattedDate);
   formattedDate = "Last update: " + (myDate.getUTCDate() + 1) + "." +  (myDate.getUTCMonth() + 1) + "." + myDate.getUTCFullYear();
 
+  logoSrc = _currentResults[foundIndex].jobPosting.hiringOrganization.logo;
+  if (!logoSrc) {
+    logoSrc = DUMMY_LOGO;
+  }
+
   jobTitle = _currentResults[foundIndex].jobPosting.title;
   if (jobTitle.length > 70) {
     jobTitle = jobTitle.substring(0, 70) + "...";
@@ -131,8 +125,9 @@ function viewJob(id) {
   _jobDetailHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
   _jobDetailHeader.querySelector(".datePublished").innerText = formattedDate;
   _jobDetailHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
+  _jobDetailHeader.querySelector(".companyLogoBig").src = logoSrc;
 
-  _jobWrap.innerHTML = _currentResults[foundIndex].jobPosting.description;
+  _jobDetailContent.innerHTML = _currentResults[foundIndex].jobPosting.description;
 }
 
 
@@ -199,9 +194,9 @@ function processResults(data) {
     let companyName =  data.jobResults[i].jobPosting.hiringOrganization.name;
     let logo = data.jobResults[i].jobPosting.hiringOrganization.logo;
     let jobID = data.jobResults[i].jobId;
-    
+
     let summary = data.jobResults[i].jobPosting.description;
-    summary = removeHtmlTags(summary);
+    summary = jHelpers.removeHtmlTags(summary);
 
     job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
     job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
@@ -237,9 +232,9 @@ function processResults(data) {
 
 
 function searchClick(ev) {
-  let title = document.getElementById("inputTitle").value;
-  let location = document.getElementById("inputLocation").value;
-  let intro = document.getElementById("intro");
+  let title = elID("inputTitle").value;
+  let location = elID("inputLocation").value;
+  let intro = elID("intro");
 
   ev.preventDefault();
   intro.style.display = "none";
@@ -258,10 +253,7 @@ function loadMoreClick() {
 }
 
 
-function main() {
-  _searchButton.addEventListener("click", searchClick);
-  _loadMoreButton.addEventListener("click", loadMoreClick);
-}
 
-
-main();
+// ADD EVENTS
+_searchButton.addEventListener("click", searchClick);
+_loadMoreButton.addEventListener("click", loadMoreClick);
