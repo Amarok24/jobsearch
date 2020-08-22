@@ -52,7 +52,7 @@ export function removeChildrenOf(element) {
 
 
 // @desc Removes all html tags from string. Only basic functionality.
-function removeHtmlTags(str) {
+export function removeHtmlTags(str) {
   return str.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td|br\/).*?>/gmi, " ");;
 }
 

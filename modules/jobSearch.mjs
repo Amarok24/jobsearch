@@ -18,7 +18,7 @@ import * as jHelpers from "./jHelpers.mjs";
 import APILIST from "./apiResources.mjs";
 
 
-const elID = document.getElementById,
+const elID = (elementID) => document.getElementById(elementID),
       cout = console.log,
       cerr = console.error,
       DUMMY_LOGO = "icons/logo-placeholder-optim.svg";
