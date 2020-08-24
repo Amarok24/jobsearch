@@ -15,10 +15,11 @@
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
 import * as jHelpers from "./jHelpers.mjs";
+import * as sForms from "./styledForms.mjs";
 import APILIST from "./apiResources.mjs";
 
 
-const elID = (elementID) => document.getElementById(elementID),
+const elID = (e) => document.getElementById(e),
       cout = console.log,
       cerr = console.error,
       DUMMY_LOGO = "icons/logo-placeholder-optim.svg";
@@ -36,7 +37,9 @@ let _currentResults = [];
 let _responseFingerprint = {};
 
 
-// @desc Shows or hides the "Load more" button below search results
+/**
+ * Shows or hides the "Load more" button below search results
+ */
 function showLoadMore(showButton = true) {
   if (showButton) {
     cout("showing 'Load more' button");
@@ -50,7 +53,13 @@ function showLoadMore(showButton = true) {
 }
 
 
-// @desc Search for jobs is handled here :-)
+/**
+ * Search for jobs is handled here :-)
+ * @param searchTerm Usually the job title
+ * @param searchLocation Location (city)
+ * @param pageOffset Page offset, starts at offset 0 (influenced by pageSize)
+ * @param pageSize Results per page (influences pageOffset)
+ */
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
   const dataQuery = {
     jobQuery: {
@@ -87,7 +96,9 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
 }
 
 
-// @desc View job details by jobID from search results
+/**
+ * View job details by jobID from search results
+ */
 function viewJob(id) {
   let foundIndex = null,
       myDate,
@@ -131,7 +142,9 @@ function viewJob(id) {
 }
 
 
-// @desc Click on individual job result will show the full job view.
+/**
+ * Click on individual job result will show the full job view.
+ */
 function jobClick() {
   // 'this' is the node <article class="job">
   const jobID = this.getAttribute("data-jobid");
@@ -146,6 +159,10 @@ function jobClick() {
 }
 
 
+/**
+ * Main function to process incoming JSON data.
+ * @param data XHR response data
+ */
 function processResults(data) {
   let response = {
     searchTerm: "",
@@ -230,7 +247,9 @@ function processResults(data) {
   return response;
 }
 
-
+/**
+ * SEARCH button click handler
+ */
 function searchClick(ev) {
   let title = elID("inputTitle").value;
   let location = elID("inputLocation").value;
@@ -245,7 +264,9 @@ function searchClick(ev) {
   _searchButton.blur(); // remove focus
 }
 
-
+/**
+ * "Load more" button click handler
+ */
 function loadMoreClick() {
   cout("loading more jobs...");
   showLoadMore(false);
@@ -253,7 +274,15 @@ function loadMoreClick() {
 }
 
 
-
 // ADD EVENTS
 _searchButton.addEventListener("click", searchClick);
 _loadMoreButton.addEventListener("click", loadMoreClick);
+
+
+// CUSTOM FORM ELEMENTS
+sForms.styleSelectboxId("countriesList", {
+ textContents: ["US 🐱", "CA 🐷", "DE 🐺", "AT 😺", "GB 🐗", "FR 🦝", "ES 🐨", "IT 🐼", "CZ 🐯"],
+ selectedIndex: 0
+});
+/* Icon source https://github.com/lipis/flag-icon-css
+License: MIT License, see icons/flags/LICENSE.flags.txt */

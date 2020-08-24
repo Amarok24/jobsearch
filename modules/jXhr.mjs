@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jXhr.mjs
   * @description Asynchronous XMLHttpRequest (XHR) library.
-  * @version 0.2
+  * @version 0.21
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -11,14 +11,27 @@
 */
 
 
-// @desc A bit simplified version when no data needs to be sent with request
-export function sendXhr(method, url, respType="text", descr="sendXhr func") {
+/**
+ * Shortened sendXhrData() when no data needs to be sent with request.
+ * @param method "GET" or "POST"
+ * @param url "URL" for request
+ * @param respType Response type, usually "text" or "json"
+ * @param descr Custom description of request for console output.
+ */
+export function sendXhr(method="", url="", respType="text", descr="") {
   return sendXhrData(method, url, null, respType, descr);
 }
 
 
-// @desc Main function with all parameters
-export function sendXhrData(method, url, data, respType="text", descr="sendXhr func") {
+/**
+ * Asynchronous XHR function.
+ * @param method "GET" or "POST"
+ * @param url "URL" for request
+ * @param data Data to send with request
+ * @param respType Response type, usually "text" or "json"
+ * @param descr Custom description of request for console output.
+ */
+export function sendXhrData(method="", url="", data, respType="text", descr="") {
   let httpPromise;
   const cout = console.log;
   const cerr = console.error;
