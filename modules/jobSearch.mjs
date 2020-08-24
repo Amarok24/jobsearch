@@ -10,7 +10,7 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-// @ts-nocheck
+// @ts-nocheckck
 
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
@@ -284,15 +284,15 @@ sForms.styleSelectbox("countriesList", {
  textContents: ["US", "CA", "DE", "AT", "GB", "FR", "ES", "IT", "CZ"],
  selectedIndex: 0,
  individualStyles: [
-   {backgroundImage: "url(../icons/flags/us.svg)"},
-   {backgroundImage: "url(../icons/flags/ca.svg)"},
-   {backgroundImage: "url(../icons/flags/de.svg)"},
-   {backgroundImage: "url(../icons/flags/at.svg)"},
-   {backgroundImage: "url(../icons/flags/gb.svg)"},
-   {backgroundImage: "url(../icons/flags/fr.svg)"},
-   {backgroundImage: "url(../icons/flags/es.svg)"},
-   {backgroundImage: "url(../icons/flags/it.svg)"},
-   {backgroundImage: "url(../icons/flags/cz.svg)"}
+   {backgroundImage: "url(icons/flags/us.svg)"},
+   {backgroundImage: "url(icons/flags/ca.svg)"},
+   {backgroundImage: "url(icons/flags/de.svg)"},
+   {backgroundImage: "url(icons/flags/at.svg)"},
+   {backgroundImage: "url(icons/flags/gb.svg)"},
+   {backgroundImage: "url(icons/flags/fr.svg)"},
+   {backgroundImage: "url(icons/flags/es.svg)"},
+   {backgroundImage: "url(icons/flags/it.svg)"},
+   {backgroundImage: "url(icons/flags/cz.svg)"}
   ],
  eachStyle: {
    paddingRight: "50px",
