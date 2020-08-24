@@ -1,10 +1,27 @@
-﻿
-.sFormSelectList ul {
-  cursor: pointer;
-  list-style-type: none;
+﻿.sFormSelectList * {
   margin: 0;
   padding: 0;
+}
+
+.sFormSelectList {
+  display: inline;
+  vertical-align: top;
+  position: relative;
+}
+
+.sFormSelectList ul {
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  list-style-type: none;
   max-width: 120px;
+  color: black;
+  box-shadow: 0 0 5px #b8a0a0;
+}
+
+.sFormSelectList ul:not(:hover) {
+  box-shadow: none;
 }
 
 .sFormSelectList ul li {
@@ -21,10 +38,19 @@
 }
 
 .sFormSelectList ul:not(:hover) li::after {
-  content: "\25BD";
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M18 15l-6-6l-6 6h12" transform="rotate(180 12 12)" /></svg>');
+  /* caret-down.svg, originally was: stroke-width="2" */
+  /* Icon source https://github.com/tabler/tabler-icons
+     License: MIT License, see icons/LICENSE.icons.txt */
+  background-size: 20px auto;
+  background-position: right center;
+  background-repeat: no-repeat;
+  content: "";
   position: absolute;
-  right: 5px;
-  top: 3px;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
 }
 
 .sFormSelectList ul li:not(.selected) {
@@ -33,10 +59,8 @@
 
 .sFormSelectList ul:hover li {
   display: block;
-}
-
-.sFormSelectList ul:hover li {
   background-color: white;
+  border-left: 5px solid transparent;
 }
 
 .sFormSelectList ul li:hover {
@@ -44,5 +68,5 @@
 }
 
 .sFormSelectList ul:hover li.selected {
-  border-left: 5px solid red;
+  border-left: 5px solid darkred;
 }

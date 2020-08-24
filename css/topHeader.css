@@ -8,11 +8,8 @@
   top: 0;
   z-index: 100;
   padding: 1em 5%;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center; /* main-axis alignment, default: flex-start */
-  align-items: center; /* cross-axis alignment, default: stretch */
-  align-content: stretch; /* cross-axis lines alignment, default: stretch */
+  display: grid;
+  grid-template-columns: auto;
 }
 
 .topHeader .countriesList {
@@ -22,11 +19,6 @@
 .topHeader form {
   text-align: center;
 }
-
-.topHeader form {
-  text-align: center;
-}
-
 
 .topHeader input::placeholder {
   color: #b09ac2;
@@ -81,25 +73,11 @@
   box-shadow: 0 0 4px white;
 }
 
-
+/* 
 #countriesList {
   appearance: none;
 }
+ */
 
-#countriesList option {
-  position: relative;
-}
-
-#countriesList option span::after {
-  content: "x";
-  position: absolute;
-  right: 30px;
-  top: 0;
-  z-index: 150;
-  width: 30px;
-  height: 20px;
-  background:url(../icons/flags/ca.svg) right top no-repeat;
-  background-size: 30px 20px;
-}
 
 /* -=-=-=-= END sticky header =-=-=-=- */
