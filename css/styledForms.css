@@ -1,0 +1,48 @@
+﻿
+.sFormSelectList ul {
+  cursor: pointer;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  max-width: 120px;
+}
+
+.sFormSelectList ul li {
+  padding: 5px;
+  display: block;
+  border-bottom: 1px solid darkgray;
+}
+
+.sFormSelectList ul:not(:hover) li {
+  position: relative;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.sFormSelectList ul:not(:hover) li::after {
+  content: "\25BD";
+  position: absolute;
+  right: 5px;
+  top: 3px;
+}
+
+.sFormSelectList ul li:not(.selected) {
+  display: none;
+}
+
+.sFormSelectList ul:hover li {
+  display: block;
+}
+
+.sFormSelectList ul:hover li {
+  background-color: white;
+}
+
+.sFormSelectList ul li:hover {
+  background-color: mistyrose;
+}
+
+.sFormSelectList ul:hover li.selected {
+  border-left: 5px solid red;
+}
