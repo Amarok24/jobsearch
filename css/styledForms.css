@@ -20,7 +20,8 @@
   box-shadow: 0 0 5px #b8a0a0;
 }
 
-.sFormSelectList ul:not(:hover) {
+/* .sFormSelectList ul:not(:hover) { */
+.sFormSelectList ul:not([data-opened]) {
   box-shadow: none;
 }
 
@@ -30,14 +31,16 @@
   border-bottom: 1px solid darkgray;
 }
 
-.sFormSelectList ul:not(:hover) li {
+/* .sFormSelectList ul:not(:hover) li { */
+.sFormSelectList ul:not([data-opened]) li {
   position: relative;
   border: 1px solid gray;
   border-radius: 5px;
   background-color: white;
 }
 
-.sFormSelectList ul:not(:hover) li::after {
+/* .sFormSelectList ul:not(:hover) li::after { */
+.sFormSelectList ul:not([data-opened]) li::after {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M18 15l-6-6l-6 6h12" transform="rotate(180 12 12)" /></svg>');
   /* caret-down.svg, originally was: stroke-width="2" */
   /* Icon source https://github.com/tabler/tabler-icons
@@ -56,8 +59,15 @@
 .sFormSelectList ul li:not(.selected) {
   display: none;
 }
-
+/*
 .sFormSelectList ul:hover li {
+  display: block;
+  background-color: white;
+  border-left: 5px solid transparent;
+}
+COMMENTED OUT BECAUSE OF TOUCHSCREENS
+ */
+.sFormSelectList ul[data-opened] li {
   display: block;
   background-color: white;
   border-left: 5px solid transparent;
@@ -66,7 +76,12 @@
 .sFormSelectList ul li:hover {
   background-color: mistyrose;
 }
-
+/*
 .sFormSelectList ul:hover li.selected {
+  border-left: 5px solid darkred;
+}
+COMMENTED OUT BECAUSE OF TOUCHSCREENS
+ */
+.sFormSelectList ul[data-opened] li.selected {
   border-left: 5px solid darkred;
 }

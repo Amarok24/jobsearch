@@ -280,26 +280,26 @@ _loadMoreButton.addEventListener("click", loadMoreClick);
 
 
 // CUSTOM FORM ELEMENTS
-sForms.styleSelectbox("countriesList", {
- textContents: ["US", "CA", "DE", "AT", "GB", "FR", "ES", "IT", "CZ"],
- selectedIndex: 0,
- individualStyles: [
-   {backgroundImage: "url(icons/flags/us.svg)"},
-   {backgroundImage: "url(icons/flags/ca.svg)"},
-   {backgroundImage: "url(icons/flags/de.svg)"},
-   {backgroundImage: "url(icons/flags/at.svg)"},
-   {backgroundImage: "url(icons/flags/gb.svg)"},
-   {backgroundImage: "url(icons/flags/fr.svg)"},
-   {backgroundImage: "url(icons/flags/es.svg)"},
-   {backgroundImage: "url(icons/flags/it.svg)"},
-   {backgroundImage: "url(icons/flags/cz.svg)"}
-  ],
- eachStyle: {
-   paddingRight: "50px",
-   backgroundSize: "22px auto",
-   backgroundPosition: "60% center",
-   backgroundRepeat: "no-repeat"
- }
-});
-/* Icon source https://github.com/lipis/flag-icon-css
-License: MIT License, see icons/flags/LICENSE.flags.txt */
+sForms.styleSelectbox(_countrySelectBox, {
+  //textContents: ["US", "CA", "DE", "AT", "GB", "FR", "ES", "IT", "CZ"],
+  selectIndex: 2, // directly select 2nd index ("DE" in this case)
+  individualStyles: [
+    {backgroundImage: "url(icons/flags/us.svg)"},
+    {backgroundImage: "url(icons/flags/ca.svg)"},
+    {backgroundImage: "url(icons/flags/de.svg)"},
+    {backgroundImage: "url(icons/flags/at.svg)"},
+    {backgroundImage: "url(icons/flags/gb.svg)"},
+    {backgroundImage: "url(icons/flags/fr.svg)"},
+    {backgroundImage: "url(icons/flags/es.svg)"},
+    {backgroundImage: "url(icons/flags/it.svg)"},
+    {backgroundImage: "url(icons/flags/cz.svg)"}
+   ],
+  eachStyle: {
+    paddingRight: "50px",
+    backgroundSize: "22px auto",
+    backgroundPosition: "60% center",
+    backgroundRepeat: "no-repeat"
+  }
+ });
+ /* Icon source https://github.com/lipis/flag-icon-css
+ License: MIT License, see icons/flags/LICENSE.flags.txt */

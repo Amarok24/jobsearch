@@ -1,7 +1,7 @@
 ﻿/**
   * @name styledForms.mjs
   * @description Improved form elements. Custom styling of form elements through JS.
-  * @version 0.2
+  * @version 0.21
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -10,64 +10,71 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-
 /**
  * Custom dropdown (select+option HTML nodes)
- * @param elemID ID of target element.
- * @param content Object which accepts keys: textContents, selectedIndex
- * @param classForSelected Name of class for selected (active) item.
+ * @param selectElem Reference to HTML <select> element.
+ * @param setup Object with optional keys: textContents, selectIndex, individualStyles, eachStyle, classForSelected.
+ * Provided textContents[] will override original <option> element text contents.
  */
-export function styleSelectbox(elemID = "", content = {}, classForSelected = "selected") {
-  const {textContents, selectedIndex, individualStyles, eachStyle} = content;
-  // TODO: textContents could be taken from genuine element
-  // FIXME: mobile devices need a click instead of hover
-  let genuineElem,
-      genuineElemChildren;
+export function styleSelectbox(selectElem, setup = {}) {
+  const {textContents=[], selectIndex=0, individualStyles, eachStyle, classForSelected="selected"} = setup;
 
   let span = document.createElement("span");
   let ul = document.createElement("ul");
 
+  // BEGIN: EVENT LISTENERS **********************************************
+  const ulMouseEnter = (ev) => { ev.target.dataset.opened = ""; }
+  const ulMouseLeave = (ev) => { delete ev.target.dataset.opened; }
   const liClick = (ev) => {
     // click event handler for each LI
-    let ulChildren = ul.children;
-    for (let i = 0; i < ulChildren.length; i++) {
-      ulChildren[i].classList.remove("selected");
+
+    if (ev.target.parentElement.dataset.opened === undefined) {
+      // user has touchscreen because ulMouseEnter event was not triggered
+      ev.target.parentElement.dataset.opened = "";
+      return 0;
+    }
+
+    for (let i = 0; i < ul.children.length; i++) {
+      ul.children[i].classList.remove(classForSelected);
     }
     ev.target.classList.add(classForSelected);
-    genuineElem.value = ev.target.attributes.rel.value;
+    selectElem.value = ev.target.dataset.relvalue; // mirror selection to selectElem
+    delete ev.target.parentElement.dataset.opened; // close selectbox
   }
+  // END: EVENT LISTENERS **********************************************
 
-  try {
-    genuineElem = document.getElementById(elemID);
-    genuineElemChildren = genuineElem.children;
-  } catch (error) {
-    console.error("Error in styleSelectbox(), DETAILS:", error);
-    return 1;
-  }
-
-  span.setAttribute("rel", elemID);
-  span.setAttribute("class", "sFormSelectList");
+  span.dataset.connection = selectElem.nodeName; // remove? unused, just for info
+  span.classList.add("sFormSelectList");
   span.append(ul);
 
-  for (let i = 0; i < genuineElemChildren.length; i++) {
-    let optionValue = genuineElemChildren[i].value;
+  if (textContents.length === 0) {
+    // textContents[] not provided, so let's take it from original element
+    for (let i of selectElem.options) {
+      textContents.push(i.innerText);
+    }
+  }
+
+  for (let i = 0; i < selectElem.options.length; i++) {
     let li = document.createElement("li");
     let text = document.createTextNode(textContents[i]);
-    li.setAttribute("rel", optionValue);
-    
-    if (selectedIndex === i) {
-      li.setAttribute("class", "selected");
+    li.dataset.relvalue = selectElem.options[i].value;
+
+    if (i === selectIndex) {
+      li.classList.add("selected");
+      selectElem.value = li.dataset.relvalue; // also modify original elem selection
     }
 
     li.append(text);
     li.addEventListener("click", liClick);
+    ul.addEventListener("mouseenter", ulMouseEnter);
+    ul.addEventListener("mouseleave", ulMouseLeave);
     applyStyles(li, individualStyles[i]);
     applyStyles(li, eachStyle);
     ul.append(li);
   }
 
-  applyStyles(genuineElem, {display: "none"});
-  genuineElem.parentNode.append(span)
+  applyStyles(selectElem, {display: "none"});
+  selectElem.parentElement.append(span);
 }
 
 
@@ -79,7 +86,6 @@ export function styleSelectbox(elemID = "", content = {}, classForSelected = "se
  */
 function applyStyles(elem, objStyles) {
   if (Array.isArray(objStyles)) {
-    // so we have an array of objects
     //console.log("array of objects");
     for (let i of objStyles) {
       console.log(i);
