@@ -1,5 +1,7 @@
 # Jobsearch
 
+![Logo](./jobsearch-logo.webp?raw=true "Logo")
+
 A lightweight job search, made in vanilla JavaScript.
 
 ## Online version

@@ -32,11 +32,11 @@
     <header class="topHeader">
 
       <form>
-        <input type="text" id="inputTitle" placeholder="Job Title" autofocus="autofocus" />
+        <input type="text" id="inputTitle" inputmode="text" placeholder="Job Title" autofocus="autofocus" />
         <input type="text" id="inputLocation" placeholder="Location" />
         <input type="submit" value="SEARCH" id="searchButton" />
 
-        <label>Change country&nbsp;&nbsp;
+        <label>Country&nbsp;&nbsp;
           <select id="countriesList">
             <option value="US" selected="selected">US</option>
             <option value="CA">CA</option>
@@ -70,9 +70,9 @@
 
       </section>
 
-      <section class="messages" id="messages">
-        <!-- output will come here -->
-      </section>
+      <output for="inputTitle inputLocation" class="messages" id="messages">
+        <!-- search result summary -->
+      </output>
 
 
       <div class="gridWrapper">
