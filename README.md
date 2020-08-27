@@ -9,6 +9,7 @@ https://amarok24.github.io/jobsearch/
 A (somehow) useful and fast jobsearch experience. Project is influenced by https://www.jobs.com and uses the same API for search results.
 
 ### Job search in following countries is currently supported:
+https://github.com/Amarok24/jobsearch/blob/master/./icons/flags/us.svg
 USA, Canada, Germany, Austria, Great Britain, France, Spain, Italy, Czechia
 
 ### TODO:
