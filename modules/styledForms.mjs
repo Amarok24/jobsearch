@@ -1,7 +1,7 @@
 ﻿/**
   * @name styledForms.mjs
   * @description Improved form elements. Custom styling of form elements through JS.
-  * @version 0.21
+  * @version 0.22
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -9,6 +9,8 @@
   v. 2.0. If a copy of the MPL was not distributed with this file, you can
   obtain one at http://mozilla.org/MPL/2.0/.
 */
+
+// FIXME: Chromium & FF on Android bug when switching selection
 
 /**
  * Custom dropdown (select+option HTML nodes)

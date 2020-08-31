@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.22
+  * @version 0.23
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -27,8 +27,8 @@ const elID = (e) => document.getElementById(e),
 let _messages = elID("messages"),
     _templateJob = elID("templateJob"),
     _searchResults = elID("searchResults"),
-    _jobDetailHeader = elID("jobDetailHeader"),
-    _jobDetailContent = elID("jobDetailContent"),
+    _jobHeader = elID("jobHeader"),
+    _rawJobData = elID("rawJobData"),
     _searchButton = elID("searchButton"),
     _loadMoreButton = elID("loadMoreButton"),
     _countrySelectBox = elID("countriesList");
@@ -131,14 +131,14 @@ function viewJob(id) {
   if (jobTitle.length > 70) {
     jobTitle = jobTitle.substring(0, 70) + "...";
   }
-  _jobDetailHeader.querySelector("h2").innerText = jobTitle;
-  _jobDetailHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
-  _jobDetailHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
-  _jobDetailHeader.querySelector(".datePublished").innerText = formattedDate;
-  _jobDetailHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
-  _jobDetailHeader.querySelector(".companyLogoBig").src = logoSrc;
+  _jobHeader.querySelector("h2").innerText = jobTitle;
+  _jobHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
+  _jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
+  _jobHeader.querySelector(".datePublished").innerText = formattedDate;
+  _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
+  _jobHeader.querySelector(".companyLogoBig").src = logoSrc;
 
-  _jobDetailContent.innerHTML = _currentResults[foundIndex].jobPosting.description;
+  _rawJobData.innerHTML = _currentResults[foundIndex].jobPosting.description;
 }
 
 
@@ -167,7 +167,7 @@ function processResults(data) {
   let response = {
     searchTerm: "",
     searchLocation: "",
-    pageOffset: data.jobRequest?.offset,
+    pageOffset: data.jobRequest?.offset, // ?. == optional chaining, ES2020
     pageSize: data.jobRequest?.pageSize,
     totalResults: data.estimatedTotalSize
   };
