@@ -204,57 +204,40 @@ body {
   font-style: italic;
 }
 
+
+/* start main GRID *********************/
+
 .gridWrapper {
   display: grid;
-  height: 85vh;
-  grid-template-columns: 30% 70%;
-  /* column-gap: 2%; */
+  height: 75vh;
+  grid-template-rows: 160px 1fr;
+  grid-template-columns: 400px 1fr;
 }
 
 .searchResults {
-  grid-column-start: 1;
-  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: -1;
   overflow-y: scroll;
   color: #505050;
 }
 
-.jobDetailWrapper {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  background-color: #b09ac2;
-  display: grid;
-  grid-template-rows: 140px auto;
-  overflow: scroll; /* neccessary for jobDetailContent's scrollbars to work */
-}
-
-.jobDetailHeader {
-  background-color: var(--cultured);
+.jobHeader {
+  background: linear-gradient(180deg, #ced4da 0%, #ffffff 100%);
   padding: 2%;
   border-bottom: 1px solid #dadada;
   display: grid;
-  grid-template-columns: 160px 1fr 150px;
+  grid-template-columns: 160px 1fr 120px;
 }
 
-.jobDetailHeader div {
-  border: 1px solid yellowgreen;
-}
-
-.jobDetailHeader h2 {
+.jobHeader h2 {
   color: var(--rose-red);
 }
 
-.jobDetailHeader h4 {
+.jobHeader h4 {
   margin-bottom: 10px;
 }
 
-.jobDetailContent {
-  background-color: white;
-  padding: 2%;
-  white-space: pre-line;
-  overflow-y: scroll;
-}
-
-.jobDetailHeader a {
+.jobHeader a {
   display: inline-block;
   color: white;
   border-radius: 20px;
@@ -265,8 +248,32 @@ body {
   text-decoration: none;
 }
 
-.jobDetailHeader a:hover {
+.jobHeader a:hover {
   background-color: crimson;
+}
+
+.jobHeader .headerLogo {
+
+}
+.jobHeader .headerText {
+
+}
+.jobHeader .headerButton {
+  align-self: center;
+  justify-self: end;
+}
+
+.jobContent {
+  background: linear-gradient(180deg, #e6e8eb 0%, #ffffff 100%);
+  overflow-y: scroll;
+}
+
+/* end main GRID *********************/
+
+
+.rawJobData {
+  padding: 2%;
+  white-space: pre-line;
 }
 
 

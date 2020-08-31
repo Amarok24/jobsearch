@@ -75,39 +75,38 @@
       </output>
 
 
-      <div class="gridWrapper">
+      <main class="gridWrapper">
 
         <section class="searchResults" id="searchResults">
           <!-- jobs search results here -->
         </section>
 
-        <section>
-          <!-- selected job-ad content here -->
-          <section class="jobDetailHeader" id="jobDetailHeader">
+        <section class="jobHeader" id="jobHeader">
 
-              <div>
-                <img src="icons/logo-placeholder-optim.svg" class="companyLogoBig" alt="Logo" />
-              </div>
+          <div class="headerLogo">
+            <img src="icons/logo-placeholder-optim.svg" class="companyLogoBig" alt="Logo" />
+          </div>
 
-              <div>
-                <h2>Title</h2>
-                <h3>Company name</h3>
-                <h4>Location</h4>
-                <span class="datePublished">Last update</span>
-              </div>
+          <div class="headerText">
+            <h2>Title</h2>
+            <h3>Company name</h3>
+            <h4>Location</h4>
+            <span class="datePublished">Last update</span>
+          </div>
 
-              <div>
-                <a href="#" target="_blank">APPLY</a>
-              </div>
+          <div class="headerButton">
+            <a href="#" target="_blank">APPLY</a>
+          </div>
 
-          </section>
-
-          <section class="jobDetailContent" id="jobDetailContent">
-
-          </section>
         </section>
 
-      </div>
+        <section class="jobContent">
+          <div class="rawJobData" id="rawJobData">
+            <!-- raw job data injected by JS -->
+          </div>
+        </section>
+
+      </main>
 
 
     </div>
