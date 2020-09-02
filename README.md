@@ -11,8 +11,11 @@ A (somehow) useful and fast jobsearch experience. Project is influenced by https
 ### Job search in following countries is currently supported:
 USA, Canada, Germany, Austria, Great Britain, France, Spain, Italy, Czechia
 
-### TODO:
-- better layout
-- completely responsive CSS (grid)
+### Urgent upcoming changes:
+- bugfixes in mobile version (language switch)
+- better layout / design
+- settings menu with light/dark mode switch
+
+### Non-urgent plans:
 - sorting of search results
 - maybe use of IndexedDB for search result storage and manipulation
