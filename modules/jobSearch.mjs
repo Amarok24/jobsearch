@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.23
+  * @version 0.24
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -22,7 +22,11 @@ import APILIST from "./apiResources.mjs";
 const elID = (e) => document.getElementById(e),
       cout = console.log,
       cerr = console.error,
-      DUMMY_LOGO = "icons/logo-placeholder-optim.svg";
+      DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
+      SCREEN_LARGE = window.matchMedia("(min-width: 801px)"),
+      SCREEN_MEDIUM = window.matchMedia("(max-width: 800px)"),
+      SCREEN_SMALL = window.matchMedia("(max-width: 480px)");
+
 
 let _messages = elID("messages"),
     _templateJob = elID("templateJob"),
@@ -31,7 +35,8 @@ let _messages = elID("messages"),
     _rawJobData = elID("rawJobData"),
     _searchButton = elID("searchButton"),
     _loadMoreButton = elID("loadMoreButton"),
-    _countrySelectBox = elID("countriesList");
+    _countrySelectBox = elID("countriesList"),
+    _toggleResults = elID("toggleResults");
 
 let _currentResults = [];
 let _responseFingerprint = {};
@@ -156,6 +161,10 @@ function jobClick() {
 
   this.classList.add("selected");
   viewJob(jobID);
+
+  if (SCREEN_MEDIUM.matches) {
+    toggleResultsClick();
+  }
 }
 
 
@@ -274,9 +283,32 @@ function loadMoreClick() {
 }
 
 
+/**
+ * Click handler for "toggle search results" icon
+ */
+function toggleResultsClick() {
+  const opened = !!_toggleResults.dataset.opened;
+
+  cout(_toggleResults.dataset);
+
+  if (!opened) {
+    _toggleResults.dataset.opened = "1";
+    _searchResults.style.left = 0;
+    document.querySelector(".jobContent").style.height = "1px";
+    document.querySelector(".jobContent").style.overflowY = "hidden";
+  } else {
+    delete _toggleResults.dataset.opened;
+    _searchResults.style.left = "-100%";
+    document.querySelector(".jobContent").style.height = "auto";
+    document.querySelector(".jobContent").style.overflowY = "scroll";
+  }
+}
+
+
 // ADD EVENTS
 _searchButton.addEventListener("click", searchClick);
 _loadMoreButton.addEventListener("click", loadMoreClick);
+_toggleResults.addEventListener("click", toggleResultsClick);
 
 
 // CUSTOM FORM ELEMENTS

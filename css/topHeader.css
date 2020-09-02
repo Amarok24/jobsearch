@@ -1,5 +1,11 @@
 ﻿/* -=-=-=-= sticky header =-=-=-=- */
 
+.topHeader * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .topHeader {
   background-color: var(--russian-violet);
   color: white;
@@ -73,11 +79,47 @@
   box-shadow: 0 0 4px white;
 }
 
+#toggleResults {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 101;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 1px 1px 3px #bababa;
+  padding: 5px;
+  cursor: pointer;
+  color: var(--rose-red);
+  background-color: white;
+}
+
+#toggleResults[data-opened] {
+  background-color: var(--rose-red);
+  color: white;
+}
+
+
 /* 
 #countriesList {
   appearance: none;
 }
  */
 
+@media screen and (max-width: 800px) {
 
-/* -=-=-=-= END sticky header =-=-=-=- */
+  .topHeader {
+    padding: 10px 10px 10px 65px;
+
+  }
+  .topHeader form {
+    text-align: left;
+  }
+
+  .topHeader input#inputTitle,
+  .topHeader input#inputLocation {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+}
