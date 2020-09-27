@@ -1,7 +1,7 @@
 ﻿﻿/**
   * @name jobSearch.mjs
   * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.24
+  * @version 0.25
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -23,9 +23,10 @@ const elID = (e) => document.getElementById(e),
       cout = console.log,
       cerr = console.error,
       DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
-      SCREEN_LARGE = window.matchMedia("(min-width: 801px)"),
-      SCREEN_MEDIUM = window.matchMedia("(max-width: 800px)"),
-      SCREEN_SMALL = window.matchMedia("(max-width: 480px)");
+      SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches,
+      SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches,
+      SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
+      TOUCHSCREEN = window.matchMedia("(pointer: coarse)").matches;
 
 
 let _messages = elID("messages"),
@@ -335,3 +336,26 @@ sForms.styleSelectbox(_countrySelectBox, {
  });
  /* Icon source https://github.com/lipis/flag-icon-css
  License: MIT License, see icons/flags/LICENSE.flags.txt */
+
+
+
+ const darkTheme = {
+  "--color_1": "#10021b",
+  "--color_2": "#38062f",
+  "--color_3": "#641c52",
+  "--color_4": "#35024e",
+  "--color_5": "#66002b",
+  "--color_6": "#8e9191",
+  "--color_7": "#968787",
+  "--color_8": "#606060",
+  "--color_9": "black",
+  "--color_10": "#bababa",
+  "--color_11": "#303030",
+  "--color_12": "darkred"
+ };
+
+ setTimeout(setDark, 3000);
+
+ function setDark() {
+  jHelpers.setCSSrootColors(darkTheme);
+}
