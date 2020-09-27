@@ -354,7 +354,7 @@ sForms.styleSelectbox(_countrySelectBox, {
   "--color_12": "darkred"
  };
 
- setTimeout(setDark, 3000);
+ //setTimeout(setDark, 3000);
 
  function setDark() {
   jHelpers.setCSSrootColors(darkTheme);

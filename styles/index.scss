@@ -1,5 +1,19 @@
 ﻿@import "./fonts";
 
+@mixin mediaSmall($maxW: 800px) {
+  // mobile devices
+  @media screen and (max-width: $maxW) {
+    @content;
+  }
+}
+
+@mixin mediaTouch() {
+  // touchscreens
+  @media (hover: none) and (pointer: coarse) {
+    @content;
+  }
+}
+
 :root {
   --color_1: #240939; /*russian-violet*/
   --color_2: #71135f; /*byzantium*/
@@ -20,7 +34,7 @@ html {
   min-height: 100%;
   -webkit-text-size-adjust: none;
 	-moz-text-size-adjust: none;
-	text-size-adjust: none; /* textsize adjustment OFF on mobile devices */
+  text-size-adjust: none; /* textsize adjustment OFF on mobile devices */
 }
 
 
@@ -112,7 +126,6 @@ body {
   }
 }
 
-
 .messages {
   display: block;
   font-size: 1.2em;
@@ -121,6 +134,11 @@ body {
   margin-bottom: 4px;
   border-bottom: 1px solid #dadada;
   box-shadow: 2px 2px 4px #dadada;
+
+  @include mediaSmall() {
+    font-size: 1.1em;
+    padding: 10px;
+  }
 }
 
 .intro {
@@ -179,12 +197,14 @@ body {
   &:hover {
     background-color: var(--color_6);
   }
+
+  &.selected {
+    background-color: var(--color_6);
+    border-left: 3px solid var(--color_5);
+    /* selected */
+  }
 } // end job
 
-.job.selected {
-  background-color: var(--color_6);
-  border-left: 3px solid var(--color_5);
-}
 
 
 .lastUpdate {
@@ -199,6 +219,11 @@ body {
   height: 75vh;
   grid-template-rows: 140px 1fr;
   grid-template-columns: 400px 1fr;
+
+  @include mediaSmall() {
+    display: block;
+    height: auto;
+  }
 }
 
 .searchResults {
@@ -207,6 +232,17 @@ body {
   overflow-y: scroll;
   color: var(--color_11);
   background-color: var(--color_10);
+
+  @include mediaSmall() {
+    position: absolute;
+    z-index: 90;
+    width: 100%;
+    height: calc(100vh - 120px); /* 120px should be the height of sticky header */
+    left: -100%;
+    top: 0;
+    border: 2px solid var(--color_4);
+    transition: left 0.3s linear;
+  }
 }
 
 .jobHeader {
@@ -217,6 +253,13 @@ body {
   grid-template-columns: 160px 1fr 120px;
   gap: 10px;
   grid-template-areas: "h_logo h_text h_button";
+
+  @include mediaSmall() {
+    grid-template-columns: 160px 1fr;
+    grid-template-areas:
+      "h_logo h_button"
+      "h_text h_text";
+  }
 
   h2 {
     color: var(--color_5);
@@ -299,44 +342,3 @@ img.companyLogoBig {
   height: 32px;
   stroke-width: 1.25;
 }
-
-
-@media screen and (max-width: 800px) {
-
-  .gridWrapper {
-    display: block;
-    height: auto;
-  }
-  .searchResults {
-    position: absolute;
-    z-index: 90;
-    width: 100%;
-    height: calc(100vh - 120px); /* 120px should be the height of sticky header */
-    left: -100%;
-    top: 0;
-    border: 2px solid var(--color_4);
-    transition: left 0.3s linear;
-  }
-
-  .jobHeader {
-    grid-template-columns: 160px 1fr;
-    grid-template-areas:
-      "h_logo h_button"
-      "h_text h_text";
-  }
-
-  .messages {
-    font-size: 1.1em;
-    padding: 10px;
-  }
-
-}
-
-
-/* touchscreens */
-/* @media (hover: none) and (pointer: coarse) {
-  input[type="checkbox"] {
-    width: 30px;
-    height: 30px;
-  }
-} */
