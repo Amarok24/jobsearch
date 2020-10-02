@@ -1,26 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- As of 2020-06-09 JS modules are still not supported in XHTML (XML)
-         documents in Chromium-based browsers! See crbug.com/717643
-         (no problems in Firefox though). Therefore this doc is general HTML5 :-(
-    -->
-
-    <title>JS JobSearch</title>
     <meta name="author" content="https://github.com/Amarok24/" />
     <meta name="description" content="A simple JobSearch using the jobs.com API" />
 
+    <title>JobSearch</title>
+
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="./css/index.css" />
-    <link rel="stylesheet" href="./css/topHeader.css" />
-    <link rel="stylesheet" href="./css/styledForms.css" />
+    <link rel="stylesheet" href="./css/index.min.css" />
+    <link rel="stylesheet" href="./css/styledForms.min.css" />
 
-    <script src="./modules/jobSearch.mjs" type="module" defer="defer"></script>
+    <script src="./modules/jobSearch.mjs" type="module" defer="defer" async="async"></script>
+    <!-- As of 2020-10-02 JS modules are _still_ not directly supported in XHTML (XML)
+      documents in CHROMIUM-based browsers! See crbug.com/717643
+      (no problems in Firefox though).
+      There's one possibility to make it work - to use async="async".
+      //TODO: once Chromium bug is resolved delete async in above script.
+    -->
 
   </head>
 
@@ -33,7 +32,7 @@
         <input type="text" id="inputLocation" placeholder="Location" />
         <input type="submit" value="SEARCH" id="searchButton" />
 
-        <label>Country&nbsp;&nbsp;
+        <label>Country&#160;&#160;
           <select id="countriesList">
             <option value="US" selected="selected">US</option>
             <option value="CA">CA</option>
@@ -54,7 +53,6 @@
         <!-- Icon "notes.svg", source https://github.com/tabler/tabler-icons
               License: MIT License, see icons/LICENSE.icons.txt -->
       </button>
-
 
     </header>
 
@@ -96,7 +94,7 @@
             <h2>Title</h2>
             <h3>Company name</h3>
             <h4>Location</h4>
-            <span class="datePublished">Last update</span>
+            <span>Last update</span>
           </div>
 
           <div class="headerButton">
@@ -136,11 +134,10 @@
     </template>
 
 
-   <button class="loadMoreButton" id="loadMoreButton">Load more&hellip;</button>
-
-
+   <button class="loadMoreButton" id="loadMoreButton">Load more&#8230;</button>
    <!-- Icon source https://github.com/tabler/tabler-icons
    License: MIT License, see icons/LICENSE.icons.txt -->
+
 
   </body>
 </html>

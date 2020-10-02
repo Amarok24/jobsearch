@@ -17,68 +17,71 @@
     max-width: 120px;
     color: black;
     box-shadow: 0 0 5px #b8a0a0;
-  }
 
-  ul:not([data-opened]) {
-    box-shadow: none;
-  }
+    &:not([data-opened]) {
+      box-shadow: none;
+    }
 
-  ul li {
-    padding: 5px;
-    display: block;
-    border-bottom: 1px solid darkgray;
-  }
+    li {
+      padding: 5px;
+      display: block;
+      border-bottom: 1px solid darkgray;
+    }
 
-  ul:not([data-opened]) li {
-    position: relative;
-    border: 1px solid gray;
-    border-radius: 5px;
-    background-color: white;
-  }
+    &:not([data-opened]) li {
+      position: relative;
+      border: 1px solid gray;
+      border-radius: 5px;
+      background-color: white;
+    }
 
-  ul:not([data-opened]) li::after {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M18 15l-6-6l-6 6h12" transform="rotate(180 12 12)" /></svg>');
-    /* caret-down.svg, originally was: stroke-width="2" */
-    /* Icon source https://github.com/tabler/tabler-icons
-       License: MIT License, see icons/LICENSE.icons.txt */
-    background-size: 20px auto;
-    background-position: right center;
-    background-repeat: no-repeat;
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 20px;
-    height: 100%;
-  }
+    &:not([data-opened]) li::after {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M18 15l-6-6l-6 6h12" transform="rotate(180 12 12)" /></svg>');
+      /* caret-down.svg, originally was: stroke-width="2" */
+      /* Icon source https://github.com/tabler/tabler-icons
+         License: MIT License, see icons/LICENSE.icons.txt */
+      background-size: 20px auto;
+      background-position: right center;
+      background-repeat: no-repeat;
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 20px;
+      height: 100%;
+    }
 
-  ul li:not(.selected) {
-    display: none;
-  }
+    li:not(.selected) {
+      display: none;
+    }
 
-  /* ul:hover li {
+    &[data-opened] li {
+      display: block;
+      background-color: white;
+      border-left: 5px solid transparent;
+    }
+
+    li:hover {
+      background-color: mistyrose;
+    }
+
+    &[data-opened] li.selected {
+      border-left: 5px solid darkred;
+    }
+  } // end UL
+} // end sFormSelectList
+
+
+/*
+NOT USED ANY MORE  BECAUSE OF TOUCHSCREENS
+
+ul:hover li {
     display: block;
     background-color: white;
     border-left: 5px solid transparent;
-  } COMMENTED OUT BECAUSE OF TOUCHSCREENS  */
-
-  ul[data-opened] li {
-    display: block;
-    background-color: white;
-    border-left: 5px solid transparent;
   }
 
-  ul li:hover {
-    background-color: mistyrose;
-  }
-
-  /* ul:hover li.selected {
+  ul:hover li.selected {
     border-left: 5px solid darkred;
   }
-  COMMENTED OUT BECAUSE OF TOUCHSCREENS
-  */
-
-  ul[data-opened] li.selected {
-    border-left: 5px solid darkred;
-  }
-}
+*/

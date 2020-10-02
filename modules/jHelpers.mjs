@@ -1,7 +1,7 @@
 ﻿/**
   * @name jHelpers.mjs
   * @description A collection of useful functions (mostly pure functions).
-  * @version 0.15
+  * @version 0.16
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -13,10 +13,10 @@
 
 /**
  * Outputs text to HTML element, optional HTML <strong> and <br/>, manipulates given 'element' node directly.
- * @param element {HTMLElement} HTML element to manipulate
- * @param text {string} Text to output
- * @param bold {boolean} Format with <strong>
- * @param linebreak {boolean} Add a <br /> at the end
+ * @param {HTMLElement} element HTML element to manipulate
+ * @param {string} text Text to output
+ * @param {boolean}  bold Format with <strong>
+ * @param {boolean}  linebreak Add a <br /> at the end
  */
 export function outText(element, text, bold=false, linebreak=false) {
   const message = document.createTextNode(text); // because .innerHTML is insecure
@@ -43,9 +43,9 @@ export function outText(element, text, bold=false, linebreak=false) {
 
 /**
  * Outputs plain text to HTML element, optional bold formatting, adds a linebreak
- * @param element {HTMLElement} HTML element to manipulate
- * @param text {string} Text to output
- * @param bold {boolean} Format with <strong>
+ * @param {HTMLElement} element HTML element to manipulate
+ * @param {string} text Text to output
+ * @param {boolean} bold Format with <strong>
  */
 export function outTextBr(element, text, bold=false) {
   outText(element, text, bold, true);
@@ -54,7 +54,7 @@ export function outTextBr(element, text, bold=false) {
 
 /**
  * Loops to remove every lastChild (because setting an empty innerHTML is bad), manipulates given 'element' node directly.
- * @param element {HTMLElement} HTML element to work on
+ * @param {HTMLElement} element HTML element to work on
  */
 export function removeChildrenOf(element) {
   while (element.firstChild) {
@@ -65,7 +65,7 @@ export function removeChildrenOf(element) {
 
 /**
  * Removes HTML tags from given string. Only basic functionality.
- * @param str {string}
+ * @param {string} str
  * @returns {string} A copy of changed input.
  */
 export function removeHtmlTags(str) {
@@ -76,7 +76,7 @@ export function removeHtmlTags(str) {
 /**
  * Returns a sanitized copy of obj, string numbers become pure numbers and string values "null" become null.
  * Example: {m: "3.14", n: "7", x: "null"} --> {m: 3.14, n: 7, x: null}
- * @param obj {object} Object to sanitized
+ * @param {object} obj Object to sanitized
  * @returns {object} A copy of changed input.
  */
 export function sanitizeObject(obj) {
@@ -97,8 +97,8 @@ export function sanitizeObject(obj) {
 /**
  * Only keeps object's specified keys given in 'keysArr'.
  * Example: filterObject([ {a: "a0", b: 5}, {a: "a1", b: 7, c: 1} ], ["a", "c"]) will return [{a: "a0"}, {a: "a1", c: 1}]
- * @param obj {any} Object to filter. Most useful when given 'obj' is [] of objects.
- * @param keysArr {array} Array of strings.
+ * @param {any} obj Object to filter. Most useful when given 'obj' is [] of objects.
+ * @param {array} keysArr Array of strings.
  * @returns {any} A copy of changed input.
  */
 export function filterObject(obj, keysArr) {
@@ -109,9 +109,9 @@ export function filterObject(obj, keysArr) {
 
 /**
  * Sorts 'arrayOfObjects' by 'key' name. Basically just a pure function using Array.prototype.sort(), so the values can be numbers or strings.
- * @param arrayOfObjects {array} Array of objects.
- * @param key {string} Name of key.
- * @param ascending {boolean}
+ * @param {array} arrayOfObjects  Array of objects.
+ * @param {string} key Name of key.
+ * @param {boolean} ascending
  * @returns {array} A copy of changed input array.
  */
 export function sortArrayOfObjects(arrayOfObjects, key, ascending=true) {
@@ -134,8 +134,8 @@ export function sortArrayOfObjects(arrayOfObjects, key, ascending=true) {
 
 /**
  * Check if given 'obj' is of specific type.
- * @param obj {any} any object / primitive / array / function and so on...
- * @param typeName {string} lowercase string, one of: number, integer, float, string, array, object, set, symbol, boolean, function, null, undefined
+ * @param {any} obj any object / primitive / array / function and so on...
+ * @param {string} typeName lowercase string, one of: number, integer, float, string, array, object, set, symbol, boolean, function, null, undefined
  * @returns {boolean} true or false
  */
 export function typeCheck(obj, typeName) {

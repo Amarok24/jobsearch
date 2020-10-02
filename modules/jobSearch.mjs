@@ -10,7 +10,7 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-// @ts-nocheckck
+// @ts-check
 
 import * as jXhr from "./jXhr.mjs";
 import * as jLoader from "./jLoader.mjs";
@@ -19,32 +19,58 @@ import * as sForms from "./styledForms.mjs";
 import APILIST from "./apiResources.mjs";
 
 
-const elID = (e) => document.getElementById(e),
-      cout = console.log,
+const cout = console.log,
       cerr = console.error,
       DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
       SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches,
       SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches,
       SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
-      TOUCHSCREEN = window.matchMedia("(pointer: coarse)").matches;
+      TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
 
-let _messages = elID("messages"),
-    _templateJob = elID("templateJob"),
-    _searchResults = elID("searchResults"),
-    _jobHeader = elID("jobHeader"),
-    _rawJobData = elID("rawJobData"),
-    _searchButton = elID("searchButton"),
-    _loadMoreButton = elID("loadMoreButton"),
-    _countrySelectBox = elID("countriesList"),
-    _toggleResults = elID("toggleResults");
+let _messages = getElem("messages"),
+    _templateJob = getElem("templateJob"),
+    _searchResults = getElem("searchResults"),
+    _jobHeader = getElem("jobHeader"),
+    _rawJobData = getElem("rawJobData"),
+    _searchButton = getElem("searchButton"),
+    _loadMoreButton = getElem("loadMoreButton"),
+    _countrySelectBox = getElem("countriesList"),
+    _toggleResults = getElem("toggleResults");
 
 let _currentResults = [];
 let _responseFingerprint = {};
 
 
 /**
- * Shows or hides the "Load more" button below search results
+ * @param {string} elem ID of element
+ * @returns {HTMLElement}
+ */
+function getElem(elem) {
+  return document.getElementById(elem);
+}
+
+/**
+ * @param {string} elem ID of element
+ * @returns {HTMLInputElement}
+ */
+function getInputElem(elem) {
+  return document.getElementById(elem);
+}
+
+/**
+ *
+ * @param {string} className Name of class
+ * @param {HTMLElement} elem HTML element to work on
+ * @returns {Element}
+ */
+function getFirstClassOfElem(className, elem) {
+  return elem.getElementsByClassName(className)[0];
+}
+
+/**
+ * @description Shows or hides the "Load more" button below search results
+ * @param {boolean} showButton
  */
 function showLoadMore(showButton = true) {
   if (showButton) {
@@ -58,13 +84,12 @@ function showLoadMore(showButton = true) {
   }
 }
 
-
 /**
- * Search for jobs is handled here :-)
- * @param searchTerm Usually the job title
- * @param searchLocation Location (city)
- * @param pageOffset Page offset, starts at offset 0 (influenced by pageSize)
- * @param pageSize Results per page (influences pageOffset)
+ * @description Search for jobs is handled here :-)
+ * @param {string} searchTerm
+ * @param {string} searchLocation Location (city)
+ * @param {number} pageOffset Page offset, starts at offset 0 (influenced by pageSize)
+ * @param {number} pageSize Results per page (influences pageOffset)
  */
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
   const dataQuery = {
@@ -101,9 +126,23 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
   }
 }
 
+/**
+ * @description Makes all special character XML-conform.
+ * @param {string} inputText
+ * @returns {string}
+ */
+function makeXMLconform(inputText) {
+  let out = "";
+  let regex = /&(?!amp|#38)/g;
+  //TODO: more special characters
+
+  out = inputText.replace(regex, "&amp;");
+  return out;
+}
 
 /**
- * View job details by jobID from search results
+ * @description View job details by jobID from search results
+ * @param {string} id jobID
  */
 function viewJob(id) {
   let foundIndex = null,
@@ -140,16 +179,23 @@ function viewJob(id) {
   _jobHeader.querySelector("h2").innerText = jobTitle;
   _jobHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
   _jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
-  _jobHeader.querySelector(".datePublished").innerText = formattedDate;
+  _jobHeader.querySelector("span").innerText = formattedDate;
   _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
-  _jobHeader.querySelector(".companyLogoBig").src = logoSrc;
+  //_jobHeader.getElementsByClassName("companyLogoBig")[0].src = logoSrc;
+  getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
 
-  _rawJobData.innerHTML = _currentResults[foundIndex].jobPosting.description;
+  try {
+    _rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
+  } catch (error) {
+    jHelpers.outTextBr(_messages);
+    jHelpers.outTextBr(_messages, "Error in text structure, job cannot be displayed.");
+    cout(_currentResults[foundIndex].jobPosting.description);
+    cerr(error);
+  }
 }
 
-
 /**
- * Click on individual job result will show the full job view.
+ * @description Click on individual job result will show the full job view.
  */
 function jobClick() {
   // 'this' is the node <article class="job">
@@ -163,15 +209,14 @@ function jobClick() {
   this.classList.add("selected");
   viewJob(jobID);
 
-  if (SCREEN_MEDIUM.matches) {
+  if (SCREEN_MEDIUM) {
     toggleResultsClick();
   }
 }
 
-
 /**
- * Main function to process incoming JSON data.
- * @param data XHR response data
+ * @description Main function to process incoming JSON data.
+ * @param {object} data XHR response data
  */
 function processResults(data) {
   let response = {
@@ -258,13 +303,15 @@ function processResults(data) {
 }
 
 /**
- * SEARCH button click handler
+ * @description SEARCH button click handler
+ * @param {Event} ev
  */
 function searchClick(ev) {
-  let title = elID("inputTitle").value;
-  let location = elID("inputLocation").value;
-  let intro = elID("intro");
-
+  let title = getInputElem("inputTitle").value;
+  let location = getElem("inputLocation").value;
+  let intro = getElem("intro");
+  cout(typeof ev);
+  cout(ev);
   ev.preventDefault();
   intro.style.display = "none";
   jHelpers.removeChildrenOf(_messages);
@@ -275,7 +322,7 @@ function searchClick(ev) {
 }
 
 /**
- * "Load more" button click handler
+ * @description "Load more" button click handler
  */
 function loadMoreClick() {
   cout("loading more jobs...");
@@ -283,9 +330,8 @@ function loadMoreClick() {
   searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize );
 }
 
-
 /**
- * Click handler for "toggle search results" icon
+ * @description Click handler for "toggle search results" icon
  */
 function toggleResultsClick() {
   const opened = !!_toggleResults.dataset.opened;
@@ -294,7 +340,7 @@ function toggleResultsClick() {
 
   if (!opened) {
     _toggleResults.dataset.opened = "1";
-    _searchResults.style.left = 0;
+    _searchResults.style.left = "0";
     document.querySelector(".jobContent").style.height = "1px";
     document.querySelector(".jobContent").style.overflowY = "hidden";
   } else {
