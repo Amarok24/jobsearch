@@ -1,7 +1,7 @@
 ﻿﻿/**
-  * @name jobSearch.mjs
-  * @description Vanilla JavaScript program for job-search on Monster server.
-  * @version 0.25
+  * @name jobSearch.ts
+  * @description Vanilla TypeScript program for job-search on Monster server.
+  * @version 1.00
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -10,13 +10,11 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-// @ts-check
-
-import * as jXhr from "./jXhr.mjs";
-import * as jLoader from "./jLoader.mjs";
-import * as jHelpers from "./jHelpers.mjs";
-import * as sForms from "./styledForms.mjs";
-import APILIST from "./apiResources.mjs";
+import * as jXhr from "./jXhr.js";
+import * as jLoader from "./jLoader.js";
+import * as jHelpers from "./jHelpers.js";
+import * as sForms from "./styledForms.js";
+import APILIST from "./apiResources.js";
 
 
 const cout = console.log,
@@ -27,52 +25,54 @@ const cout = console.log,
       SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
       TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
-
 let _messages = getElem("messages"),
-    _templateJob = getElem("templateJob"),
+    _templateJob = getElem("templateJob") as HTMLTemplateElement,
     _searchResults = getElem("searchResults"),
     _jobHeader = getElem("jobHeader"),
     _rawJobData = getElem("rawJobData"),
     _searchButton = getElem("searchButton"),
     _loadMoreButton = getElem("loadMoreButton"),
-    _countrySelectBox = getElem("countriesList"),
+    _countrySelectBox = getElem("countriesList") as HTMLSelectElement,
     _toggleResults = getElem("toggleResults");
 
 let _currentResults = [];
-let _responseFingerprint = {};
+let _responseFingerprint: Response;
+
+interface Response {
+  searchTerm: string;
+  searchLocation: string;
+  pageOffset: number;
+  pageSize: number;
+  totalResults: number;
+};
 
 
-/**
- * @param {string} elem ID of element
- * @returns {HTMLElement}
- */
-function getElem(elem) {
+function getElem(elem: string): HTMLElement {
   return document.getElementById(elem);
 }
 
-/**
- * @param {string} elem ID of element
- * @returns {HTMLInputElement}
- */
-function getInputElem(elem) {
-  return document.getElementById(elem);
+function getInputElem(elem: string): HTMLInputElement {
+  return document.getElementById(elem) as HTMLInputElement;
 }
 
-/**
- *
- * @param {string} className Name of class
- * @param {HTMLElement} elem HTML element to work on
- * @returns {Element}
- */
-function getFirstClassOfElem(className, elem) {
-  return elem.getElementsByClassName(className)[0];
+
+function queryHTMLElem(elem: string): HTMLElement {
+  return document.querySelector(elem);
 }
+
+
+function generateError(msg: string, code: number): never {
+  throw {
+    message: msg,
+    errorCode: code
+  };
+}
+
 
 /**
  * @description Shows or hides the "Load more" button below search results
- * @param {boolean} showButton
  */
-function showLoadMore(showButton = true) {
+function showLoadMore(showButton: boolean = true): void {
   if (showButton) {
     cout("showing 'Load more' button");
     _searchResults.append(_loadMoreButton);
@@ -86,12 +86,11 @@ function showLoadMore(showButton = true) {
 
 /**
  * @description Search for jobs is handled here :-)
- * @param {string} searchTerm
- * @param {string} searchLocation Location (city)
- * @param {number} pageOffset Page offset, starts at offset 0 (influenced by pageSize)
- * @param {number} pageSize Results per page (influences pageOffset)
+ * @param searchLocation Location (city)
+ * @param pageOffset Page offset, starts at offset 0 (influenced by pageSize)
+ * @param pageSize Results per page (influences pageOffset)
  */
-async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
+async function searchJobs(searchTerm: string, searchLocation: string, pageOffset: number = 0, pageSize: number = 10): Promise<void> {
   const dataQuery = {
     jobQuery: {
       locations: [{ address: searchLocation, country: APILIST[_countrySelectBox.value].code }],
@@ -107,7 +106,7 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
   cout(`selected country: ${_countrySelectBox.value}`);
 
   try {
-    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json");
+    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
     cout("responseData OK!");
 
     // all errors occuring inside of processResults will also be caught here
@@ -128,10 +127,8 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
 
 /**
  * @description Makes all special character XML-conform.
- * @param {string} inputText
- * @returns {string}
  */
-function makeXMLconform(inputText) {
+function makeXMLconform(inputText: string): string {
   let out = "";
   let regex = /&(?!amp|#38)/g;
   //TODO: more special characters
@@ -142,14 +139,16 @@ function makeXMLconform(inputText) {
 
 /**
  * @description View job details by jobID from search results
- * @param {string} id jobID
+ * @returns {number} returns 0 if foundIndex is null, otherwise 1
  */
-function viewJob(id) {
+function viewJob(id: string): number {
   let foundIndex = null,
       myDate,
       formattedDate = "",
       jobTitle = "",
       logoSrc = "";
+
+  let companyLogoBig: HTMLImageElement;
 
   for (let i = 0; i < _currentResults.length; i++) {
     if (_currentResults[i].jobId === id) {
@@ -161,7 +160,7 @@ function viewJob(id) {
   if (foundIndex === null) {
     // this should never happen
     cerr("viewJob() foundIndex is null");
-    return -1;
+    return 0;
   }
 
   myDate = new Date(_currentResults[foundIndex].formattedDate);
@@ -182,7 +181,10 @@ function viewJob(id) {
   _jobHeader.querySelector("span").innerText = formattedDate;
   _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
   //_jobHeader.getElementsByClassName("companyLogoBig")[0].src = logoSrc;
-  getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
+  //getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
+  //companyLogoBig = queryHTMLElem(".companyLogoBig") as HTMLImageElement;
+  companyLogoBig = _jobHeader.querySelector(".companyLogoBig") as HTMLImageElement;
+  companyLogoBig.src = logoSrc;
 
   try {
     _rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
@@ -192,12 +194,14 @@ function viewJob(id) {
     cout(_currentResults[foundIndex].jobPosting.description);
     cerr(error);
   }
+
+  return 1;
 }
 
 /**
  * @description Click on individual job result will show the full job view.
  */
-function jobClick() {
+function jobClick(): void {
   // 'this' is the node <article class="job">
   const jobID = this.getAttribute("data-jobid");
   const resultNodeLists = _searchResults.querySelectorAll("article");
@@ -216,10 +220,10 @@ function jobClick() {
 
 /**
  * @description Main function to process incoming JSON data.
- * @param {object} data XHR response data
+ * @param data XHR response data
  */
-function processResults(data) {
-  let response = {
+function processResults(data: any): Response {
+  let response: Response = {
     searchTerm: "",
     searchLocation: "",
     pageOffset: data.jobRequest?.offset, // ?. == optional chaining, ES2020
@@ -227,11 +231,14 @@ function processResults(data) {
     totalResults: data.estimatedTotalSize
   };
 
+  let smallLogo: HTMLImageElement;
+
   cout("data:", data);
 
   if (!data) {
     jHelpers.outTextBr(_messages, "Unusual error, no data in processResults.");
-    return 1;
+    response.searchTerm = "ERROR";
+    return response;
   }
 
   if (response.totalResults === 0) {
@@ -249,7 +256,7 @@ function processResults(data) {
     jHelpers.outText(_messages, response.searchLocation, true);
   }
   jHelpers.outText(_messages, ", total results: ");
-  jHelpers.outTextBr(_messages, response.totalResults, true);
+  jHelpers.outTextBr(_messages, response.totalResults.toString(), true);
   jHelpers.outText(_messages, response.pageOffset + data.totalSize, true);
   jHelpers.outText(_messages, " currently loaded");
 
@@ -283,7 +290,8 @@ function processResults(data) {
     job.querySelector(".summary").textContent = summary.substring(0, 160) + "... ";
 
     if (logo) {
-      job.querySelector(".companyLogoSmall").src = logo;
+      smallLogo = job.querySelector(".companyLogoSmall") as HTMLImageElement;
+      smallLogo.src = logo;
     }
 
     job.firstElementChild.addEventListener("click", jobClick);
@@ -304,11 +312,10 @@ function processResults(data) {
 
 /**
  * @description SEARCH button click handler
- * @param {Event} ev
  */
-function searchClick(ev) {
+function searchClick(ev: Event) {
   let title = getInputElem("inputTitle").value;
-  let location = getElem("inputLocation").value;
+  let location = getInputElem("inputLocation").value;
   let intro = getElem("intro");
   cout(typeof ev);
   cout(ev);
@@ -324,7 +331,7 @@ function searchClick(ev) {
 /**
  * @description "Load more" button click handler
  */
-function loadMoreClick() {
+function loadMoreClick(): void {
   cout("loading more jobs...");
   showLoadMore(false);
   searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize );
@@ -333,7 +340,7 @@ function loadMoreClick() {
 /**
  * @description Click handler for "toggle search results" icon
  */
-function toggleResultsClick() {
+function toggleResultsClick(): void {
   const opened = !!_toggleResults.dataset.opened;
 
   cout(_toggleResults.dataset);
@@ -341,13 +348,13 @@ function toggleResultsClick() {
   if (!opened) {
     _toggleResults.dataset.opened = "1";
     _searchResults.style.left = "0";
-    document.querySelector(".jobContent").style.height = "1px";
-    document.querySelector(".jobContent").style.overflowY = "hidden";
+    queryHTMLElem(".jobContent").style.height = "1px";
+    queryHTMLElem(".jobContent").style.overflowY = "hidden";
   } else {
     delete _toggleResults.dataset.opened;
     _searchResults.style.left = "-100%";
-    document.querySelector(".jobContent").style.height = "auto";
-    document.querySelector(".jobContent").style.overflowY = "scroll";
+    queryHTMLElem(".jobContent").style.height = "auto";
+    queryHTMLElem(".jobContent").style.overflowY = "scroll";
   }
 }
 

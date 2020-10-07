@@ -1,7 +1,7 @@
 ﻿﻿/**
-  * @name jLoader.mjs
+  * @name jLoader.ts
   * @description A standalone loader animation library.
-  * @version 0.2
+  * @version 0.3
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0

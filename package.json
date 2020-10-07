@@ -1,0 +1,29 @@
+{
+  "name": "jobsearch",
+  "version": "1.0.0",
+  "description": "A lightweight jobsearch experience.",
+  "main": "index.xhtml",
+  "scripts": {
+    "Watch_Sass": "sass --style=compressed --watch scss:css",
+    "TS_compiler": "tsc",
+    "LiteServer": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amarok24/jobsearch.git"
+  },
+  "keywords": [
+    "jobads",
+    "jobs",
+    "work"
+  ],
+  "author": "Jan Pražák",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Amarok24/jobsearch/issues"
+  },
+  "homepage": "https://github.com/Amarok24/jobsearch#readme",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}

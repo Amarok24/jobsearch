@@ -1,7 +1,7 @@
 ﻿/**
-  * @name jHelpers.mjs
+  * @name jHelpers.ts
   * @description A collection of useful functions (mostly pure functions).
-  * @version 0.16
+  * @version 0.2
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -10,15 +10,15 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+type Filterable = object | object[];
+
 
 /**
  * Outputs text to HTML element, optional HTML <strong> and <br/>, manipulates given 'element' node directly.
- * @param {HTMLElement} element HTML element to manipulate
- * @param {string} text Text to output
- * @param {boolean}  bold Format with <strong>
- * @param {boolean}  linebreak Add a <br /> at the end
+ * @param bold Format with <strong>
+ * @param linebreak Add a <br /> at the end
  */
-export function outText(element, text, bold=false, linebreak=false) {
+export function outText(element: HTMLElement, text: string, bold=false, linebreak=false) {
   const message = document.createTextNode(text); // because .innerHTML is insecure
   let fragment = document.createDocumentFragment();
   let strong,
@@ -43,20 +43,17 @@ export function outText(element, text, bold=false, linebreak=false) {
 
 /**
  * Outputs plain text to HTML element, optional bold formatting, adds a linebreak
- * @param {HTMLElement} element HTML element to manipulate
- * @param {string} text Text to output
- * @param {boolean} bold Format with <strong>
+ * @param bold Format with <strong>
  */
-export function outTextBr(element, text, bold=false) {
+export function outTextBr(element: HTMLElement, text="", bold=false) {
   outText(element, text, bold, true);
 }
 
 
 /**
  * Loops to remove every lastChild (because setting an empty innerHTML is bad), manipulates given 'element' node directly.
- * @param {HTMLElement} element HTML element to work on
  */
-export function removeChildrenOf(element) {
+export function removeChildrenOf(element: HTMLElement) {
   while (element.firstChild) {
     element.removeChild(element.lastChild);
   }
@@ -65,10 +62,9 @@ export function removeChildrenOf(element) {
 
 /**
  * Removes HTML tags from given string. Only basic functionality.
- * @param {string} str
- * @returns {string} A copy of changed input.
+ * @returns A copy of changed input.
  */
-export function removeHtmlTags(str) {
+export function removeHtmlTags(str: string): string {
   return str.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td|br\/).*?>/gmi, " ");;
 }
 
@@ -76,17 +72,19 @@ export function removeHtmlTags(str) {
 /**
  * Returns a sanitized copy of obj, string numbers become pure numbers and string values "null" become null.
  * Example: {m: "3.14", n: "7", x: "null"} --> {m: 3.14, n: 7, x: null}
- * @param {object} obj Object to sanitized
- * @returns {object} A copy of changed input.
+ * @returns A copy of changed input object.
  */
-export function sanitizeObject(obj) {
+export function sanitizeObject(obj: object): object {
   let objCopy = {...obj}; // shallow copy (and excluding prototype)
   // all deep levels will be by reference, but this function doesn't use them
-  const strToNum = val => !isNaN(val) ? +val : val; // +s converts string to number
+  const tryStrToNum = function(s: string): string | number {
+    let plusS = +s; // +s tries to convert string to number, returns NaN on fail
+    return isNaN(plusS) ? s : plusS;
+  };
 
   for (let key in objCopy) {
     if (typeof objCopy[key] === "string") {
-      objCopy[key] = (objCopy[key] === "null") ? null : strToNum(objCopy[key]);
+      objCopy[key] = (objCopy[key] === "null") ? null : tryStrToNum(objCopy[key]);
     }
   }
 
@@ -95,13 +93,11 @@ export function sanitizeObject(obj) {
 
 
 /**
- * Only keeps object's specified keys given in 'keysArr'.
+ * Only keeps object's specified keys (and their values) given in 'keysArr'.
  * Example: filterObject([ {a: "a0", b: 5}, {a: "a1", b: 7, c: 1} ], ["a", "c"]) will return [{a: "a0"}, {a: "a1", c: 1}]
- * @param {any} obj Object to filter. Most useful when given 'obj' is [] of objects.
- * @param {array} keysArr Array of strings.
- * @returns {any} A copy of changed input.
+ * @returns A copy of changed input.
  */
-export function filterObject(obj, keysArr) {
+export function filterObject(obj: Filterable, keysArr: string[]): Filterable {
   let json = JSON.stringify(obj, keysArr);
   return JSON.parse(json);
 }
@@ -109,15 +105,12 @@ export function filterObject(obj, keysArr) {
 
 /**
  * Sorts 'arrayOfObjects' by 'key' name. Basically just a pure function using Array.prototype.sort(), so the values can be numbers or strings.
- * @param {array} arrayOfObjects  Array of objects.
- * @param {string} key Name of key.
- * @param {boolean} ascending
- * @returns {array} A copy of changed input array.
+ * @returns A copy of changed input array.
  */
-export function sortArrayOfObjects(arrayOfObjects, key, ascending=true) {
+export function sortArrayOfObjects(arrayOfObjects: object[], key: string, ascending: boolean = true): object[] {
   let arrCopy = [...arrayOfObjects];
 
-  const compareFunc = function (a, b) {
+  const compareFunc = function (a: any, b: any) {
     if (a[key] < b[key]) {
       return ascending ? -1 : 1;
     }
@@ -127,18 +120,17 @@ export function sortArrayOfObjects(arrayOfObjects, key, ascending=true) {
     return 0; // both are equal, leave their order
   }
 
-  arrCopy.sort(compareFunc); // .sort() works on its object directly
+  arrCopy.sort(compareFunc); // .sort() works on given object directly
   return arrCopy;
 }
 
 
 /**
  * Check if given 'obj' is of specific type.
- * @param {any} obj any object / primitive / array / function and so on...
- * @param {string} typeName lowercase string, one of: number, integer, float, string, array, object, set, symbol, boolean, function, null, undefined
- * @returns {boolean} true or false
+ * @param obj Any object / primitive / array / function and so on...
+ * @param typeName (lowercase) one of: number, integer, float, string, array, object, set, symbol, boolean, function, null, undefined
  */
-export function typeCheck(obj, typeName) {
+export function typeCheck(obj: unknown, typeName: string): boolean {
   if (obj === null || obj === undefined) return typeName === String(obj);
   if (typeName === "integer") return Number.isInteger(obj);
   if (typeName === "float") {
@@ -150,11 +142,13 @@ export function typeCheck(obj, typeName) {
 
 /**
  * 
- * @param colors {object} Key-value pairs of CSS variable and value
+ * @param colors Key-value pairs of CSS variableName and value
  */
-export function setCSSrootColors(colors) {
+export function setCSSrootColors(colors: object) {
   let rootElem = document.documentElement;
-  for (let colorName in colors) {
+  let colorName: string;
+
+  for (colorName in colors) {
     console.log(colorName, colors[colorName]);
     rootElem.style.setProperty(colorName, colors[colorName]);
   }

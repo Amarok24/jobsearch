@@ -1,4 +1,4 @@
-﻿@import "./fonts";
+﻿@import "fonts";
 
 @mixin mediaSmall($maxW: 800px) {
   // mobile devices
@@ -345,3 +345,5 @@ img#companyLogoBig {
 /**** end ICON specific styles */
 
 @import "./topHeader";
+
+/* test node-sassABCminified */

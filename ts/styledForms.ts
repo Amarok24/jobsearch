@@ -1,7 +1,7 @@
 ﻿/**
-  * @name styledForms.mjs
+  * @name styledForms.ts
   * @description Improved form elements. Custom styling of form elements through JS.
-  * @version 0.22
+  * @version 0.3
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -12,14 +12,28 @@
 
 // FIXME: Chromium & FF on Android bug when switching selection
 
+interface SelectBoxSetup {
+  textContents: [];
+  selectIndex: number;
+  individualStyles: object;
+  eachStyle: object;
+  classForSelected: string;
+};
+
 /**
  * Custom dropdown (select+option HTML nodes)
  * @param selectElem Reference to HTML <select> element.
  * @param setup Object with optional keys: textContents, selectIndex, individualStyles, eachStyle, classForSelected.
  * Provided textContents[] will override original <option> element text contents.
  */
-export function styleSelectbox(selectElem, setup = {}) {
-  const {textContents=[], selectIndex=0, individualStyles, eachStyle, classForSelected="selected"} = setup;
+export function styleSelectbox(selectElem, setup: SelectBoxSetup) {
+  const {
+    textContents,
+    selectIndex,
+    individualStyles,
+    eachStyle,
+    classForSelected
+  } = setup;
 
   let span = document.createElement("span");
   let ul = document.createElement("ul");

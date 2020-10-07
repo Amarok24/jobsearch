@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ES2015",
+    "lib": ["DOM", "ES2017"],
+    "rootDir": "./ts",
+    "outDir": "./js",
+    "watch": true
+  }
+}

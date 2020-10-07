@@ -1,7 +1,7 @@
 ﻿﻿/**
-  * @name jXhr.mjs
+  * @name jXhr.ts
   * @description Asynchronous XMLHttpRequest (XHR) library.
-  * @version 0.21
+  * @version 0.3
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -10,15 +10,18 @@
   obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+type TransferMethod = "GET" | "POST";
+type ResponseType = "text" | "json";
+type XhrData = null | string | Document | Blob | FormData;
 
 /**
  * Shortened sendXhrData() when no data needs to be sent with request.
  * @param method "GET" or "POST"
  * @param url "URL" for request
- * @param respType Response type, usually "text" or "json"
+ * @param respType Response type, "text" or "json"
  * @param descr Custom description of request for console output.
  */
-export function sendXhr(method="", url="", respType="text", descr="") {
+export function sendXhr(method: TransferMethod, url: string, respType: ResponseType = "text", descr: string) {
   return sendXhrData(method, url, null, respType, descr);
 }
 
@@ -31,16 +34,17 @@ export function sendXhr(method="", url="", respType="text", descr="") {
  * @param respType Response type, usually "text" or "json"
  * @param descr Custom description of request for console output.
  */
-export function sendXhrData(method="", url="", data, respType="text", descr="") {
-  let httpPromise;
+export function sendXhrData(method: TransferMethod, url: string, data: XhrData, respType: ResponseType, descr: string) {
+  let httpPromise: Promise<unknown>;
   const cout = console.log;
   const cerr = console.error;
 
-  function httpReq(resolve, reject) {
+  const httpReq = function (resolve: (arg0: any) => void, reject: (arg0: Error) => void) {
     let xhr = new XMLHttpRequest();
 
     const handleLoad = (ev) => {
       console.group(descr);
+      cout("handleLoad here");
       cout(`jXhr: ${ev.type} event here`);
       cout(`jXhr: ${ev.loaded} bytes loaded"`);
       console.groupEnd();
