@@ -1,6 +1,7 @@
 ![Logo](./jobsearch-logo.webp?raw=true "Logo")
 
-A lightweight job search, made in vanilla TypeScript.
+A lightweight job-search.
+[![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 
 ## Currently under construction - complete rewrite from JS to TS.
 
