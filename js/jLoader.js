@@ -12,7 +12,7 @@
 /*
   How to use:
   1) Import this file into your project, for example:
-     import * as jLoader from "./jLoader.mjs";
+     import * as jLoader from "./jLoader.js";
   2) Use exported functions:
      jLoader.showLoader();
      jLoader.hideLoader();
@@ -69,9 +69,8 @@ function applyStyles(elem, objStyles) {
     }
 }
 function main() {
-    let divChild;
     try {
-        divChild = document.createElement("div");
+        let divChild = document.createElement("div");
         _loaderDiv = document.createElement("div");
         _loaderDiv.setAttribute("data-info", "jLoader");
         applyStyles(_loaderDiv, LOADERSTYLE_PARENT);

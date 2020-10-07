@@ -24,7 +24,7 @@ export function sendXhr(method, url, respType = "text", descr) {
  * @param method "GET" or "POST"
  * @param url "URL" for request
  * @param data Data to send with request
- * @param respType Response type, usually "text" or "json"
+ * @param respType Response type, "text" or "json"
  * @param descr Custom description of request for console output.
  */
 export function sendXhrData(method, url, data, respType, descr) {
@@ -35,7 +35,6 @@ export function sendXhrData(method, url, data, respType, descr) {
         let xhr = new XMLHttpRequest();
         const handleLoad = (ev) => {
             console.group(descr);
-            cout("handleLoad here");
             cout(`jXhr: ${ev.type} event here`);
             cout(`jXhr: ${ev.loaded} bytes loaded"`);
             console.groupEnd();

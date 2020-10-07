@@ -13,26 +13,25 @@
 // FIXME: Chromium & FF on Android bug when switching selection
 
 interface SelectBoxSetup {
-  textContents: [];
+  textContents?: string[];
   selectIndex: number;
   individualStyles: object;
   eachStyle: object;
-  classForSelected: string;
+  classForSelected?: string;
 };
 
 /**
  * Custom dropdown (select+option HTML nodes)
- * @param selectElem Reference to HTML <select> element.
  * @param setup Object with optional keys: textContents, selectIndex, individualStyles, eachStyle, classForSelected.
  * Provided textContents[] will override original <option> element text contents.
  */
-export function styleSelectbox(selectElem, setup: SelectBoxSetup) {
+export function styleSelectbox(selectElem: HTMLSelectElement, setup: SelectBoxSetup) {
   const {
-    textContents,
+    textContents = [],
     selectIndex,
     individualStyles,
     eachStyle,
-    classForSelected
+    classForSelected = "selected"
   } = setup;
 
   let span = document.createElement("span");
@@ -65,8 +64,8 @@ export function styleSelectbox(selectElem, setup: SelectBoxSetup) {
 
   if (textContents.length === 0) {
     // textContents[] not provided, so let's take it from original element
-    for (let i of selectElem.options) {
-      textContents.push(i.innerText);
+    for (let i = 0; i < selectElem.options.length; i++) {
+      textContents.push(selectElem.options[i].innerText);
     }
   }
 

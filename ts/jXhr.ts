@@ -31,7 +31,7 @@ export function sendXhr(method: TransferMethod, url: string, respType: ResponseT
  * @param method "GET" or "POST"
  * @param url "URL" for request
  * @param data Data to send with request
- * @param respType Response type, usually "text" or "json"
+ * @param respType Response type, "text" or "json"
  * @param descr Custom description of request for console output.
  */
 export function sendXhrData(method: TransferMethod, url: string, data: XhrData, respType: ResponseType, descr: string) {
@@ -42,9 +42,8 @@ export function sendXhrData(method: TransferMethod, url: string, data: XhrData, 
   const httpReq = function (resolve: (arg0: any) => void, reject: (arg0: Error) => void) {
     let xhr = new XMLHttpRequest();
 
-    const handleLoad = (ev) => {
+    const handleLoad = (ev: ProgressEvent) => {
       console.group(descr);
-      cout("handleLoad here");
       cout(`jXhr: ${ev.type} event here`);
       cout(`jXhr: ${ev.loaded} bytes loaded"`);
       console.groupEnd();

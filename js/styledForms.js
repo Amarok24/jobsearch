@@ -12,12 +12,11 @@
 ;
 /**
  * Custom dropdown (select+option HTML nodes)
- * @param selectElem Reference to HTML <select> element.
  * @param setup Object with optional keys: textContents, selectIndex, individualStyles, eachStyle, classForSelected.
  * Provided textContents[] will override original <option> element text contents.
  */
 export function styleSelectbox(selectElem, setup) {
-    const { textContents, selectIndex, individualStyles, eachStyle, classForSelected } = setup;
+    const { textContents = [], selectIndex, individualStyles, eachStyle, classForSelected = "selected" } = setup;
     let span = document.createElement("span");
     let ul = document.createElement("ul");
     // BEGIN: EVENT LISTENERS **********************************************
@@ -43,8 +42,8 @@ export function styleSelectbox(selectElem, setup) {
     span.append(ul);
     if (textContents.length === 0) {
         // textContents[] not provided, so let's take it from original element
-        for (let i of selectElem.options) {
-            textContents.push(i.innerText);
+        for (let i = 0; i < selectElem.options.length; i++) {
+            textContents.push(selectElem.options[i].innerText);
         }
     }
     for (let i = 0; i < selectElem.options.length; i++) {
