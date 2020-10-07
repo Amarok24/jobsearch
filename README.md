@@ -1,6 +1,8 @@
 ![Logo](./jobsearch-logo.webp?raw=true "Logo")
 
-A lightweight job search, made in vanilla JavaScript.
+A lightweight job search, made in vanilla TypeScript.
+
+## Currently under construction - complete rewrite from JS to TS.
 
 ## Online version
 https://amarok24.github.io/jobsearch/
