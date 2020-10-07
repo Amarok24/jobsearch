@@ -4,8 +4,6 @@ A lightweight job-search.
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 
-## Currently under construction - complete rewrite from JS to TS.
-
 ## Online version
 https://amarok24.github.io/jobsearch/
 
@@ -19,6 +17,7 @@ USA, Canada, Germany, Austria, Great Britain, France, Spain, Italy, Czechia
 - bugfixes in mobile version (language switch)
 - better layout / design
 - settings menu with light/dark mode switch
+- code cleanup in TypeScript
 
 ### Non-urgent plans:
 - sorting of search results
