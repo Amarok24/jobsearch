@@ -1,7 +1,5 @@
 ﻿﻿/**
-  * @name jXhr.ts
   * @description Asynchronous XMLHttpRequest (XHR) library.
-  * @version 0.3
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -9,6 +7,9 @@
   v. 2.0. If a copy of the MPL was not distributed with this file, you can
   obtain one at http://mozilla.org/MPL/2.0/.
 */
+/**
+ *
+ */
 
 type TransferMethod = "GET" | "POST";
 type ResponseType = "text" | "json";
@@ -24,7 +25,6 @@ type XhrData = null | string | Document | Blob | FormData;
 export function sendXhr(method: TransferMethod, url: string, respType: ResponseType = "text", descr: string) {
   return sendXhrData(method, url, null, respType, descr);
 }
-
 
 /**
  * Asynchronous XHR function.
@@ -58,7 +58,7 @@ export function sendXhrData(method: TransferMethod, url: string, data: XhrData, 
       }
     };
 
-    const handleError = (ev) => {
+    const handleError = (ev: ProgressEvent) => {
       // serious error like timeout or unreachable URL or no internet connection
       reject(new Error("jXhr: failed to send request!"));
       console.group(descr);

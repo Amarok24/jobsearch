@@ -1,20 +1,9 @@
-/**
- * @name jobSearch.ts
- * @description Vanilla TypeScript program for job-search on Monster server.
- * @version 1.00
- * @author Jan Prazak
- * @website https://github.com/Amarok24/
- * @license MPL-2.0
- This Source Code Form is subject to the terms of the Mozilla Public License,
- v. 2.0. If a copy of the MPL was not distributed with this file, you can
- obtain one at http://mozilla.org/MPL/2.0/.
-*/
 import * as jXhr from "./jXhr.js";
 import * as jLoader from "./jLoader.js";
 import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
-const cout = console.log, cerr = console.error, DUMMY_LOGO = "icons/logo-placeholder-optim.svg", SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches, SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches, SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches, TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+const cout = console.log, cerr = console.error, DUMMY_LOGO = "icons/logo-placeholder-optim.svg", SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
 let _messages = getElem("messages"), _templateJob = getElem("templateJob"), _searchResults = getElem("searchResults"), _jobHeader = getElem("jobHeader"), _rawJobData = getElem("rawJobData"), _searchButton = getElem("searchButton"), _loadMoreButton = getElem("loadMoreButton"), _countrySelectBox = getElem("countriesList"), _toggleResults = getElem("toggleResults");
 let _currentResults = [];
 let _responseFingerprint;
@@ -34,9 +23,6 @@ function generateError(msg, code) {
         errorCode: code
     };
 }
-/**
- * @description Shows or hides the "Load more" button below search results
- */
 function showLoadMore(showButton = true) {
     if (showButton) {
         cout("showing 'Load more' button");
@@ -49,12 +35,6 @@ function showLoadMore(showButton = true) {
         document.body.append(_loadMoreButton);
     }
 }
-/**
- * @description Search for jobs is handled here :-)
- * @param searchLocation Location (city)
- * @param pageOffset Page offset, starts at offset 0 (influenced by pageSize)
- * @param pageSize Results per page (influences pageOffset)
- */
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
     const dataQuery = {
         jobQuery: {
@@ -70,7 +50,6 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
     try {
         responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
         cout("responseData OK!");
-        // all errors occuring inside of processResults will also be caught here
         _responseFingerprint = processResults(responseData);
         if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
             showLoadMore();
@@ -86,20 +65,12 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
         jLoader.hideLoader();
     }
 }
-/**
- * @description Makes all special character XML-conform.
- */
 function makeXMLconform(inputText) {
     let out = "";
     let regex = /&(?!amp|#38)/g;
-    //TODO: more special characters
     out = inputText.replace(regex, "&amp;");
     return out;
 }
-/**
- * @description View job details by jobID from search results
- * @returns {number} returns 0 if foundIndex is null, otherwise 1
- */
 function viewJob(id) {
     let foundIndex = null, myDate, formattedDate = "", jobTitle = "", logoSrc = "";
     let companyLogoBig;
@@ -110,7 +81,6 @@ function viewJob(id) {
         }
     }
     if (foundIndex === null) {
-        // this should never happen
         cerr("viewJob() foundIndex is null");
         return 0;
     }
@@ -129,9 +99,6 @@ function viewJob(id) {
     _jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
     _jobHeader.querySelector("span").innerText = formattedDate;
     _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
-    //_jobHeader.getElementsByClassName("companyLogoBig")[0].src = logoSrc;
-    //getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
-    //companyLogoBig = queryHTMLElem(".companyLogoBig") as HTMLImageElement;
     companyLogoBig = _jobHeader.querySelector(".companyLogoBig");
     companyLogoBig.src = logoSrc;
     try {
@@ -145,26 +112,19 @@ function viewJob(id) {
     }
     return 1;
 }
-/**
- * @description Click on individual job result will show the full job view.
- */
-function jobClick() {
-    // 'this' is the node <article class="job">
+function jobClick(ev) {
     const jobID = this.getAttribute("data-jobid");
     const resultNodeLists = _searchResults.querySelectorAll("article");
     for (let i = 0; i < resultNodeLists.length; i++) {
         resultNodeLists[i].classList.remove("selected");
     }
     this.classList.add("selected");
-    viewJob(jobID);
+    if (jobID)
+        viewJob(jobID);
     if (SCREEN_MEDIUM) {
         toggleResultsClick();
     }
 }
-/**
- * @description Main function to process incoming JSON data.
- * @param data XHR response data
- */
 function processResults(data) {
     var _a, _b;
     let response = {
@@ -198,19 +158,17 @@ function processResults(data) {
     jHelpers.outText(_messages, response.pageOffset + data.totalSize, true);
     jHelpers.outText(_messages, " currently loaded");
     for (let i = 0; i < data.totalSize; i++) {
-        // data.totalSize is the number of jobs returned in current pageOffset
-        let job = document.importNode(_templateJob.content, true); // true = deep copy
-        // type of 'job' is developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
+        let job = document.importNode(_templateJob.content, true);
         let postalCode = data.jobResults[i].jobPosting.jobLocation[0].address.postalCode;
         let locality = data.jobResults[i].jobPosting.jobLocation[0].address.addressLocality;
         let countryCode = data.jobResults[i].jobPosting.jobLocation[0].address.addressCountry;
-        //let refNum = data.jobResults[i].jobPosting.identifier.value; // customer's own refnum
         let companyName = data.jobResults[i].jobPosting.hiringOrganization.name;
         let logo = data.jobResults[i].jobPosting.hiringOrganization.logo;
         let jobID = data.jobResults[i].jobId;
         let summary = data.jobResults[i].jobPosting.description;
         summary = jHelpers.removeHtmlTags(summary);
-        job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
+        if (job.firstElementChild)
+            job.firstElementChild.setAttribute("data-jobid", jobID);
         job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
         if (!postalCode) {
             postalCode = "";
@@ -223,20 +181,17 @@ function processResults(data) {
             smallLogo = job.querySelector(".companyLogoSmall");
             smallLogo.src = logo;
         }
-        job.firstElementChild.addEventListener("click", jobClick);
+        if (job.firstElementChild)
+            job.firstElementChild.addEventListener("click", jobClick);
         _searchResults.append(job);
         _currentResults.push(data.jobResults[i]);
     }
     cout("_currentResults:", _currentResults);
     if (response.pageOffset === 0) {
-        // we are on 1st page, directly select (click) 1st job in results
         jobClick.apply(_searchResults.querySelector("article"));
     }
     return response;
 }
-/**
- * @description SEARCH button click handler
- */
 function searchClick(ev) {
     let title = getInputElem("inputTitle").value;
     let location = getInputElem("inputLocation").value;
@@ -248,42 +203,33 @@ function searchClick(ev) {
     jHelpers.removeChildrenOf(_messages);
     jHelpers.removeChildrenOf(_searchResults);
     searchJobs(title, location);
-    _searchButton.blur(); // remove focus
+    _searchButton.blur();
 }
-/**
- * @description "Load more" button click handler
- */
 function loadMoreClick() {
     cout("loading more jobs...");
     showLoadMore(false);
     searchJobs(_responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize);
 }
-/**
- * @description Click handler for "toggle search results" icon
- */
-function toggleResultsClick() {
-    const opened = !!_toggleResults.dataset.opened;
+function toggleResultsClick(ev) {
+    const opened = !!_toggleResults.dataset["opened"];
     cout(_toggleResults.dataset);
     if (!opened) {
-        _toggleResults.dataset.opened = "1";
+        _toggleResults.dataset["opened"] = "1";
         _searchResults.style.left = "0";
         queryHTMLElem(".jobContent").style.height = "1px";
         queryHTMLElem(".jobContent").style.overflowY = "hidden";
     }
     else {
-        delete _toggleResults.dataset.opened;
+        delete _toggleResults.dataset["opened"];
         _searchResults.style.left = "-100%";
         queryHTMLElem(".jobContent").style.height = "auto";
         queryHTMLElem(".jobContent").style.overflowY = "scroll";
     }
 }
-// ADD EVENTS
 _searchButton.addEventListener("click", searchClick);
 _loadMoreButton.addEventListener("click", loadMoreClick);
 _toggleResults.addEventListener("click", toggleResultsClick);
-// CUSTOM FORM ELEMENTS
 sForms.styleSelectbox(_countrySelectBox, {
-    //textContents: ["US", "CA", "DE", "AT", "GB", "FR", "ES", "IT", "CZ"],
     selectIndex: 2,
     individualStyles: [
         { backgroundImage: "url(icons/flags/us.svg)" },
@@ -303,8 +249,6 @@ sForms.styleSelectbox(_countrySelectBox, {
         backgroundRepeat: "no-repeat"
     }
 });
-/* Icon source https://github.com/lipis/flag-icon-css
-License: MIT License, see icons/flags/LICENSE.flags.txt */
 const darkTheme = {
     "--color_1": "#10021b",
     "--color_2": "#38062f",
@@ -319,7 +263,6 @@ const darkTheme = {
     "--color_11": "#303030",
     "--color_12": "darkred"
 };
-//setTimeout(setDark, 3000);
 function setDark() {
     jHelpers.setCSSrootColors(darkTheme);
 }

@@ -1,7 +1,5 @@
 ﻿﻿/**
-  * @name jobSearch.ts
   * @description Vanilla TypeScript program for job-search on Monster server.
-  * @version 1.00
   * @author Jan Prazak
   * @website https://github.com/Amarok24/
   * @license MPL-2.0
@@ -9,6 +7,9 @@
   v. 2.0. If a copy of the MPL was not distributed with this file, you can
   obtain one at http://mozilla.org/MPL/2.0/.
 */
+/**
+ *
+ */
 
 import * as jXhr from "./jXhr.js";
 import * as jLoader from "./jLoader.js";
@@ -16,26 +17,26 @@ import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
 
-
 const cout = console.log,
       cerr = console.error,
       DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
-      SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches,
-      SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches,
-      SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
-      TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+      //SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches,
+      //SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
+      SCREEN_MEDIUM =
+        window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
 
-let _messages = getElem("messages"),
+
+let _messages = getElem("messages")!,
     _templateJob = getElem("templateJob") as HTMLTemplateElement,
-    _searchResults = getElem("searchResults"),
-    _jobHeader = getElem("jobHeader"),
-    _rawJobData = getElem("rawJobData"),
-    _searchButton = getElem("searchButton"),
-    _loadMoreButton = getElem("loadMoreButton"),
+    _searchResults = getElem("searchResults")!,
+    _jobHeader = getElem("jobHeader")!,
+    _rawJobData = getElem("rawJobData")!,
+    _searchButton = getElem("searchButton")!,
+    _loadMoreButton = getElem("loadMoreButton")!,
     _countrySelectBox = getElem("countriesList") as HTMLSelectElement,
-    _toggleResults = getElem("toggleResults");
+    _toggleResults = getElem("toggleResults")!;
 
-let _currentResults = [];
+let _currentResults: any[] = [];
 let _responseFingerprint: Response;
 
 interface Response {
@@ -46,20 +47,17 @@ interface Response {
   totalResults: number;
 };
 
-
-function getElem(elem: string): HTMLElement {
+function getElem(elem: string): HTMLElement | null {
   return document.getElementById(elem);
 }
 
-function getInputElem(elem: string): HTMLInputElement {
+function getInputElem(elem: string): HTMLInputElement | null {
   return document.getElementById(elem) as HTMLInputElement;
 }
 
-
-function queryHTMLElem(elem: string): HTMLElement {
+function queryHTMLElem(elem: string): HTMLElement | null {
   return document.querySelector(elem);
 }
-
 
 function generateError(msg: string, code: number): never {
   throw {
@@ -175,11 +173,11 @@ function viewJob(id: string): number {
   if (jobTitle.length > 70) {
     jobTitle = jobTitle.substring(0, 70) + "...";
   }
-  _jobHeader.querySelector("h2").innerText = jobTitle;
-  _jobHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
-  _jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
-  _jobHeader.querySelector("span").innerText = formattedDate;
-  _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
+  _jobHeader.querySelector("h2")!.innerText = jobTitle;
+  _jobHeader.querySelector("h3")!.innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
+  _jobHeader.querySelector("h4")!.innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
+  _jobHeader.querySelector("span")!.innerText = formattedDate;
+  _jobHeader.querySelector("a")!.href = _currentResults[foundIndex].apply.applyUrl;
   //_jobHeader.getElementsByClassName("companyLogoBig")[0].src = logoSrc;
   //getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
   //companyLogoBig = queryHTMLElem(".companyLogoBig") as HTMLImageElement;
@@ -201,8 +199,9 @@ function viewJob(id: string): number {
 /**
  * @description Click on individual job result will show the full job view.
  */
-function jobClick(): void {
-  // 'this' is the node <article class="job">
+function jobClick(this: HTMLElement, ev?: Event): void {
+  // 'this' here is always the node <article class="job">, so it's of type HTMLElement
+  // 'ev' is undefined (because not used) when jobClick is called via apply()
   const jobID = this.getAttribute("data-jobid");
   const resultNodeLists = _searchResults.querySelectorAll("article");
 
@@ -211,7 +210,7 @@ function jobClick(): void {
   }
 
   this.classList.add("selected");
-  viewJob(jobID);
+  if(jobID) viewJob(jobID);
 
   if (SCREEN_MEDIUM) {
     toggleResultsClick();
@@ -277,24 +276,24 @@ function processResults(data: any): Response {
     let summary = data.jobResults[i].jobPosting.description;
     summary = jHelpers.removeHtmlTags(summary);
 
-    job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
-    job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
+    if (job.firstElementChild) job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
+    job.querySelector("h3")!.textContent = data.jobResults[i].jobPosting.title;
 
     if (!postalCode) {
       postalCode = "";
     }
 
-    job.querySelector(".company").textContent = companyName;
-    job.querySelector(".location").textContent = `${postalCode} ${locality} (${countryCode})`;
-    job.querySelector(".lastUpdate").textContent = data.jobResults[i].dateRecency;
-    job.querySelector(".summary").textContent = summary.substring(0, 160) + "... ";
+    job.querySelector(".company")!.textContent = companyName;
+    job.querySelector(".location")!.textContent = `${postalCode} ${locality} (${countryCode})`;
+    job.querySelector(".lastUpdate")!.textContent = data.jobResults[i].dateRecency;
+    job.querySelector(".summary")!.textContent = summary.substring(0, 160) + "... ";
 
     if (logo) {
       smallLogo = job.querySelector(".companyLogoSmall") as HTMLImageElement;
       smallLogo.src = logo;
     }
 
-    job.firstElementChild.addEventListener("click", jobClick);
+    if (job.firstElementChild) job.firstElementChild.addEventListener("click", jobClick);
 
     _searchResults.append(job);
     _currentResults.push(data.jobResults[i]);
@@ -304,7 +303,7 @@ function processResults(data: any): Response {
 
   if (response.pageOffset === 0) {
     // we are on 1st page, directly select (click) 1st job in results
-    jobClick.apply(_searchResults.querySelector("article"));
+    jobClick.apply(_searchResults.querySelector("article")!);
   }
 
   return response;
@@ -314,9 +313,9 @@ function processResults(data: any): Response {
  * @description SEARCH button click handler
  */
 function searchClick(ev: Event) {
-  let title = getInputElem("inputTitle").value;
-  let location = getInputElem("inputLocation").value;
-  let intro = getElem("intro");
+  let title = getInputElem("inputTitle")!.value;
+  let location = getInputElem("inputLocation")!.value;
+  let intro = getElem("intro")!;
   cout(typeof ev);
   cout(ev);
   ev.preventDefault();
@@ -340,21 +339,21 @@ function loadMoreClick(): void {
 /**
  * @description Click handler for "toggle search results" icon
  */
-function toggleResultsClick(): void {
-  const opened = !!_toggleResults.dataset.opened;
+function toggleResultsClick(ev?: Event): void {
+  const opened = !!_toggleResults.dataset["opened"];
 
   cout(_toggleResults.dataset);
 
   if (!opened) {
-    _toggleResults.dataset.opened = "1";
+    _toggleResults.dataset["opened"] = "1";
     _searchResults.style.left = "0";
-    queryHTMLElem(".jobContent").style.height = "1px";
-    queryHTMLElem(".jobContent").style.overflowY = "hidden";
+    queryHTMLElem(".jobContent")!.style.height = "1px";
+    queryHTMLElem(".jobContent")!.style.overflowY = "hidden";
   } else {
-    delete _toggleResults.dataset.opened;
+    delete _toggleResults.dataset["opened"];
     _searchResults.style.left = "-100%";
-    queryHTMLElem(".jobContent").style.height = "auto";
-    queryHTMLElem(".jobContent").style.overflowY = "scroll";
+    queryHTMLElem(".jobContent")!.style.height = "auto";
+    queryHTMLElem(".jobContent")!.style.overflowY = "scroll";
   }
 }
 

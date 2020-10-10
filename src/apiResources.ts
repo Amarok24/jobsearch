@@ -1,4 +1,12 @@
-﻿const apiList = {
+﻿interface JobServerList {
+  // this type declaration is needed else we get error in index.ts accessing APILIST[...]
+  [countryCode: string]: {
+    url: string;
+    code: string;
+  };
+};
+
+const apiList: JobServerList = {
   US: {
     url: "https://services.monster.io/jobs-svx-service/v2/search-jobs/samsearch/en-us",
     code: "us"

@@ -17,7 +17,7 @@ USA, Canada, Germany, Austria, Great Britain, France, Spain, Italy, Czechia
 - bugfixes in mobile version (language switch)
 - better layout / design
 - settings menu with light/dark mode switch
-- code cleanup in TypeScript
+- more code cleanup in TypeScript
 
 ### Non-urgent plans:
 - sorting of search results

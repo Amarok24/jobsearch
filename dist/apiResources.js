@@ -1,3 +1,4 @@
+;
 const apiList = {
     US: {
         url: "https://services.monster.io/jobs-svx-service/v2/search-jobs/samsearch/en-us",
