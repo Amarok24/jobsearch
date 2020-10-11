@@ -276,7 +276,7 @@ function processResults(data: any): Response {
     let summary = data.jobResults[i].jobPosting.description;
     summary = jHelpers.removeHtmlTags(summary);
 
-    if (job.firstElementChild) job.firstElementChild.setAttribute("data-jobid", jobID); // data-xx always lowercase
+    job.firstElementChild?.setAttribute("data-jobid", jobID); // data-xx always lowercase
     job.querySelector("h3")!.textContent = data.jobResults[i].jobPosting.title;
 
     if (!postalCode) {
@@ -293,7 +293,7 @@ function processResults(data: any): Response {
       smallLogo.src = logo;
     }
 
-    if (job.firstElementChild) job.firstElementChild.addEventListener("click", jobClick);
+    job.firstElementChild?.addEventListener("click", jobClick);
 
     _searchResults.append(job);
     _currentResults.push(data.jobResults[i]);

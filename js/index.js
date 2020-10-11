@@ -126,7 +126,7 @@ function jobClick(ev) {
     }
 }
 function processResults(data) {
-    var _a, _b;
+    var _a, _b, _c, _d;
     let response = {
         searchTerm: "",
         searchLocation: "",
@@ -167,8 +167,7 @@ function processResults(data) {
         let jobID = data.jobResults[i].jobId;
         let summary = data.jobResults[i].jobPosting.description;
         summary = jHelpers.removeHtmlTags(summary);
-        if (job.firstElementChild)
-            job.firstElementChild.setAttribute("data-jobid", jobID);
+        (_c = job.firstElementChild) === null || _c === void 0 ? void 0 : _c.setAttribute("data-jobid", jobID);
         job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
         if (!postalCode) {
             postalCode = "";
@@ -181,8 +180,7 @@ function processResults(data) {
             smallLogo = job.querySelector(".companyLogoSmall");
             smallLogo.src = logo;
         }
-        if (job.firstElementChild)
-            job.firstElementChild.addEventListener("click", jobClick);
+        (_d = job.firstElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", jobClick);
         _searchResults.append(job);
         _currentResults.push(data.jobResults[i]);
     }

@@ -111,7 +111,7 @@ export function styleSelectbox(selectElem: HTMLSelectElement, setup: SelectBoxSe
   }
 
   applyStyles(selectElem, {display: "none"});
-  if (selectElem.parentElement) selectElem.parentElement.append(span);
+  selectElem.parentElement?.append(span);
 }
 
 

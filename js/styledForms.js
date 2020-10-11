@@ -2,6 +2,7 @@ const TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").mat
 ;
 ;
 export function styleSelectbox(selectElem, setup) {
+    var _a;
     const { textContents = [], selectIndex, individualStyles, eachStyle, classForSelected = "selected" } = setup;
     let span = document.createElement("span");
     let ul = document.createElement("ul");
@@ -57,8 +58,7 @@ export function styleSelectbox(selectElem, setup) {
         ul.append(li);
     }
     applyStyles(selectElem, { display: "none" });
-    if (selectElem.parentElement)
-        selectElem.parentElement.append(span);
+    (_a = selectElem.parentElement) === null || _a === void 0 ? void 0 : _a.append(span);
 }
 function applyStyles(elem, objStyles) {
     if (Array.isArray(objStyles)) {
