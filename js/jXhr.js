@@ -40,3 +40,4 @@ export function sendXhrData(method, url, data, respType, descr) {
     httpPromise = new Promise(httpReq);
     return httpPromise;
 }
+//# sourceMappingURL=jXhr.js.map

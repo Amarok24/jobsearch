@@ -15,22 +15,26 @@ type Filterable = object | object[];
 
 
 /**
- * Outputs text to HTML element, optional HTML <strong> and <br/>, manipulates given 'element' node directly.
+ * Outputs text to HTML element, optional HTML <strong> and <br/>, manipulates given 'element' node directly. Text will be always wrapped by <p> element.
  * @param bold Format with <strong>
+ * @param wrapper Wrap whole text with given element name, default is "span".
  * @param linebreak Add a <br /> at the end
  */
-export function outText(element: HTMLElement, text: string, bold=false, linebreak=false): void {
+export function outText(element: HTMLElement, text: string, bold=false, wrapper="span", linebreak=false): void {
   const message = document.createTextNode(text); // because .innerHTML is insecure
   let fragment = document.createDocumentFragment();
   let strong,
       br;
+  let paragraph = document.createElement(wrapper);
 
   if (bold) {
     strong = document.createElement("strong");
+    paragraph.appendChild(strong);
     strong.appendChild(message);
-    fragment.appendChild(strong);
+    fragment.appendChild(paragraph);
   } else {
-    fragment.appendChild(message);
+    paragraph.appendChild(message);
+    fragment.appendChild(paragraph);
   }
 
   if (linebreak) {
@@ -46,7 +50,7 @@ export function outText(element: HTMLElement, text: string, bold=false, linebrea
  * @param bold Format with <strong>
  */
 export function outTextBr(element: HTMLElement, text="", bold=false): void {
-  outText(element, text, bold, true);
+  outText(element, text, bold, "span", true);
 }
 
 /**

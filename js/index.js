@@ -8,6 +8,7 @@ let _messages = getElem("messages"), _templateJob = getElem("templateJob"), _sea
 let _currentResults = [];
 let _responseFingerprint;
 ;
+;
 function getElem(elem) {
     return document.getElementById(elem);
 }
@@ -25,12 +26,10 @@ function generateError(msg, code) {
 }
 function showLoadMore(showButton = true) {
     if (showButton) {
-        cout("showing 'Load more' button");
         _searchResults.append(_loadMoreButton);
         _loadMoreButton.style.display = "block";
     }
     else {
-        cout("hiding 'Load more' button");
         _loadMoreButton.style.display = "none";
         document.body.append(_loadMoreButton);
     }
@@ -44,15 +43,17 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
         offset: pageOffset,
         pageSize: pageSize
     };
-    let responseData = null;
+    let responseData;
     jLoader.showLoader();
     cout(`selected country: ${_countrySelectBox.value}`);
     try {
         responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
         cout("responseData OK!");
         _responseFingerprint = processResults(responseData);
-        if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
-            showLoadMore();
+        if (_responseFingerprint.pageOffset !== undefined && _responseFingerprint.pageSize !== undefined) {
+            if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
+                showLoadMore();
+            }
         }
     }
     catch (error) {
@@ -135,18 +136,19 @@ function processResults(data) {
         totalResults: data.estimatedTotalSize
     };
     let smallLogo;
-    cout("data:", data);
+    cout("processResults here, data:", data);
     if (!data) {
-        jHelpers.outTextBr(_messages, "Unusual error, no data in processResults.");
-        response.searchTerm = "ERROR";
-        return response;
+        jHelpers.outTextBr(_messages, "Unusual error, 'data' in processResults undefined.");
+        generateError("Unusual error, 'data' in processResults undefined.", 2);
     }
     if (response.totalResults === 0) {
         jHelpers.outTextBr(_messages, "0 jobs found");
         return response;
     }
-    response.searchTerm = data.jobRequest.jobQuery.query;
-    response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
+    if (data.jobRequest) {
+        response.searchTerm = data.jobRequest.jobQuery.query;
+        response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
+    }
     jHelpers.removeChildrenOf(_messages);
     jHelpers.outText(_messages, response.searchTerm, true);
     if (response.searchLocation.length !== 0) {
@@ -155,7 +157,9 @@ function processResults(data) {
     }
     jHelpers.outText(_messages, ", total results: ");
     jHelpers.outTextBr(_messages, response.totalResults.toString(), true);
-    jHelpers.outText(_messages, response.pageOffset + data.totalSize, true);
+    if (response.pageOffset !== undefined) {
+        jHelpers.outText(_messages, response.pageOffset + data.totalSize + "", true);
+    }
     jHelpers.outText(_messages, " currently loaded");
     for (let i = 0; i < data.totalSize; i++) {
         let job = document.importNode(_templateJob.content, true);
@@ -194,8 +198,7 @@ function searchClick(ev) {
     let title = getInputElem("inputTitle").value;
     let location = getInputElem("inputLocation").value;
     let intro = getElem("intro");
-    cout(typeof ev);
-    cout(ev);
+    cout(ev.constructor.name);
     ev.preventDefault();
     intro.style.display = "none";
     jHelpers.removeChildrenOf(_messages);
@@ -204,9 +207,10 @@ function searchClick(ev) {
     _searchButton.blur();
 }
 function loadMoreClick() {
+    const pOffset = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
     cout("loading more jobs...");
     showLoadMore(false);
-    searchJobs(_responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize);
+    searchJobs(_responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize);
 }
 function toggleResultsClick(ev) {
     const opened = !!_toggleResults.dataset["opened"];
@@ -264,3 +268,4 @@ const darkTheme = {
 function setDark() {
     jHelpers.setCSSrootColors(darkTheme);
 }
+//# sourceMappingURL=index.js.map

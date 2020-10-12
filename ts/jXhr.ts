@@ -34,8 +34,9 @@ export function sendXhr(method: TransferMethod, url: string, respType: ResponseT
  * @param respType Response type, "text" or "json"
  * @param descr Custom description of request for console output.
  */
-export function sendXhrData(method: TransferMethod, url: string, data: XhrData, respType: ResponseType, descr: string) {
-  let httpPromise: Promise<unknown>;
+export function sendXhrData(method: TransferMethod, url: string, data: XhrData, respType: ResponseType, descr: string): Promise<any> {
+  
+  let httpPromise: Promise<any>;
   const cout = console.log;
   const cerr = console.error;
 

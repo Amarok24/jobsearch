@@ -37,14 +37,60 @@ let _messages = getElem("messages")!,
     _toggleResults = getElem("toggleResults")!;
 
 let _currentResults: any[] = [];
-let _responseFingerprint: Response;
+let _responseFingerprint: ProcessedData;
 
-interface Response {
+interface ProcessedData {
   searchTerm: string;
   searchLocation: string;
-  pageOffset: number;
-  pageSize: number;
+  pageOffset?: number;
+  pageSize?: number;
   totalResults: number;
+};
+
+interface JsonSingleJobResult {
+  dateRecency: string;
+  schemaVersion: string;
+  jobId: string;
+  status: string;
+  jobPosting: {
+    title: string;
+    description: string;
+    url: string;
+    datePosted: string;
+    jobLocation: [
+      {
+        address: {
+          addressLocality: string;
+          addressRegion: string;
+          addressCountry: string;
+          postalCode?: string;
+        }
+      }
+    ];
+    hiringOrganization: {
+      name: string;
+      logo?: string;
+    }
+  }
+}
+
+interface JsonResponse {
+  jobRequest?: {
+    offset: number;
+    pageSize: number;
+    jobQuery: {
+      query: string;
+      locations: [
+        {
+          address: string;
+          country: string;
+        }
+      ];
+    };
+  };
+  totalSize: number;
+  estimatedTotalSize: number;
+  jobResults: JsonSingleJobResult[] | []; // empty[] if totalSize: 0 (no jobs found)
 };
 
 function getElem(elem: string): HTMLElement | null {
@@ -70,13 +116,11 @@ function generateError(msg: string, code: number): never {
 /**
  * @description Shows or hides the "Load more" button below search results
  */
-function showLoadMore(showButton: boolean = true): void {
+function showLoadMore(showButton = true): void {
   if (showButton) {
-    cout("showing 'Load more' button");
     _searchResults.append(_loadMoreButton);
     _loadMoreButton.style.display = "block";
   } else {
-    cout("hiding 'Load more' button");
     _loadMoreButton.style.display = "none";
     document.body.append(_loadMoreButton);
   }
@@ -98,7 +142,7 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
     pageSize: pageSize
   };
 
-  let responseData = null;
+  let responseData: JsonResponse;
   jLoader.showLoader();
 
   cout(`selected country: ${_countrySelectBox.value}`);
@@ -110,8 +154,10 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
     // all errors occuring inside of processResults will also be caught here
     _responseFingerprint = processResults(responseData);
 
-    if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
-      showLoadMore();
+    if (_responseFingerprint.pageOffset !== undefined && _responseFingerprint.pageSize !== undefined) {
+      if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
+        showLoadMore();
+      }
     }
   } catch (error) {
     cerr("catch block here, details: ", error);
@@ -221,8 +267,8 @@ function jobClick(this: HTMLElement, ev?: Event): void {
  * @description Main function to process incoming JSON data.
  * @param data XHR response data
  */
-function processResults(data: any): Response {
-  let response: Response = {
+function processResults(data: JsonResponse): ProcessedData {
+  let response: ProcessedData = {
     searchTerm: "",
     searchLocation: "",
     pageOffset: data.jobRequest?.offset, // ?. == optional chaining, ES2020
@@ -232,12 +278,11 @@ function processResults(data: any): Response {
 
   let smallLogo: HTMLImageElement;
 
-  cout("data:", data);
+  cout("processResults here, data:", data);
 
   if (!data) {
-    jHelpers.outTextBr(_messages, "Unusual error, no data in processResults.");
-    response.searchTerm = "ERROR";
-    return response;
+    jHelpers.outTextBr(_messages, "Unusual error, 'data' in processResults undefined.");
+    generateError("Unusual error, 'data' in processResults undefined.", 2);
   }
 
   if (response.totalResults === 0) {
@@ -245,8 +290,10 @@ function processResults(data: any): Response {
     return response;
   }
 
-  response.searchTerm = data.jobRequest.jobQuery.query;
-  response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
+  if (data.jobRequest) {
+    response.searchTerm = data.jobRequest.jobQuery.query;
+    response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
+  }
 
   jHelpers.removeChildrenOf(_messages);
   jHelpers.outText(_messages, response.searchTerm, true);
@@ -256,7 +303,11 @@ function processResults(data: any): Response {
   }
   jHelpers.outText(_messages, ", total results: ");
   jHelpers.outTextBr(_messages, response.totalResults.toString(), true);
-  jHelpers.outText(_messages, response.pageOffset + data.totalSize, true);
+
+  if (response.pageOffset !== undefined) {
+    jHelpers.outText(_messages, response.pageOffset + data.totalSize + "", true);
+  }
+
   jHelpers.outText(_messages, " currently loaded");
 
   for (let i = 0; i < data.totalSize; i++) {
@@ -316,8 +367,7 @@ function searchClick(ev: Event) {
   let title = getInputElem("inputTitle")!.value;
   let location = getInputElem("inputLocation")!.value;
   let intro = getElem("intro")!;
-  cout(typeof ev);
-  cout(ev);
+  cout(ev.constructor.name); // MouseEvent
   ev.preventDefault();
   intro.style.display = "none";
   jHelpers.removeChildrenOf(_messages);
@@ -331,9 +381,10 @@ function searchClick(ev: Event) {
  * @description "Load more" button click handler
  */
 function loadMoreClick(): void {
+  const pOffset = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
   cout("loading more jobs...");
   showLoadMore(false);
-  searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, _responseFingerprint.pageOffset + 10, _responseFingerprint.pageSize );
+  searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize );
 }
 
 /**

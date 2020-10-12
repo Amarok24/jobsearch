@@ -52,3 +52,4 @@ function main() {
     document.body.append(_loaderDiv);
 }
 main();
+//# sourceMappingURL=jLoader.js.map

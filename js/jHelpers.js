@@ -1,14 +1,17 @@
-export function outText(element, text, bold = false, linebreak = false) {
+export function outText(element, text, bold = false, wrapper = "span", linebreak = false) {
     const message = document.createTextNode(text);
     let fragment = document.createDocumentFragment();
     let strong, br;
+    let paragraph = document.createElement(wrapper);
     if (bold) {
         strong = document.createElement("strong");
+        paragraph.appendChild(strong);
         strong.appendChild(message);
-        fragment.appendChild(strong);
+        fragment.appendChild(paragraph);
     }
     else {
-        fragment.appendChild(message);
+        paragraph.appendChild(message);
+        fragment.appendChild(paragraph);
     }
     if (linebreak) {
         br = document.createElement("br");
@@ -17,7 +20,7 @@ export function outText(element, text, bold = false, linebreak = false) {
     element.appendChild(fragment);
 }
 export function outTextBr(element, text = "", bold = false) {
-    outText(element, text, bold, true);
+    outText(element, text, bold, "span", true);
 }
 export function removeChildrenOf(element) {
     while (element.lastElementChild) {
@@ -81,3 +84,4 @@ export function setCSSrootColors(colors) {
         rootElem.style.setProperty(colorName, colors[colorName]);
     }
 }
+//# sourceMappingURL=jHelpers.js.map

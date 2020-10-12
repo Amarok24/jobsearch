@@ -38,3 +38,4 @@ const apiList = {
     }
 };
 export default apiList;
+//# sourceMappingURL=apiResources.js.map

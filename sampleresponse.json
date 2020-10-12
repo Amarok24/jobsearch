@@ -1,0 +1,848 @@
+﻿{
+  "totalSize": 5,
+  "estimatedTotalSize": 5,
+  "jobResults": [
+    {
+      "schemaVersion": "2.0.12",
+      "jobId": "6c1dbf3f-1579-43d7-a512-47edeb161b1c",
+      "externalIdentifiers": [
+        {
+          "identifierName": "NOW_POSTING_ID",
+          "identifierValue": "c5510271-c667-4c9e-a5e4-6ea722e019f5"
+        }
+      ],
+      "status": "ACTIVE",
+      "jobPosting": {
+        "@context": "http://schema.org",
+        "@type": "JobPosting",
+        "description": "<p><strong>About ESR Labs</strong></p><p>We are an embedded automotive software company. In other words, we develop innovative embedded software for high-tech cars. Within only six years, we have achieved the status of a Tier 1 software supplier providing us with the opportunity to work directly with some of the most respected and distinguished premium car manufacturers and suppliers in the market. Our work is already part of millions of vehicles and enables those vehicles to take advantages of what has become state of the art in consumer electronics: internet connectivity, artificial intelligence, autonomy, cloud computing, and over-the-air feature updates.</p><p> </p><p><strong>Job description </strong></p><p>As C++ Software Developer, you are involved in very demanding projects in cooperation with our leading automotive OEMs. You develop software which ensures network communication within control devices used in world-renowned vehicle brands (such as Volkswagen/Audi or BMW). You are part of the entire process of development and you work with different Fieldbus technologies like Ethernet, CAN and FlexRay.</p><p> </p><p><strong>Contact </strong></p><p>Your application will be processed by the Job Ambition GmbH, our strategic recruiting partner. If you have questions, feel free to contact Ms. Anastasia Michurina by phone: + 49 (0) 711 400 538 81.</p><p> </p><p><strong>Qualifications</strong></p><p><strong>Required qualifications: </strong></p><ul><li>Excellent teamwork capability</li><li>Completed degree in Information Technology or comparable education</li><li>Excellent knowledge of C++</li><li>Good knowledge of network technologies (e.g. TCP/IP, CAN or Ethernet)</li><li>Ready to make a strong commitment to both the customer and to the team</li><li>Willingness to work with hardware interfaces</li><li>Good expertise in operating systems like Windows or Linux</li><li>Good knowledge in git</li><li>Fluent English language skills</li></ul><p> </p><p><strong>Desired qualifications: </strong></p><ul><li>Embedded expertise and experience in automotive industry</li><li>Good knowledge of Rust</li><li>Knowledge of agile software development</li><li>German language skills</li></ul><p> </p><p><strong>What we offer</strong> </p><ul><li><strong>Great work environment with co-workers you can rely on and who demonstrate strong performance</strong><strong></strong></li><li>Opportunity to make an impact by delivering fantastic work in essential projects</li><li>A chance to create useful technology by minimizing complexity</li><li>Employee freedom through flexible work-hour models, little hierarchy, and a collaborative work environment</li><li>Experimentation and learning through our regular hackathons, programming challenges and hands-on workshops</li><li>Choose your hardware/ software set up</li><li>A daily supply of fresh fruit, coffee and water</li></ul><p> </p><p> </p><p> </p><p> </p>",
+        "url": "https://esrlabs.softgarden.io/job/1730933/C++-Software-Developer-f-m-x-?jobDbPVId=19301150&l=en",
+        "datePosted": "2020-10-07T12:43:10.629516300Z",
+        "hiringOrganization": {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "ESR Labs AG"
+        },
+        "identifier": {
+          "@context": "http://schema.org",
+          "@type": "PropertyValue",
+          "name": "ESR Labs AG",
+          "value": "19301150"
+        },
+        "jobLocation": [
+          {
+            "@context": "http://schema.org",
+            "@type": "Place",
+            "address": {
+              "@context": "http://schema.org",
+              "@type": "PostalAddress",
+              "addressLocality": "Kulmbach",
+              "addressRegion": "Bayern",
+              "addressCountry": "DE"
+            },
+            "geo": {
+              "@context": "http://schema.org",
+              "@type": "GeoCoordinates",
+              "latitude": "50.104",
+              "longitude": "11.443"
+            }
+          }
+        ],
+        "occupationalCategory": "1500127001001",
+        "title": "C++ Software Developer (f/m/x)"
+      },
+      "createdDate": "+52609-06-29T16:27:20Z",
+      "provider": {
+        "id": "54203",
+        "source": "Feed",
+        "code": "softgardenftpin",
+        "name": "Softgarden_crawler"
+      },
+      "apply": {
+        "applyType": "OFFSITE",
+        "applyUrl": "https://esrlabs.softgarden.io/job/1730933/C++-Software-Developer-f-m-x-?jobDbPVId=19301150&l=en"
+      },
+      "ingestionMethod": "ADAPTED_NOW",
+      "enrichments": {
+        "ats": {
+          "atsName": "Softgarden",
+          "atsId": "ATS/670",
+          "atsJobId": "19301150",
+          "isSourceTagged": false,
+          "isDefaultSourceTagged": false
+        },
+        "language": {
+          "languageCode": "en"
+        },
+        "mescos": [
+          {
+            "id": "1500127001001"
+          }
+        ],
+        "normalizedJobLocations": [
+          {
+            "postalAddress": {
+              "@context": "http://schema.org",
+              "@type": "Place",
+              "address": {
+                "@context": "http://schema.org",
+                "@type": "PostalAddress",
+                "addressCountry": "DE"
+              },
+              "geo": {
+                "@context": "http://schema.org",
+                "@type": "GeoCoordinates",
+                "latitude": "51.5",
+                "longitude": "10.5"
+              }
+            },
+            "locationId": "2921044",
+            "countryCode": "DE"
+          }
+        ],
+        "normalizedTitles": [
+          {
+            "title": "C++ Entwickler"
+          }
+        ],
+        "normalizedSalary": {
+          "currencyCode": {
+            "name": "UNKNOWN",
+            "id": 927
+          },
+          "salaryBaseType": {
+            "name": "UNKNOWN",
+            "id": 239
+          }
+        },
+        "jobLocationType": {
+          "name": "UNKNOWN",
+          "id": 109
+        },
+        "employmentTypes": [
+          {
+            "name": "UNKNOWN",
+            "id": 29
+          }
+        ],
+        "status": {
+          "name": "ACTIVE",
+          "id": 52
+        },
+        "applyType": {
+          "name": "OFFSITE",
+          "id": 51
+        },
+        "ingestionMethod": {
+          "name": "ADAPTED_NOW",
+          "id": 704
+        },
+        "jobPositionLevel": {
+          "name": "UNKNOWN",
+          "id": 89
+        },
+        "localizedMonsterUrls": [
+          {
+            "locationId": "2921044",
+            "url": "https://www.jobs.com/de-de/jobs/csoftware-developer-f-m-x--6c1dbf3f-1579-43d7-a512-47edeb161b1c"
+          }
+        ],
+        "qualifiedForG4J": true,
+        "applyUrlRedirectResolution": {
+          "resolved": false,
+          "resolutionNotAttempted": true,
+          "totalRedirects": 0,
+          "totalRedirectTimeMs": 0,
+          "resolutionFailureReasons": [
+            {
+              "failureCode": "SKIPPED_DUE_TO_POLICY",
+              "failureDescription": "Url identified as do not attempt to resolve,url=https://esrlabs.softgarden.io/job/1730933/C++-Software-Developer-f-m-x-?jobDbPVId=19301150&l=en"
+            }
+          ]
+        }
+      },
+      "now": {
+        "jobAdPricingTypeId": 3
+      },
+      "formattedDate": "2020-10-07T00:00:00",
+      "dateRecency": "5 days ago",
+      "seoJobId": "csoftware-developer-f-m-x--6c1dbf3f-1579-43d7-a512-47edeb161b1c",
+      "fieldTranslations": []
+    },
+    {
+      "schemaVersion": "2.0.12",
+      "jobId": "cdd0eff6-621f-4fc8-9e64-78428b3745b6",
+      "externalIdentifiers": [
+        {
+          "identifierName": "NOW_POSTING_ID",
+          "identifierValue": "ca5d5975-2c9c-4ef8-8992-85d79037f9b2"
+        }
+      ],
+      "status": "ACTIVE",
+      "jobPosting": {
+        "@context": "http://schema.org",
+        "@type": "JobPosting",
+        "description": "<p><strong>About ESR Labs</strong></p><p>We are an embedded automotive software company. In other words, we develop innovative embedded software for high-tech cars. Within only six years, we have achieved the status of a Tier 1 software supplier providing us with the opportunity to work directly with some of the most respected and distinguished premium car manufacturers and suppliers in the market. Our work is already part of millions of vehicles and enables those vehicles to take advantages of what has become state of the art in consumer electronics: internet connectivity, artificial intelligence, autonomy, cloud computing, and over-the-air feature updates.</p><p> </p><p><strong>Job description </strong></p><p>As Low Level Software Developer, you take on very demanding projects usually in cooperation with leading automotive OEMs. Here you develop BSPs and drivers in cooperation with well-known microcontroller manufacturers. You will not adjust pre-existing low level drivers but write these drivers in C/C++ from scratch on the basis of very specific and complex requirements.</p><p> </p><p><strong>Contact</strong></p><p>Your application will be processed by the Job Ambition GmbH, our strategic recruiting partner. If you have questions, feel free to contact Mrs. Anastasia Michurina by phone: +49 (0) 711 400 538 81.</p><p> </p><p><strong>Qualifications</strong></p><p><strong>Required qualifications: </strong></p><ul><li>Completed degree in information technology or comparable education</li><li>Excellent knowledge in C/C++</li><li>Good knowledge in git</li><li>Good knowledge in driver development</li><li>Good knowledge in RTOS</li><li>Experience with hardware debugger (preferably T32)</li><li>Embedded Know-how</li><li>Good English language skills</li><li>High customer- and team-orientation</li></ul><p> </p><p><strong>Desired qualifications: </strong></p><ul><li>Good understanding of PowerPC- and ARM-architectures</li><li>Experience with OSCI</li><li>Knowledge of agile software development</li><li>German language skills</li></ul><p> </p><p><strong>What we offer</strong> </p><ul><li><strong>Great work environment with co-workers you can rely on and who demonstrate strong performance</strong></li><li>Opportunity to make an impact by delivering fantastic work in essential projects</li><li>A chance to create useful technology by minimizing complexity</li><li>Employee freedom through flexible work-hour models, little hierarchy, and a collaborative work environment</li><li>Experimentation and learning through our regular hackathons, programming challenges and hands-on workshops</li><li>Choose your hardware/ software set up</li><li>A daily supply of fresh fruit, coffee and water</li></ul><p> </p><p> </p>",
+        "url": "https://esrlabs.softgarden.io/job/1808507/Low-Level-Software-Developer-f-m-x-?jobDbPVId=13617992&l=en",
+        "datePosted": "2020-10-07T12:43:10.283479800Z",
+        "hiringOrganization": {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "ESR Labs AG"
+        },
+        "identifier": {
+          "@context": "http://schema.org",
+          "@type": "PropertyValue",
+          "name": "ESR Labs AG",
+          "value": "13617992"
+        },
+        "jobLocation": [
+          {
+            "@context": "http://schema.org",
+            "@type": "Place",
+            "address": {
+              "@context": "http://schema.org",
+              "@type": "PostalAddress",
+              "addressLocality": "Kulmbach",
+              "addressRegion": "Bayern",
+              "addressCountry": "DE"
+            },
+            "geo": {
+              "@context": "http://schema.org",
+              "@type": "GeoCoordinates",
+              "latitude": "50.104",
+              "longitude": "11.443"
+            }
+          }
+        ],
+        "occupationalCategory": "1500127001001",
+        "title": "Low Level Software Developer (f/m/x)"
+      },
+      "createdDate": "+52609-06-29T06:27:56Z",
+      "provider": {
+        "id": "54203",
+        "source": "Feed",
+        "code": "softgardenftpin",
+        "name": "Softgarden_crawler"
+      },
+      "apply": {
+        "applyType": "OFFSITE",
+        "applyUrl": "https://esrlabs.softgarden.io/job/1808507/Low-Level-Software-Developer-f-m-x-?jobDbPVId=13617992&l=en"
+      },
+      "ingestionMethod": "ADAPTED_NOW",
+      "enrichments": {
+        "ats": {
+          "atsName": "Softgarden",
+          "atsId": "ATS/670",
+          "atsJobId": "13617992",
+          "isSourceTagged": false,
+          "isDefaultSourceTagged": false
+        },
+        "language": {
+          "languageCode": "en"
+        },
+        "mescos": [
+          {
+            "id": "1500127001001"
+          }
+        ],
+        "normalizedJobLocations": [
+          {
+            "postalAddress": {
+              "@context": "http://schema.org",
+              "@type": "Place",
+              "address": {
+                "@context": "http://schema.org",
+                "@type": "PostalAddress",
+                "addressCountry": "DE"
+              },
+              "geo": {
+                "@context": "http://schema.org",
+                "@type": "GeoCoordinates",
+                "latitude": "51.5",
+                "longitude": "10.5"
+              }
+            },
+            "locationId": "2921044",
+            "countryCode": "DE"
+          }
+        ],
+        "normalizedTitles": [
+          {
+            "title": "Softwareentwickler"
+          }
+        ],
+        "normalizedSalary": {
+          "currencyCode": {
+            "name": "UNKNOWN",
+            "id": 927
+          },
+          "salaryBaseType": {
+            "name": "UNKNOWN",
+            "id": 239
+          }
+        },
+        "jobLocationType": {
+          "name": "UNKNOWN",
+          "id": 109
+        },
+        "employmentTypes": [
+          {
+            "name": "UNKNOWN",
+            "id": 29
+          }
+        ],
+        "status": {
+          "name": "ACTIVE",
+          "id": 52
+        },
+        "applyType": {
+          "name": "OFFSITE",
+          "id": 51
+        },
+        "ingestionMethod": {
+          "name": "ADAPTED_NOW",
+          "id": 704
+        },
+        "jobPositionLevel": {
+          "name": "UNKNOWN",
+          "id": 89
+        },
+        "localizedMonsterUrls": [
+          {
+            "locationId": "2921044",
+            "url": "https://www.jobs.com/de-de/jobs/low-level-software-developer-f-m-x--cdd0eff6-621f-4fc8-9e64-78428b3745b6"
+          }
+        ],
+        "qualifiedForG4J": true,
+        "applyUrlRedirectResolution": {
+          "resolved": false,
+          "resolutionNotAttempted": true,
+          "totalRedirects": 0,
+          "totalRedirectTimeMs": 0,
+          "resolutionFailureReasons": [
+            {
+              "failureCode": "SKIPPED_DUE_TO_POLICY",
+              "failureDescription": "Url identified as do not attempt to resolve,url=https://esrlabs.softgarden.io/job/1808507/Low-Level-Software-Developer-f-m-x-?jobDbPVId=13617992&l=en"
+            }
+          ]
+        }
+      },
+      "now": {
+        "jobAdPricingTypeId": 3
+      },
+      "formattedDate": "2020-10-07T00:00:00",
+      "dateRecency": "5 days ago",
+      "seoJobId": "low-level-software-developer-f-m-x--cdd0eff6-621f-4fc8-9e64-78428b3745b6",
+      "fieldTranslations": []
+    },
+    {
+      "schemaVersion": "2.0.12",
+      "jobId": "724e091f-1e11-4be4-a91f-79d2df63c3c7",
+      "externalIdentifiers": [
+        {
+          "identifierName": "NOW_POSTING_ID",
+          "identifierValue": "52a7ca69-790e-4d91-b59a-e5c457c82970"
+        }
+      ],
+      "status": "ACTIVE",
+      "jobPosting": {
+        "@context": "http://schema.org",
+        "@type": "JobPosting",
+        "description": "Musterprüfingenieur (m/w/d) mechanische Systeme \n \n Planen Sie mit uns Ihre Zukunft\n \n RUAG Aviation ist Teil der internationalen RUAG Gruppe, die in der Luft- und Raumfahrt sowie in der Sicherheits- und Wehrtechnik tätig ist und weltweit mehr als 9'000 Mitarbeitende beschäftigt. Wir sind der grösste unabhängige europäische Zulieferer für die Raumfahrtindustrie. In der Schweiz, in Schweden, Österreich, Finnland, Deutschland und in den USA entwickeln, produzieren und testen wir Subsysteme und Equipment für den Einsatz im Weltall. Erfahrung, Flexibilität sowie absolute Zuverlässigkeit machen RUAG Defence zum Partner der Wahl für die Hersteller von Satelliten und Trägerraketen in aller Welt.\n \n Ihre Aufgaben\n \n Fachliche Führung und Koordination von Mitarbeitern \n Unterstützung des Customer Supports (z.B. Bearbeitung von Kundenanfragen/-beanstandungen, Erstellung von Service Bulletins, Herausgabe von Service Information Letters, Bearbeitung von AOGs) \n Erstellung, Prüfung und Unterzeichen zulassungsrelevanter Nachweise und Unterlagen unter Berücksichtigung gesetzlicher, betrieblicher und kundenspezifischer Vorgaben \n Unterstützung des Konfigurationsmanagements \n Wahrnehmen aller Aufgaben hinsichtlich Continued Airworthiness für das Fachgebiet mechanische Systeme \n Beratung andere Abteilungen in Fachgebietsfragen \n Erstellung von Spezifikationen komplexer Bauteile \n Entwicklung von Konzepten, Komponenten und Baugruppen nach verschiedenen Vorgaben \n Entwicklung mit dem Ziel der Wahrnehmung der Funktion des Teamleiters \n \n Ihr Profil\n \n Dipl.-Ing. (FH/Univ.) Flugzeugbau oder vergleichbar mit mindestens 5-jähriger Berufserfahrung auf dem Gebiet der Konstruktion Flugzeugbau \n vertraut mit den aktuellen Vorschriften (FAR, JAR) und Part 21 \n Hohe Einsatzbereitschaft \n Sehr gute Kenntnisse im Umgang mit modernen Konstruktionshilfsmitteln (CADAM, CATIA) \n Verhandlungssichere Englischkenntnisse in Wort und Schrift \n Selbständiges und verantwortungsbewusstes Arbeiten, gute Kommunikationsfähigkeit, hohe Kundenorientierung \n Kreativität bei Verbesserungen und Entwicklung des Arbeitsumfeldes (Produktivität, Kundenbetreuung) \n Unternehmerisches Denken \n \n Ihr Kontakt\n \n Haben wir Ihr Interesse für neue berufliche Horizonte geweckt? Dann freuen wir uns auf Ihre Online-Bewerbung.\n \n RUAG MRO International | Recruiter/HR Manager: Daniela Bothschafter\n www.ruag.com/en/career/find-your-job\n \n Standort: \n \n Weßling, DE \n \n Einstiegslevel: Erfahrene Experten \n \n Tätigkeitsbereich: Ingenieurwesen \n \n RUAG International ist ein Schweizer Technologiekonzern mit Fokus auf die Luft- und Raumfahrt. Das Unternehmen mit Sitz in Zürich (Schweiz) und Produktionsstandorten in 14 Ländern gliedert sich in die vier Bereiche Space, Aerostructures, MRO International und Ammotec. Mit der strategischen Ausrichtung auf den Geschäftsbereich Aerospace wird das Unternehmen mittelfristig aus den beiden Unternehmensbereichen Aerostructures und Space bestehen. RUAG Space ist der führende europäische Zulieferer von Produkten für die Raumfahrtindustrie. RUAG Aerostructures ist globaler First-Tier-Lieferant im Flugzeugstrukturbau. RUAG International beschäftigt rund 6‘000 Mitarbeitende, wovon rund zwei Drittel im Ausland tätig sind.",
+        "url": "https://careers.ruag.com/job/We%C3%9Fling-Systemingenieur-mechanische-Luftfahrzeug-Systeme-1/575879401/",
+        "datePosted": "2020-10-06T06:52:23.976940500Z",
+        "hiringOrganization": {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "RUAG Ammotec GmbH"
+        },
+        "identifier": {
+          "@context": "http://schema.org",
+          "@type": "PropertyValue",
+          "name": "RUAG Ammotec GmbH",
+          "value": "323699414"
+        },
+        "jobLocation": [
+          {
+            "@context": "http://schema.org",
+            "@type": "Place",
+            "address": {
+              "@context": "http://schema.org",
+              "@type": "PostalAddress",
+              "streetAddress": "",
+              "addressLocality": "Weßling",
+              "addressRegion": "Bayern",
+              "postalCode": "82230",
+              "addressCountry": "DE"
+            },
+            "geo": {
+              "@context": "http://schema.org",
+              "@type": "GeoCoordinates",
+              "latitude": "48.072",
+              "longitude": "11.256"
+            }
+          }
+        ],
+        "occupationalCategory": "9901111000004",
+        "title": "Musterprüfingenieur (m/w/d) mechanische Systeme"
+      },
+      "createdDate": "+52734-04-29T04:38:42Z",
+      "provider": {
+        "id": "1475",
+        "source": "Feed",
+        "code": "de_advdataftpin",
+        "name": "Anzeigendaten DE"
+      },
+      "apply": {
+        "applyType": "OFFSITE",
+        "applyUrl": "https://careers.ruag.com/job/We%C3%9Fling-Systemingenieur-mechanische-Luftfahrzeug-Systeme-1/575879401/"
+      },
+      "ingestionMethod": "ADAPTED_NOW",
+      "enrichments": {
+        "language": {
+          "languageCode": "de"
+        },
+        "mescos": [
+          {
+            "id": "9901111000004"
+          }
+        ],
+        "normalizedJobLocations": [
+          {
+            "postalAddress": {
+              "@context": "http://schema.org",
+              "@type": "Place",
+              "address": {
+                "@context": "http://schema.org",
+                "@type": "PostalAddress",
+                "addressCountry": "DE"
+              },
+              "geo": {
+                "@context": "http://schema.org",
+                "@type": "GeoCoordinates",
+                "latitude": "51.5",
+                "longitude": "10.5"
+              }
+            },
+            "locationId": "2921044",
+            "countryCode": "DE"
+          }
+        ],
+        "normalizedTitles": [
+          {
+            "title": "Unclassified Occupations"
+          }
+        ],
+        "normalizedSalary": {
+          "currencyCode": {
+            "name": "UNKNOWN",
+            "id": 927
+          },
+          "salaryBaseType": {
+            "name": "UNKNOWN",
+            "id": 239
+          }
+        },
+        "jobLocationType": {
+          "name": "UNKNOWN",
+          "id": 109
+        },
+        "employmentTypes": [
+          {
+            "name": "UNKNOWN",
+            "id": 29
+          }
+        ],
+        "status": {
+          "name": "ACTIVE",
+          "id": 52
+        },
+        "applyType": {
+          "name": "OFFSITE",
+          "id": 51
+        },
+        "ingestionMethod": {
+          "name": "ADAPTED_NOW",
+          "id": 704
+        },
+        "jobPositionLevel": {
+          "name": "UNKNOWN",
+          "id": 89
+        },
+        "localizedMonsterUrls": [
+          {
+            "locationId": "2921044",
+            "url": "https://www.jobs.com/de-de/jobs/musterprüfingenieur-m-w-d-mechanische-systeme--724e091f-1e11-4be4-a91f-79d2df63c3c7"
+          }
+        ],
+        "qualifiedForG4J": true,
+        "applyUrlRedirectResolution": {
+          "resolved": false,
+          "resolutionNotAttempted": false,
+          "totalRedirects": 0,
+          "totalRedirectTimeMs": 0,
+          "resolutionFailureReasons": [
+            {
+              "failureCode": "RESOLVED_URL_SAME",
+              "failureDescription": "Input did not contain a redirect"
+            }
+          ]
+        }
+      },
+      "now": {
+        "jobAdPricingTypeId": 3
+      },
+      "formattedDate": "2020-10-06T00:00:00",
+      "dateRecency": "6 days ago",
+      "seoJobId": "musterprüfingenieur-m-w-d-mechanische-systeme--724e091f-1e11-4be4-a91f-79d2df63c3c7",
+      "fieldTranslations": []
+    },
+    {
+      "schemaVersion": "2.0.12",
+      "jobId": "ee28b4fb-7dc8-4605-9b2f-b33fd78d481b",
+      "externalIdentifiers": [
+        {
+          "identifierName": "NOW_POSTING_ID",
+          "identifierValue": "c06d27d9-ae90-4975-9c47-9bb10ae23bda"
+        }
+      ],
+      "status": "ACTIVE",
+      "jobPosting": {
+        "@context": "http://schema.org",
+        "@type": "JobPosting",
+        "description": "NDT Prüfer (m/w/d) \n \n Planen Sie mit uns Ihre Zukunft\n \n RUAG MRO International ist Teil der internationalen RUAG Gruppe, die in der Luft- und Raumfahrt sowie in der Sicherheits- und Wehrtechnik tätig ist und weltweit mehr als 9'000 Mitarbeitende beschäftigt. Wir sind das Kompetenzzentrum für den zivilen und militärischen Flugzeugunterhalt sowie für die Entwicklung, Herstellung und Integration von Systemen und Subsystemen in der Luftfahrt. Wir sind auch Hersteller (OEM) der Dornier 228, eines vielseitigen Flugzeugs für Spezialeinsätze sowie für Passagier- und Frachtoperationen. \n \n Ihre Aufgaben\n \n Auswahl und Durchführung von zerstörungsfreien Prüfungen an Bauteilen, Komponenten und Luftfahrzeugen \n Dokumentation und Bewertung von Ergebnissen \n Erkennen und Beurteilung von Abweichungen, aussortieren und Kennzeichnung mit Fehlerbeschreibung \n Weiterleitung fehlerhafter Teile/Komponenten \n Freigabe der geprüften Bauteile, Komponenten und Luftfahrzeuge nach Prüfung ohne bzw. tolerierbarem Befund \n Vorbereitung von Prüfabläufen und Prüfeinrichtungen, Messung und Prüfung von Teilen, Komponenten und Dokumenten, Auswertung und Dokumentation der Ergebnisse, ggf. Erstellung von Fehlerbeschreibungen in Form von Beanstandungen \n Einhaltung und Sicherstellung der Einhaltung von Normen, Verordnungen, Vorschriften, luftrechtlichen Forderungen und Qualitätsrichtlinien \n Freigabe von Luftfahrzeugsystemen/ -Baugruppen und -Teilen (Prüfberechtigung) \n \n Ihr Profil\n \n staatlich geprüfter Techniker/Meister oder abgeschlossene Berufsausbildung als Fluggerätbauer oder Fluggerätmechaniker mit fachspezifischer Zusatzqualifikation \n merjährige Berufserfahrung im Bereich Luftfahrttechnik \n Besitz von gültigen Qualifikationsstufen (Stufe 2 für MT, PT, RT, RT NF, ET, UT gemäß EN 4179/NAS410) \n gute Englischkenntnisse in Wort und Schrift \n Bereitschaft für flexible Arbeitszeiten und Außendiensteinsätze \n Gute EDV-Kenntnisse in MS-Office (Word, Excel) und SAP \n \n Ihr Kontakt\n \n Haben wir Ihr Interesse für neue berufliche Horizonte geweckt? Dann freuen wir uns auf Ihre Online-Bewerbung.\n \n RUAG MRO International | Recruiter/HR Manager: Daniela Bothschafter |\n www.ruag.com/en/career/find-your-job\n \n Standort: \n \n Weßling, DE \n \n Einstiegslevel: Erfahrene Experten \n \n Tätigkeitsbereich: Produktion \n \n RUAG International ist ein Schweizer Technologiekonzern mit Fokus auf die Luft- und Raumfahrt. Das Unternehmen mit Sitz in Zürich (Schweiz) und Produktionsstandorten in 14 Ländern gliedert sich in die vier Bereiche Space, Aerostructures, MRO International und Ammotec. Mit der strategischen Ausrichtung auf den Geschäftsbereich Aerospace wird das Unternehmen mittelfristig aus den beiden Unternehmensbereichen Aerostructures und Space bestehen. RUAG Space ist der führende europäische Zulieferer von Produkten für die Raumfahrtindustrie. RUAG Aerostructures ist globaler First-Tier-Lieferant im Flugzeugstrukturbau. RUAG International beschäftigt rund 6‘000 Mitarbeitende, wovon rund zwei Drittel im Ausland tätig sind.",
+        "url": "https://careers.ruag.com/job/We%C3%9Fling-NDT-Pr%C3%BCfer-%28mwd%29/604046101/",
+        "datePosted": "2020-10-06T06:52:24.117545200Z",
+        "hiringOrganization": {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "RUAG Ammotec GmbH"
+        },
+        "identifier": {
+          "@context": "http://schema.org",
+          "@type": "PropertyValue",
+          "name": "RUAG Ammotec GmbH",
+          "value": "323699431"
+        },
+        "jobLocation": [
+          {
+            "@context": "http://schema.org",
+            "@type": "Place",
+            "address": {
+              "@context": "http://schema.org",
+              "@type": "PostalAddress",
+              "streetAddress": "",
+              "addressLocality": "Weßling",
+              "addressRegion": "Bayern",
+              "postalCode": "82230",
+              "addressCountry": "DE"
+            },
+            "geo": {
+              "@context": "http://schema.org",
+              "@type": "GeoCoordinates",
+              "latitude": "48.072",
+              "longitude": "11.256"
+            }
+          }
+        ],
+        "occupationalCategory": "5101004001001",
+        "title": "NDT Prüfer (m/w/d)"
+      },
+      "createdDate": "+52734-04-29T07:27:00Z",
+      "provider": {
+        "id": "1475",
+        "source": "Feed",
+        "code": "de_advdataftpin",
+        "name": "Anzeigendaten DE"
+      },
+      "apply": {
+        "applyType": "OFFSITE",
+        "applyUrl": "https://careers.ruag.com/job/We%C3%9Fling-NDT-Pr%C3%BCfer-%28mwd%29/604046101/"
+      },
+      "ingestionMethod": "ADAPTED_NOW",
+      "enrichments": {
+        "language": {
+          "languageCode": "de"
+        },
+        "mescos": [
+          {
+            "id": "5101004001001"
+          }
+        ],
+        "normalizedJobLocations": [
+          {
+            "postalAddress": {
+              "@context": "http://schema.org",
+              "@type": "Place",
+              "address": {
+                "@context": "http://schema.org",
+                "@type": "PostalAddress",
+                "addressCountry": "DE"
+              },
+              "geo": {
+                "@context": "http://schema.org",
+                "@type": "GeoCoordinates",
+                "latitude": "51.5",
+                "longitude": "10.5"
+              }
+            },
+            "locationId": "2921044",
+            "countryCode": "DE"
+          }
+        ],
+        "normalizedTitles": [
+          {
+            "title": "Prüfer"
+          }
+        ],
+        "normalizedSalary": {
+          "currencyCode": {
+            "name": "UNKNOWN",
+            "id": 927
+          },
+          "salaryBaseType": {
+            "name": "UNKNOWN",
+            "id": 239
+          }
+        },
+        "jobLocationType": {
+          "name": "UNKNOWN",
+          "id": 109
+        },
+        "employmentTypes": [
+          {
+            "name": "UNKNOWN",
+            "id": 29
+          }
+        ],
+        "status": {
+          "name": "ACTIVE",
+          "id": 52
+        },
+        "applyType": {
+          "name": "OFFSITE",
+          "id": 51
+        },
+        "ingestionMethod": {
+          "name": "ADAPTED_NOW",
+          "id": 704
+        },
+        "jobPositionLevel": {
+          "name": "UNKNOWN",
+          "id": 89
+        },
+        "localizedMonsterUrls": [
+          {
+            "locationId": "2921044",
+            "url": "https://www.jobs.com/de-de/jobs/ndt-prüfer-m-w-d--ee28b4fb-7dc8-4605-9b2f-b33fd78d481b"
+          }
+        ],
+        "qualifiedForG4J": true,
+        "applyUrlRedirectResolution": {
+          "resolved": false,
+          "resolutionNotAttempted": false,
+          "totalRedirects": 0,
+          "totalRedirectTimeMs": 0,
+          "resolutionFailureReasons": [
+            {
+              "failureCode": "RESOLVED_URL_SAME",
+              "failureDescription": "Input did not contain a redirect"
+            }
+          ]
+        }
+      },
+      "now": {
+        "jobAdPricingTypeId": 3
+      },
+      "formattedDate": "2020-10-06T00:00:00",
+      "dateRecency": "6 days ago",
+      "seoJobId": "ndt-prüfer-m-w-d--ee28b4fb-7dc8-4605-9b2f-b33fd78d481b",
+      "fieldTranslations": []
+    },
+    {
+      "schemaVersion": "2.0.12",
+      "jobId": "f02eabf7-dc4c-4478-bdad-807a5ea8f7ed",
+      "externalIdentifiers": [
+        {
+          "identifierName": "NOW_POSTING_ID",
+          "identifierValue": "d704cc09-014f-4b6e-9068-934c25723bc1"
+        }
+      ],
+      "status": "ACTIVE",
+      "jobPosting": {
+        "@context": "http://schema.org",
+        "@type": "JobPosting",
+        "description": "Responsibilities:<br/><ul><li>Be a self-starter who can flourish in a dynamic technology company</li><li>Support our sales teams on large and/or strategic opportunities</li><li>Love for solving complex distributed database system problems</li><li>Engage with senior technical decision makers throughout the sales process</li><li>Present and discuss the value proposition(s) associated with your specialization</li><li>Build long-term business relationships and become a trusted advisor within select accounts to see opportunities and sell Nutanix Solutions</li><li>Ability to demonstrate and improve reseller/alliance partner relationships to increase sales</li><li>Build and deliver technical product and solution presentations and/or training sessions to customers, partners, and Nutanix SEs as needed</li><li>Install, support, and maintain Nutanix solutions during Proof of Concept (POC) deployments</li><li>Stay well ahead of the learning curve in your area of expertise and related business trends</li><li>Work across the NEEUR region with sales teams as a regional pre-sales resource providing deep technical support for proposed cluster Nutanix design with respect to underlying network requirements, as needed help with design and architecture for future customer requirements as they expand installations and help sales teams with networking issues at installed customers</li><li>Work with the regional education team to ensure cross training to the field systems engineers of relevant industry network news as well as technical network training as appropriate</li><li>Work with Nutanix Product Management to feed back information from customers and field sales teams to influence future Nutanix network and associated product development</li></ul>Requirements:<br/><ul><li>Deep domain expertise with one of the RDBMS technologies like Oracle, Microsoft SQL, DB2 or PostgreSQL</li><li>Experience in architecting, designing and deploying complex database deployments and helping customers build DBaaS architecture</li><li>Hands-on experience with Oracle/MSSQL databases, understanding AWR/PerfMon Reports and experience in sizing and design of complex workloads.</li><li>Broad database/analytics experience around other technologies like NoSQL DB Workloads like MongoDB, Cassandra, CouchDB is desired</li><li>Experience of other tier 1 business applications such as SAP/HANA</li><li>Some coding / scripting experience to for automation of platforms through API</li></ul>Proven experience one or more of the following areas:<br/><ul><li>Application and Server Virtualization experience</li><li>Maintain relationships with technical resources at all levels of a customer organization</li><li>Deep understanding of technical sales techniques and processes including the ability to understand customer needs, overcome objections, assist in the development of business cases, and technically close deals</li><li>Flexible, dependable, self-starter, capable of quickly learning new products and technologies</li><li>Excellent oral and written communications skills, as well as excellent presentation skills</li><li>Ability to travel within the United States on occasion and as required</li><li>Experience selling servers, storage hardware, or networking</li><li>Strong knowledge of Linux/UNIX</li><li>Extraordinary teammate that works well in dynamic situations and startup environments</li></ul>Qualifications and Experience:<br/><ul><li>Bachelor’s degree or equivalent experience</li><li>5-8 years prior Sales Engineering or Reseller experience in a high-tech sales environment with a proven track record of success in driving customer adoption of technology</li></ul>About us<br/>Founded in 2009 and headquartered in San Jose, California, Nutanix is a passionate team of 6000+ employees worldwide. Our people (we call ourselves “Nutants”) are the heartbeat of #LifeAtNutanix and one of the many things that makes Nutanix a great place to work at. We share an intellectual curiosity, a bias for action, and an obsession for our customers. We are builders and problem solvers with an entrepreneurial spirit. Above all, we celebrate what makes each of us unique.<br/><br/>We are humbled to be recognized as one of Bloomberg’s Top 50 Companies to Watch in 2020 and one of the Fortune 100 Best Companies to Work For® 2020.<br/>We’re growing fast and disrupting the computing industry. Join us and make your mark.<br/>We’re an equal opportunity employer<br/>Nutanix is an Equal Employment Opportunity and (in the U.S.) an Affirmative Action employer. <br/><br/>Qualified applicants are considered for employment opportunities without regard to race, color, religion, sex, sexual orientation, gender identity or expression, national origin, age, marital status, protected veteran status, disability status or any other category protected by applicable law. We hire and promote individuals solely on the basis of qualifications for the job to be filled.<br/>We strive to foster an inclusive working environment that enables all our Nutants to be themselves and to do great work in a safe and welcoming environment, free of unlawful discrimination, intimidation or harassment.<br/>As part of this commitment, we will ensure that persons with disabilities are provided reasonable accommodations. If you need a reasonable accommodation, please let us know by contacting hr@nutanix.com",
+        "url": "http://app.jobvite.com/CompanyJobs/Job.aspx?c=qKr9VfwZ&j=ogPidfwk&s=Monster",
+        "datePosted": "2020-09-15T23:31:36.684509200Z",
+        "hiringOrganization": {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "Nutanix"
+        },
+        "identifier": {
+          "@context": "http://schema.org",
+          "@type": "PropertyValue",
+          "name": "Nutanix",
+          "value": "ogPidfwkCWvFVfwL"
+        },
+        "jobLocation": [
+          {
+            "@context": "http://schema.org",
+            "@type": "Place",
+            "address": {
+              "@context": "http://schema.org",
+              "@type": "PostalAddress",
+              "addressLocality": "Stuttgart",
+              "addressRegion": "Bayern",
+              "postalCode": "",
+              "addressCountry": "DE"
+            }
+          }
+        ],
+        "occupationalCategory": "1500130001001",
+        "title": "Portfolio Specialist - Databases (ERA) CEUR(m/f) - Munich / Frankfurt, Germany, EMEA"
+      },
+      "createdDate": "+52678-10-01T09:32:12Z",
+      "provider": {
+        "id": "4774",
+        "source": "Wrapping",
+        "code": "e84ce812-3db6-4918-bed6-d9d15d541107",
+        "name": "Nutanix"
+      },
+      "apply": {
+        "applyType": "OFFSITE",
+        "applyUrl": "http://app.jobvite.com/CompanyJobs/Job.aspx?c=qKr9VfwZ&j=ogPidfwk&s=Monster",
+        "resolvedRedirectUrl": "https://jobs.jobvite.com/nutanix/job/ogPidfwk?__jvst=JB+-+Job+Board&__jvsd=Monster"
+      },
+      "ingestionMethod": "ADAPTED_NOW",
+      "enrichments": {
+        "ats": {
+          "atsName": "Jobvite",
+          "atsId": "ATS/401",
+          "atsJobId": "ogPidfwk",
+          "source": "Monster",
+          "isSourceTagged": true,
+          "isDefaultSourceTagged": false
+        },
+        "language": {
+          "languageCode": "en"
+        },
+        "mescos": [
+          {
+            "id": "1500130001001"
+          }
+        ],
+        "normalizedJobLocations": [
+          {
+            "postalAddress": {
+              "@context": "http://schema.org",
+              "@type": "Place",
+              "address": {
+                "@context": "http://schema.org",
+                "@type": "PostalAddress",
+                "addressCountry": "DE"
+              },
+              "geo": {
+                "@context": "http://schema.org",
+                "@type": "GeoCoordinates",
+                "latitude": "51.5",
+                "longitude": "10.5"
+              }
+            },
+            "locationId": "2921044",
+            "countryCode": "DE"
+          }
+        ],
+        "companyKb": {
+          "normalizedCompanyName": "Nutanix",
+          "normalizedCompanyGuid": "cbc2vonihfbmrmfg3yrdwvpsjb"
+        },
+        "normalizedTitles": [
+          {
+            "title": "Datenbank Spezialist"
+          }
+        ],
+        "normalizedSalary": {
+          "currencyCode": {
+            "name": "UNKNOWN",
+            "id": 927
+          },
+          "salaryBaseType": {
+            "name": "UNKNOWN",
+            "id": 239
+          }
+        },
+        "jobLocationType": {
+          "name": "UNKNOWN",
+          "id": 109
+        },
+        "employmentTypes": [
+          {
+            "name": "UNKNOWN",
+            "id": 29
+          }
+        ],
+        "status": {
+          "name": "ACTIVE",
+          "id": 52
+        },
+        "applyType": {
+          "name": "OFFSITE",
+          "id": 51
+        },
+        "ingestionMethod": {
+          "name": "ADAPTED_NOW",
+          "id": 704
+        },
+        "jobPositionLevel": {
+          "name": "UNKNOWN",
+          "id": 89
+        },
+        "localizedMonsterUrls": [
+          {
+            "locationId": "2921044",
+            "url": "https://www.jobs.com/de-de/jobs/portfolio-specialist-databases-era-ceur-m-f-munich-frankfurt-germany-emea--f02eabf7-dc4c-4478-bdad-807a5ea8f7ed"
+          }
+        ],
+        "qualifiedForG4J": true,
+        "applyUrlRedirectResolution": {
+          "resolved": true,
+          "url": "https://jobs.jobvite.com/nutanix/job/ogPidfwk?__jvst=JB+-+Job+Board&__jvsd=Monster",
+          "resolutionNotAttempted": false,
+          "totalRedirects": 4,
+          "totalRedirectTimeMs": 89
+        }
+      },
+      "now": {
+        "jobAdPricingTypeId": 3
+      },
+      "formattedDate": "2020-09-15T00:00:00",
+      "dateRecency": "27 days ago",
+      "seoJobId": "portfolio-specialist-databases-era-ceur-m-f-munich-frankfurt-germany-emea--f02eabf7-dc4c-4478-bdad-807a5ea8f7ed",
+      "fieldTranslations": []
+    }
+  ],
+  "jobRequest": {
+    "offset": 0,
+    "pageSize": 10,
+    "jobQuery": {
+      "query": "tier",
+      "locations": [
+        {
+          "address": "Hof, Bavaria",
+          "country": "de"
+        }
+      ],
+      "disableSpellCheck": false,
+      "excludeJobs": []
+    },
+    "debug": false,
+    "overrideOptions": false,
+    "enableDiversification": false,
+    "disableKeywordMatch": false,
+    "enableBroadening": false
+  },
+  "histogramQueryResult": []
+}
