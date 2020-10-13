@@ -14,11 +14,12 @@ A (somehow) useful and fast jobsearch experience. Project is influenced by https
 USA, Canada, Germany, Austria, Great Britain, France, Spain, Italy, Czechia
 
 ### Urgent upcoming changes:
-- bugfixes in mobile version (language switch)
+- bugfixes in mobile version (language switch on Android)
 - better layout / design
 - settings menu with light/dark mode switch
 - more code cleanup in TypeScript
 
 ### Non-urgent plans:
+- make it work on Safari/iOS (currently nothing works there, maybe XHTML+modules incompatibility?)
 - sorting of search results
 - maybe use of IndexedDB for search result storage and manipulation
