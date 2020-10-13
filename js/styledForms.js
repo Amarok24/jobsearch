@@ -7,7 +7,6 @@ export function styleSelectbox(selectElem, setup) {
     let span = document.createElement("span");
     let ul = document.createElement("ul");
     const ulMouseEnter = (ev) => {
-        console.dir(ev);
         let t = ev.target;
         t.dataset["opened"] = "";
         ev.stopPropagation();

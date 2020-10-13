@@ -291,6 +291,7 @@ body {
 
   .headerLogo {
     grid-area: h_logo;
+    //FIXME: object-fit ?? big logos don't fit into DIV
   }
 
   .headerButton {

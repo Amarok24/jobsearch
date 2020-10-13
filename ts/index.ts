@@ -17,24 +17,40 @@ import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
 
-const cout = console.log,
-      cerr = console.error,
-      DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
+const DUMMY_LOGO = "icons/logo-placeholder-optim.svg",
       //SCREEN_LARGE = window.matchMedia("(min-width: 801px)").matches,
       //SCREEN_SMALL = window.matchMedia("(max-width: 640px)").matches,
-      SCREEN_MEDIUM =
+      SCREEN_MEDIUM: boolean =
         window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
 
+const darkTheme = {
+  "--color_1": "#10021b",
+  "--color_2": "#38062f",
+  "--color_3": "#641c52",
+  "--color_4": "#35024e",
+  "--color_5": "#66002b",
+  "--color_6": "#8e9191",
+  "--color_7": "#968787",
+  "--color_8": "#606060",
+  "--color_9": "black",
+  "--color_10": "#bababa",
+  "--color_11": "#303030",
+  "--color_12": "darkred"
+  };
 
-let _messages = getElem("messages")!,
-    _templateJob = getElem("templateJob") as HTMLTemplateElement,
-    _searchResults = getElem("searchResults")!,
-    _jobHeader = getElem("jobHeader")!,
-    _rawJobData = getElem("rawJobData")!,
-    _searchButton = getElem("searchButton")!,
-    _loadMoreButton = getElem("loadMoreButton")!,
-    _countrySelectBox = getElem("countriesList") as HTMLSelectElement,
-    _toggleResults = getElem("toggleResults")!;
+interface GlobalElements {
+  messages: HTMLElement;
+  templateJob: HTMLTemplateElement;
+  searchResults: HTMLElement;
+  jobHeader: HTMLElement;
+  rawJobData: HTMLElement;
+  searchButton: HTMLElement;
+  loadMoreButton: HTMLElement;
+  countrySelectBox: HTMLSelectElement;
+  toggleResults: HTMLElement;
+}
+
+let globEl: GlobalElements;
 
 let _currentResults: any[] = [];
 let _responseFingerprint: ProcessedData;
@@ -93,36 +109,39 @@ interface JsonResponse {
   jobResults: JsonSingleJobResult[] | []; // empty[] if totalSize: 0 (no jobs found)
 };
 
-function getElem(elem: string): HTMLElement | null {
-  return document.getElementById(elem);
+
+function generateError(msg: string): never {
+  throw {
+    message: msg,
+    from: "index.ts generateError()"
+  };
 }
 
-function getInputElem(elem: string): HTMLInputElement | null {
-  return document.getElementById(elem) as HTMLInputElement;
+/**
+ * This function gets rid of awkward JS type union
+ * for return value (HTMLElement | null), better to use try..catch blocks.
+ */
+function getElem(elem: string): HTMLElement {
+  const maybeElem = document.getElementById(elem);
+  if (maybeElem === null) generateError(`getElem: could not find element ${elem}`);
+  return maybeElem;
 }
+
 
 function queryHTMLElem(elem: string): HTMLElement | null {
   return document.querySelector(elem);
 }
 
-function generateError(msg: string, code: number): never {
-  throw {
-    message: msg,
-    errorCode: code
-  };
-}
-
-
 /**
  * @description Shows or hides the "Load more" button below search results
  */
-function showLoadMore(showButton = true): void {
+function showLoadMore(showButton: boolean = true): void {
   if (showButton) {
-    _searchResults.append(_loadMoreButton);
-    _loadMoreButton.style.display = "block";
+    globEl.searchResults.append(globEl.loadMoreButton);
+    globEl.loadMoreButton.style.display = "block";
   } else {
-    _loadMoreButton.style.display = "none";
-    document.body.append(_loadMoreButton);
+    globEl.loadMoreButton.style.display = "none";
+    document.body.append(globEl.loadMoreButton);
   }
 }
 
@@ -133,9 +152,10 @@ function showLoadMore(showButton = true): void {
  * @param pageSize Results per page (influences pageOffset)
  */
 async function searchJobs(searchTerm: string, searchLocation: string, pageOffset: number = 0, pageSize: number = 10): Promise<void> {
+
   const dataQuery = {
     jobQuery: {
-      locations: [{ address: searchLocation, country: APILIST[_countrySelectBox.value].code }],
+      locations: [{ address: searchLocation, country: APILIST[globEl.countrySelectBox.value].code }],
       query: searchTerm
     },
     offset: pageOffset,
@@ -145,11 +165,11 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
   let responseData: JsonResponse;
   jLoader.showLoader();
 
-  cout(`selected country: ${_countrySelectBox.value}`);
+  console.log(`selected country: ${globEl.countrySelectBox.value}`);
 
   try {
-    responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
-    cout("responseData OK!");
+    responseData = await jXhr.sendXhrData("POST", APILIST[globEl.countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
+    console.log("responseData OK!");
 
     // all errors occuring inside of processResults will also be caught here
     _responseFingerprint = processResults(responseData);
@@ -160,10 +180,10 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
       }
     }
   } catch (error) {
-    cerr("catch block here, details: ", error);
-    jHelpers.outTextBr(_messages, "An ERROR occured:");
-    jHelpers.outTextBr(_messages, error.message);
-    jHelpers.outTextBr(_messages, error.details);
+    console.error("catch block here, details: ", error);
+    jHelpers.outTextBr(globEl.messages, "An ERROR occured:");
+    jHelpers.outTextBr(globEl.messages, error.message);
+    jHelpers.outTextBr(globEl.messages, error.details);
   } finally {
     jLoader.hideLoader();
   }
@@ -173,8 +193,8 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
  * @description Makes all special character XML-conform.
  */
 function makeXMLconform(inputText: string): string {
-  let out = "";
-  let regex = /&(?!amp|#38)/g;
+  let out: string = "";
+  let regex: RegExp = /&(?!amp|#38)/g;
   //TODO: more special characters
 
   out = inputText.replace(regex, "&amp;");
@@ -183,14 +203,14 @@ function makeXMLconform(inputText: string): string {
 
 /**
  * @description View job details by jobID from search results
- * @returns {number} returns 0 if foundIndex is null, otherwise 1
+ * @returns {number} returns 0 if foundIndex is -1, otherwise 1
  */
 function viewJob(id: string): number {
-  let foundIndex = null,
-      myDate,
-      formattedDate = "",
-      jobTitle = "",
-      logoSrc = "";
+  let foundIndex: number = -1,
+      myDate: Date,
+      formattedDate: string,
+      jobTitle: string,
+      logoSrc: string;
 
   let companyLogoBig: HTMLImageElement;
 
@@ -201,9 +221,9 @@ function viewJob(id: string): number {
     }
   }
 
-  if (foundIndex === null) {
+  if (foundIndex === -1) {
     // this should never happen
-    cerr("viewJob() foundIndex is null");
+    console.error("viewJob() foundIndex is -1");
     return 0;
   }
 
@@ -219,24 +239,24 @@ function viewJob(id: string): number {
   if (jobTitle.length > 70) {
     jobTitle = jobTitle.substring(0, 70) + "...";
   }
-  _jobHeader.querySelector("h2")!.innerText = jobTitle;
-  _jobHeader.querySelector("h3")!.innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
-  _jobHeader.querySelector("h4")!.innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
-  _jobHeader.querySelector("span")!.innerText = formattedDate;
-  _jobHeader.querySelector("a")!.href = _currentResults[foundIndex].apply.applyUrl;
+  globEl.jobHeader.querySelector("h2")!.innerText = jobTitle;
+  globEl.jobHeader.querySelector("h3")!.innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
+  globEl.jobHeader.querySelector("h4")!.innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
+  globEl.jobHeader.querySelector("span")!.innerText = formattedDate;
+  globEl.jobHeader.querySelector("a")!.href = _currentResults[foundIndex].apply.applyUrl;
   //_jobHeader.getElementsByClassName("companyLogoBig")[0].src = logoSrc;
   //getFirstClassOfElem("companyLogoBig", _jobHeader).src = logoSrc;
   //companyLogoBig = queryHTMLElem(".companyLogoBig") as HTMLImageElement;
-  companyLogoBig = _jobHeader.querySelector(".companyLogoBig") as HTMLImageElement;
+  companyLogoBig = globEl.jobHeader.querySelector(".companyLogoBig") as HTMLImageElement;
   companyLogoBig.src = logoSrc;
 
   try {
-    _rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
+    globEl.rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
   } catch (error) {
-    jHelpers.outTextBr(_messages);
-    jHelpers.outTextBr(_messages, "Error in text structure, job cannot be displayed.");
-    cout(_currentResults[foundIndex].jobPosting.description);
-    cerr(error);
+    jHelpers.outTextBr(globEl.messages);
+    jHelpers.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
+    console.log(_currentResults[foundIndex].jobPosting.description);
+    console.error(error);
   }
 
   return 1;
@@ -248,8 +268,8 @@ function viewJob(id: string): number {
 function jobClick(this: HTMLElement, ev?: Event): void {
   // 'this' here is always the node <article class="job">, so it's of type HTMLElement
   // 'ev' is undefined (because not used) when jobClick is called via apply()
-  const jobID = this.getAttribute("data-jobid");
-  const resultNodeLists = _searchResults.querySelectorAll("article");
+  const jobID: string | null = this.getAttribute("data-jobid");
+  const resultNodeLists: NodeListOf<HTMLElement> = globEl.searchResults.querySelectorAll("article");
 
   for (let i=0; i<resultNodeLists.length; i++) {
     resultNodeLists[i].classList.remove("selected");
@@ -278,15 +298,15 @@ function processResults(data: JsonResponse): ProcessedData {
 
   let smallLogo: HTMLImageElement;
 
-  cout("processResults here, data:", data);
+  console.log("processResults here, data:", data);
 
   if (!data) {
-    jHelpers.outTextBr(_messages, "Unusual error, 'data' in processResults undefined.");
-    generateError("Unusual error, 'data' in processResults undefined.", 2);
+    jHelpers.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
+    generateError("Unusual error, 'data' in processResults undefined.");
   }
 
   if (response.totalResults === 0) {
-    jHelpers.outTextBr(_messages, "0 jobs found");
+    jHelpers.outTextBr(globEl.messages, "0 jobs found");
     return response;
   }
 
@@ -295,25 +315,25 @@ function processResults(data: JsonResponse): ProcessedData {
     response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
   }
 
-  jHelpers.removeChildrenOf(_messages);
-  jHelpers.outText(_messages, response.searchTerm, true);
+  jHelpers.removeChildrenOf(globEl.messages);
+  jHelpers.outText(globEl.messages, response.searchTerm, true);
   if (response.searchLocation.length !== 0) {
-    jHelpers.outText(_messages, " in ");
-    jHelpers.outText(_messages, response.searchLocation, true);
+    jHelpers.outText(globEl.messages, " in ");
+    jHelpers.outText(globEl.messages, response.searchLocation, true);
   }
-  jHelpers.outText(_messages, ", total results: ");
-  jHelpers.outTextBr(_messages, response.totalResults.toString(), true);
+  jHelpers.outText(globEl.messages, ", total results: ");
+  jHelpers.outTextBr(globEl.messages, response.totalResults.toString(), true);
 
   if (response.pageOffset !== undefined) {
-    jHelpers.outText(_messages, response.pageOffset + data.totalSize + "", true);
+    jHelpers.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
   }
 
-  jHelpers.outText(_messages, " currently loaded");
+  jHelpers.outText(globEl.messages, " currently loaded");
 
   for (let i = 0; i < data.totalSize; i++) {
     // data.totalSize is the number of jobs returned in current pageOffset
 
-    let job = document.importNode(_templateJob.content, true); // true = deep copy
+    let job = document.importNode(globEl.templateJob.content, true); // true = deep copy
     // type of 'job' is developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
 
     let postalCode = data.jobResults[i].jobPosting.jobLocation[0].address.postalCode;
@@ -346,15 +366,15 @@ function processResults(data: JsonResponse): ProcessedData {
 
     job.firstElementChild?.addEventListener("click", jobClick);
 
-    _searchResults.append(job);
+    globEl.searchResults.append(job);
     _currentResults.push(data.jobResults[i]);
   }
 
-  cout("_currentResults:", _currentResults);
+  console.log("_currentResults:", _currentResults);
 
   if (response.pageOffset === 0) {
     // we are on 1st page, directly select (click) 1st job in results
-    jobClick.apply(_searchResults.querySelector("article")!);
+    jobClick.apply(globEl.searchResults.querySelector("article")!);
   }
 
   return response;
@@ -364,25 +384,26 @@ function processResults(data: JsonResponse): ProcessedData {
  * @description SEARCH button click handler
  */
 function searchClick(ev: Event) {
-  let title = getInputElem("inputTitle")!.value;
-  let location = getInputElem("inputLocation")!.value;
-  let intro = getElem("intro")!;
-  cout(ev.constructor.name); // MouseEvent
+  //let title = getInputElem("inputTitle").value;
+  let title = getElem("inputTitle") as HTMLInputElement;
+  let location = getElem("inputLocation") as HTMLInputElement;
+  let intro = getElem("intro");
+  //console.log(ev.constructor.name); // 'MouseEvent' even if clicked via keyboard!
   ev.preventDefault();
   intro.style.display = "none";
-  jHelpers.removeChildrenOf(_messages);
-  jHelpers.removeChildrenOf(_searchResults);
+  jHelpers.removeChildrenOf(globEl.messages);
+  jHelpers.removeChildrenOf(globEl.searchResults);
 
-  searchJobs(title, location);
-  _searchButton.blur(); // remove focus
+  searchJobs(title.value, location.value);
+  globEl.searchButton.blur(); // remove focus
 }
 
 /**
  * @description "Load more" button click handler
  */
 function loadMoreClick(): void {
-  const pOffset = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
-  cout("loading more jobs...");
+  const pOffset: number = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
+  console.log("loading more jobs...");
   showLoadMore(false);
   searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize );
 }
@@ -391,32 +412,64 @@ function loadMoreClick(): void {
  * @description Click handler for "toggle search results" icon
  */
 function toggleResultsClick(ev?: Event): void {
-  const opened = !!_toggleResults.dataset["opened"];
+  const opened: boolean = !!globEl.toggleResults.dataset["opened"];
 
-  cout(_toggleResults.dataset);
+  console.log(globEl.toggleResults.dataset);
 
   if (!opened) {
-    _toggleResults.dataset["opened"] = "1";
-    _searchResults.style.left = "0";
+    globEl.toggleResults.dataset["opened"] = "1";
+    globEl.searchResults.style.left = "0";
     queryHTMLElem(".jobContent")!.style.height = "1px";
     queryHTMLElem(".jobContent")!.style.overflowY = "hidden";
   } else {
-    delete _toggleResults.dataset["opened"];
-    _searchResults.style.left = "-100%";
+    delete globEl.toggleResults.dataset["opened"];
+    globEl.searchResults.style.left = "-100%";
     queryHTMLElem(".jobContent")!.style.height = "auto";
     queryHTMLElem(".jobContent")!.style.overflowY = "scroll";
   }
 }
 
+/**
+ * @returns True on success.
+ */
+function gatherElements(): boolean {
+  try {
+    globEl = {
+      messages: getElem("messages"),
+      templateJob: getElem("templateJob") as HTMLTemplateElement,
+      searchResults: getElem("searchResults"),
+      jobHeader: getElem("jobHeader"),
+      rawJobData: getElem("rawJobData"),
+      searchButton: getElem("searchButton"),
+      loadMoreButton: getElem("loadMoreButton"),
+      countrySelectBox: getElem("countriesList") as HTMLSelectElement,
+      toggleResults: getElem("toggleResults")
+    };
+    return true;
+  } catch (err) {
+    console.error(err.message);
+    return false;
+  }
+}
 
-// ADD EVENTS
-_searchButton.addEventListener("click", searchClick);
-_loadMoreButton.addEventListener("click", loadMoreClick);
-_toggleResults.addEventListener("click", toggleResultsClick);
+
+function setDark() {
+  jHelpers.setCSSrootColors(darkTheme);
+}
 
 
-// CUSTOM FORM ELEMENTS
-sForms.styleSelectbox(_countrySelectBox, {
+
+function main(): boolean {
+  if (!gatherElements()) return false;
+  console.info("All HTML elements found, let's get started...");
+
+  // ADD EVENTS
+  globEl.searchButton.addEventListener("click", searchClick);
+  globEl.loadMoreButton.addEventListener("click", loadMoreClick);
+  globEl.toggleResults.addEventListener("click", toggleResultsClick);
+
+  // CUSTOM FORM ELEMENTS
+  sForms.styleSelectbox(globEl.countrySelectBox, {
   //textContents: ["US", "CA", "DE", "AT", "GB", "FR", "ES", "IT", "CZ"],
   selectIndex: 2, // directly select 2nd index ("DE" in this case)
   individualStyles: [
@@ -429,36 +482,21 @@ sForms.styleSelectbox(_countrySelectBox, {
     {backgroundImage: "url(icons/flags/es.svg)"},
     {backgroundImage: "url(icons/flags/it.svg)"},
     {backgroundImage: "url(icons/flags/cz.svg)"}
-   ],
+    ],
   eachStyle: {
     paddingRight: "50px",
     backgroundSize: "22px auto",
     backgroundPosition: "60% center",
     backgroundRepeat: "no-repeat"
   }
- });
- /* Icon source https://github.com/lipis/flag-icon-css
- License: MIT License, see icons/flags/LICENSE.flags.txt */
+  });
+  /* Icon source https://github.com/lipis/flag-icon-css
+  License: MIT License, see icons/flags/LICENSE.flags.txt */
 
 
-
- const darkTheme = {
-  "--color_1": "#10021b",
-  "--color_2": "#38062f",
-  "--color_3": "#641c52",
-  "--color_4": "#35024e",
-  "--color_5": "#66002b",
-  "--color_6": "#8e9191",
-  "--color_7": "#968787",
-  "--color_8": "#606060",
-  "--color_9": "black",
-  "--color_10": "#bababa",
-  "--color_11": "#303030",
-  "--color_12": "darkred"
- };
-
- //setTimeout(setDark, 3000);
-
- function setDark() {
-  jHelpers.setCSSrootColors(darkTheme);
+  //setTimeout(setDark, 3000);
+  return true;
 }
+
+
+main();

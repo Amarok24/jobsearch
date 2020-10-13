@@ -3,41 +3,55 @@ import * as jLoader from "./jLoader.js";
 import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
-const cout = console.log, cerr = console.error, DUMMY_LOGO = "icons/logo-placeholder-optim.svg", SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
-let _messages = getElem("messages"), _templateJob = getElem("templateJob"), _searchResults = getElem("searchResults"), _jobHeader = getElem("jobHeader"), _rawJobData = getElem("rawJobData"), _searchButton = getElem("searchButton"), _loadMoreButton = getElem("loadMoreButton"), _countrySelectBox = getElem("countriesList"), _toggleResults = getElem("toggleResults");
+const DUMMY_LOGO = "icons/logo-placeholder-optim.svg", SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
+const darkTheme = {
+    "--color_1": "#10021b",
+    "--color_2": "#38062f",
+    "--color_3": "#641c52",
+    "--color_4": "#35024e",
+    "--color_5": "#66002b",
+    "--color_6": "#8e9191",
+    "--color_7": "#968787",
+    "--color_8": "#606060",
+    "--color_9": "black",
+    "--color_10": "#bababa",
+    "--color_11": "#303030",
+    "--color_12": "darkred"
+};
+let globEl;
 let _currentResults = [];
 let _responseFingerprint;
 ;
 ;
-function getElem(elem) {
-    return document.getElementById(elem);
+function generateError(msg) {
+    throw {
+        message: msg,
+        from: "index.ts generateError()"
+    };
 }
-function getInputElem(elem) {
-    return document.getElementById(elem);
+function getElem(elem) {
+    const maybeElem = document.getElementById(elem);
+    if (maybeElem === null)
+        generateError(`getElem: could not find element ${elem}`);
+    return maybeElem;
 }
 function queryHTMLElem(elem) {
     return document.querySelector(elem);
 }
-function generateError(msg, code) {
-    throw {
-        message: msg,
-        errorCode: code
-    };
-}
 function showLoadMore(showButton = true) {
     if (showButton) {
-        _searchResults.append(_loadMoreButton);
-        _loadMoreButton.style.display = "block";
+        globEl.searchResults.append(globEl.loadMoreButton);
+        globEl.loadMoreButton.style.display = "block";
     }
     else {
-        _loadMoreButton.style.display = "none";
-        document.body.append(_loadMoreButton);
+        globEl.loadMoreButton.style.display = "none";
+        document.body.append(globEl.loadMoreButton);
     }
 }
 async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize = 10) {
     const dataQuery = {
         jobQuery: {
-            locations: [{ address: searchLocation, country: APILIST[_countrySelectBox.value].code }],
+            locations: [{ address: searchLocation, country: APILIST[globEl.countrySelectBox.value].code }],
             query: searchTerm
         },
         offset: pageOffset,
@@ -45,10 +59,10 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
     };
     let responseData;
     jLoader.showLoader();
-    cout(`selected country: ${_countrySelectBox.value}`);
+    console.log(`selected country: ${globEl.countrySelectBox.value}`);
     try {
-        responseData = await jXhr.sendXhrData("POST", APILIST[_countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
-        cout("responseData OK!");
+        responseData = await jXhr.sendXhrData("POST", APILIST[globEl.countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
+        console.log("responseData OK!");
         _responseFingerprint = processResults(responseData);
         if (_responseFingerprint.pageOffset !== undefined && _responseFingerprint.pageSize !== undefined) {
             if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
@@ -57,10 +71,10 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
         }
     }
     catch (error) {
-        cerr("catch block here, details: ", error);
-        jHelpers.outTextBr(_messages, "An ERROR occured:");
-        jHelpers.outTextBr(_messages, error.message);
-        jHelpers.outTextBr(_messages, error.details);
+        console.error("catch block here, details: ", error);
+        jHelpers.outTextBr(globEl.messages, "An ERROR occured:");
+        jHelpers.outTextBr(globEl.messages, error.message);
+        jHelpers.outTextBr(globEl.messages, error.details);
     }
     finally {
         jLoader.hideLoader();
@@ -73,7 +87,7 @@ function makeXMLconform(inputText) {
     return out;
 }
 function viewJob(id) {
-    let foundIndex = null, myDate, formattedDate = "", jobTitle = "", logoSrc = "";
+    let foundIndex = -1, myDate, formattedDate, jobTitle, logoSrc;
     let companyLogoBig;
     for (let i = 0; i < _currentResults.length; i++) {
         if (_currentResults[i].jobId === id) {
@@ -81,8 +95,8 @@ function viewJob(id) {
             break;
         }
     }
-    if (foundIndex === null) {
-        cerr("viewJob() foundIndex is null");
+    if (foundIndex === -1) {
+        console.error("viewJob() foundIndex is -1");
         return 0;
     }
     myDate = new Date(_currentResults[foundIndex].formattedDate);
@@ -95,27 +109,27 @@ function viewJob(id) {
     if (jobTitle.length > 70) {
         jobTitle = jobTitle.substring(0, 70) + "...";
     }
-    _jobHeader.querySelector("h2").innerText = jobTitle;
-    _jobHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
-    _jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
-    _jobHeader.querySelector("span").innerText = formattedDate;
-    _jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
-    companyLogoBig = _jobHeader.querySelector(".companyLogoBig");
+    globEl.jobHeader.querySelector("h2").innerText = jobTitle;
+    globEl.jobHeader.querySelector("h3").innerText = _currentResults[foundIndex].jobPosting.hiringOrganization.name;
+    globEl.jobHeader.querySelector("h4").innerText = _currentResults[foundIndex].jobPosting.jobLocation[0].address.addressLocality;
+    globEl.jobHeader.querySelector("span").innerText = formattedDate;
+    globEl.jobHeader.querySelector("a").href = _currentResults[foundIndex].apply.applyUrl;
+    companyLogoBig = globEl.jobHeader.querySelector(".companyLogoBig");
     companyLogoBig.src = logoSrc;
     try {
-        _rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
+        globEl.rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
     }
     catch (error) {
-        jHelpers.outTextBr(_messages);
-        jHelpers.outTextBr(_messages, "Error in text structure, job cannot be displayed.");
-        cout(_currentResults[foundIndex].jobPosting.description);
-        cerr(error);
+        jHelpers.outTextBr(globEl.messages);
+        jHelpers.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
+        console.log(_currentResults[foundIndex].jobPosting.description);
+        console.error(error);
     }
     return 1;
 }
 function jobClick(ev) {
     const jobID = this.getAttribute("data-jobid");
-    const resultNodeLists = _searchResults.querySelectorAll("article");
+    const resultNodeLists = globEl.searchResults.querySelectorAll("article");
     for (let i = 0; i < resultNodeLists.length; i++) {
         resultNodeLists[i].classList.remove("selected");
     }
@@ -136,33 +150,33 @@ function processResults(data) {
         totalResults: data.estimatedTotalSize
     };
     let smallLogo;
-    cout("processResults here, data:", data);
+    console.log("processResults here, data:", data);
     if (!data) {
-        jHelpers.outTextBr(_messages, "Unusual error, 'data' in processResults undefined.");
-        generateError("Unusual error, 'data' in processResults undefined.", 2);
+        jHelpers.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
+        generateError("Unusual error, 'data' in processResults undefined.");
     }
     if (response.totalResults === 0) {
-        jHelpers.outTextBr(_messages, "0 jobs found");
+        jHelpers.outTextBr(globEl.messages, "0 jobs found");
         return response;
     }
     if (data.jobRequest) {
         response.searchTerm = data.jobRequest.jobQuery.query;
         response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
     }
-    jHelpers.removeChildrenOf(_messages);
-    jHelpers.outText(_messages, response.searchTerm, true);
+    jHelpers.removeChildrenOf(globEl.messages);
+    jHelpers.outText(globEl.messages, response.searchTerm, true);
     if (response.searchLocation.length !== 0) {
-        jHelpers.outText(_messages, " in ");
-        jHelpers.outText(_messages, response.searchLocation, true);
+        jHelpers.outText(globEl.messages, " in ");
+        jHelpers.outText(globEl.messages, response.searchLocation, true);
     }
-    jHelpers.outText(_messages, ", total results: ");
-    jHelpers.outTextBr(_messages, response.totalResults.toString(), true);
+    jHelpers.outText(globEl.messages, ", total results: ");
+    jHelpers.outTextBr(globEl.messages, response.totalResults.toString(), true);
     if (response.pageOffset !== undefined) {
-        jHelpers.outText(_messages, response.pageOffset + data.totalSize + "", true);
+        jHelpers.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
     }
-    jHelpers.outText(_messages, " currently loaded");
+    jHelpers.outText(globEl.messages, " currently loaded");
     for (let i = 0; i < data.totalSize; i++) {
-        let job = document.importNode(_templateJob.content, true);
+        let job = document.importNode(globEl.templateJob.content, true);
         let postalCode = data.jobResults[i].jobPosting.jobLocation[0].address.postalCode;
         let locality = data.jobResults[i].jobPosting.jobLocation[0].address.addressLocality;
         let countryCode = data.jobResults[i].jobPosting.jobLocation[0].address.addressCountry;
@@ -185,87 +199,99 @@ function processResults(data) {
             smallLogo.src = logo;
         }
         (_d = job.firstElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", jobClick);
-        _searchResults.append(job);
+        globEl.searchResults.append(job);
         _currentResults.push(data.jobResults[i]);
     }
-    cout("_currentResults:", _currentResults);
+    console.log("_currentResults:", _currentResults);
     if (response.pageOffset === 0) {
-        jobClick.apply(_searchResults.querySelector("article"));
+        jobClick.apply(globEl.searchResults.querySelector("article"));
     }
     return response;
 }
 function searchClick(ev) {
-    let title = getInputElem("inputTitle").value;
-    let location = getInputElem("inputLocation").value;
+    let title = getElem("inputTitle");
+    let location = getElem("inputLocation");
     let intro = getElem("intro");
-    cout(ev.constructor.name);
     ev.preventDefault();
     intro.style.display = "none";
-    jHelpers.removeChildrenOf(_messages);
-    jHelpers.removeChildrenOf(_searchResults);
-    searchJobs(title, location);
-    _searchButton.blur();
+    jHelpers.removeChildrenOf(globEl.messages);
+    jHelpers.removeChildrenOf(globEl.searchResults);
+    searchJobs(title.value, location.value);
+    globEl.searchButton.blur();
 }
 function loadMoreClick() {
     const pOffset = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
-    cout("loading more jobs...");
+    console.log("loading more jobs...");
     showLoadMore(false);
     searchJobs(_responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize);
 }
 function toggleResultsClick(ev) {
-    const opened = !!_toggleResults.dataset["opened"];
-    cout(_toggleResults.dataset);
+    const opened = !!globEl.toggleResults.dataset["opened"];
+    console.log(globEl.toggleResults.dataset);
     if (!opened) {
-        _toggleResults.dataset["opened"] = "1";
-        _searchResults.style.left = "0";
+        globEl.toggleResults.dataset["opened"] = "1";
+        globEl.searchResults.style.left = "0";
         queryHTMLElem(".jobContent").style.height = "1px";
         queryHTMLElem(".jobContent").style.overflowY = "hidden";
     }
     else {
-        delete _toggleResults.dataset["opened"];
-        _searchResults.style.left = "-100%";
+        delete globEl.toggleResults.dataset["opened"];
+        globEl.searchResults.style.left = "-100%";
         queryHTMLElem(".jobContent").style.height = "auto";
         queryHTMLElem(".jobContent").style.overflowY = "scroll";
     }
 }
-_searchButton.addEventListener("click", searchClick);
-_loadMoreButton.addEventListener("click", loadMoreClick);
-_toggleResults.addEventListener("click", toggleResultsClick);
-sForms.styleSelectbox(_countrySelectBox, {
-    selectIndex: 2,
-    individualStyles: [
-        { backgroundImage: "url(icons/flags/us.svg)" },
-        { backgroundImage: "url(icons/flags/ca.svg)" },
-        { backgroundImage: "url(icons/flags/de.svg)" },
-        { backgroundImage: "url(icons/flags/at.svg)" },
-        { backgroundImage: "url(icons/flags/gb.svg)" },
-        { backgroundImage: "url(icons/flags/fr.svg)" },
-        { backgroundImage: "url(icons/flags/es.svg)" },
-        { backgroundImage: "url(icons/flags/it.svg)" },
-        { backgroundImage: "url(icons/flags/cz.svg)" }
-    ],
-    eachStyle: {
-        paddingRight: "50px",
-        backgroundSize: "22px auto",
-        backgroundPosition: "60% center",
-        backgroundRepeat: "no-repeat"
+function gatherElements() {
+    try {
+        globEl = {
+            messages: getElem("messages"),
+            templateJob: getElem("templateJob"),
+            searchResults: getElem("searchResults"),
+            jobHeader: getElem("jobHeader"),
+            rawJobData: getElem("rawJobData"),
+            searchButton: getElem("searchButton"),
+            loadMoreButton: getElem("loadMoreButton"),
+            countrySelectBox: getElem("countriesList"),
+            toggleResults: getElem("toggleResults")
+        };
+        return true;
     }
-});
-const darkTheme = {
-    "--color_1": "#10021b",
-    "--color_2": "#38062f",
-    "--color_3": "#641c52",
-    "--color_4": "#35024e",
-    "--color_5": "#66002b",
-    "--color_6": "#8e9191",
-    "--color_7": "#968787",
-    "--color_8": "#606060",
-    "--color_9": "black",
-    "--color_10": "#bababa",
-    "--color_11": "#303030",
-    "--color_12": "darkred"
-};
+    catch (err) {
+        console.error(err.message);
+        return false;
+    }
+}
 function setDark() {
     jHelpers.setCSSrootColors(darkTheme);
 }
+function main() {
+    if (!gatherElements())
+        return false;
+    console.info("All HTML elements found, let's get started...");
+    globEl.searchButton.addEventListener("click", searchClick);
+    globEl.loadMoreButton.addEventListener("click", loadMoreClick);
+    globEl.toggleResults.addEventListener("click", toggleResultsClick);
+    sForms.styleSelectbox(globEl.countrySelectBox, {
+        selectIndex: 2,
+        individualStyles: [
+            { backgroundImage: "url(icons/flags/us.svg)" },
+            { backgroundImage: "url(icons/flags/ca.svg)" },
+            { backgroundImage: "url(icons/flags/de.svg)" },
+            { backgroundImage: "url(icons/flags/at.svg)" },
+            { backgroundImage: "url(icons/flags/gb.svg)" },
+            { backgroundImage: "url(icons/flags/fr.svg)" },
+            { backgroundImage: "url(icons/flags/es.svg)" },
+            { backgroundImage: "url(icons/flags/it.svg)" },
+            { backgroundImage: "url(icons/flags/cz.svg)" }
+        ],
+        eachStyle: {
+            paddingRight: "50px",
+            backgroundSize: "22px auto",
+            backgroundPosition: "60% center",
+            backgroundRepeat: "no-repeat"
+        }
+    });
+    return true;
+}
+main();
 //# sourceMappingURL=index.js.map

@@ -20,12 +20,12 @@ type Filterable = object | object[];
  * @param wrapper Wrap whole text with given element name, default is "span".
  * @param linebreak Add a <br /> at the end
  */
-export function outText(element: HTMLElement, text: string, bold=false, wrapper="span", linebreak=false): void {
-  const message = document.createTextNode(text); // because .innerHTML is insecure
-  let fragment = document.createDocumentFragment();
-  let strong,
-      br;
-  let paragraph = document.createElement(wrapper);
+export function outText(element: HTMLElement, text: string, bold=false, wrapper: string = "span", linebreak=false): void {
+  const message: Text = document.createTextNode(text); // because .innerHTML is insecure
+  let fragment: DocumentFragment = document.createDocumentFragment();
+  let paragraph: HTMLElement = document.createElement(wrapper),
+      strong: HTMLElement,
+      br: HTMLElement;
 
   if (bold) {
     strong = document.createElement("strong");
@@ -49,7 +49,7 @@ export function outText(element: HTMLElement, text: string, bold=false, wrapper=
  * Outputs plain text to HTML element, optional bold formatting, adds a linebreak
  * @param bold Format with <strong>
  */
-export function outTextBr(element: HTMLElement, text="", bold=false): void {
+export function outTextBr(element: HTMLElement, text: string = "", bold=false): void {
   outText(element, text, bold, "span", true);
 }
 
@@ -108,7 +108,7 @@ export function sanitizeJSONobject(obj: GenericObject): GenericObject {
  * @returns A copy of changed input.
  */
 export function filterObject(obj: Filterable, keysArr: string[]): Filterable {
-  let json = JSON.stringify(obj, keysArr);
+  let json: string = JSON.stringify(obj, keysArr);
   return JSON.parse(json);
 }
 
@@ -157,7 +157,7 @@ interface ColorList {
  * @param colors Key-value pairs of CSS variableName and value
  */
 export function setCSSrootColors(colors: ColorList) {
-  let rootElem = document.documentElement;
+  let rootElem: HTMLElement = document.documentElement;
   let colorName: string;
 
   for (colorName in colors) {

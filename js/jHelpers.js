@@ -1,8 +1,7 @@
 export function outText(element, text, bold = false, wrapper = "span", linebreak = false) {
     const message = document.createTextNode(text);
     let fragment = document.createDocumentFragment();
-    let strong, br;
-    let paragraph = document.createElement(wrapper);
+    let paragraph = document.createElement(wrapper), strong, br;
     if (bold) {
         strong = document.createElement("strong");
         paragraph.appendChild(strong);

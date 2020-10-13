@@ -47,7 +47,6 @@ export function styleSelectbox(selectElem: HTMLSelectElement, setup: SelectBoxSe
 
   // BEGIN: EVENT LISTENERS **********************************************
   const ulMouseEnter = (ev: MouseEvent) => {
-    console.dir(ev);
     let t = ev.target as HTMLElement;
     t.dataset["opened"] = "";
     ev.stopPropagation(); // TODO: try without, old bug?
