@@ -118,8 +118,8 @@ function generateError(msg: string): never {
 }
 
 /**
- * This function gets rid of awkward JS type union
- * for return value (HTMLElement | null), better to use try..catch blocks.
+ * This function gets rid of awkward JS type union (HTMLElement | null)
+ * in getElementById's return value. Better to use try..catch blocks.
  */
 function getElem(elem: string): HTMLElement {
   const maybeElem = document.getElementById(elem);
@@ -432,7 +432,7 @@ function toggleResultsClick(ev?: Event): void {
 /**
  * @returns True on success.
  */
-function gatherElements(): boolean {
+function gatherHTMLElements(): boolean {
   try {
     globEl = {
       messages: getElem("messages"),
@@ -460,7 +460,7 @@ function setDark() {
 
 
 function main(): boolean {
-  if (!gatherElements()) return false;
+  if (!gatherHTMLElements()) return false;
   console.info("All HTML elements found, let's get started...");
 
   // ADD EVENTS
