@@ -17,15 +17,15 @@ const TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").mat
 
 interface StyleList {
   [keyName: string]: string;
-};
+}
 
 interface SelectBoxSetup {
-  textContents?: string[];
+  textContents?: string[]; // TODO: get rid of |
   selectIndex: number;
   individualStyles: StyleList[];
   eachStyle: StyleList;
-  classForSelected?: string;
-};
+  classForSelected?: string; // TODO: get rid of |
+}
 
 
 /**

@@ -52,16 +52,17 @@ interface GlobalElements {
 
 let globEl: GlobalElements;
 
-let _currentResults: any[] = [];
-let _responseFingerprint: ProcessedData;
-
 interface ProcessedData {
   searchTerm: string;
   searchLocation: string;
-  pageOffset?: number;
-  pageSize?: number;
+  pageOffset: number; // -1 if undefined
+  pageSize: number; // -1 if undefined
   totalResults: number;
-};
+}
+
+let _responseFingerprint: ProcessedData;
+
+let _currentResults: any[] = []; //TODO: get rid of any
 
 interface JsonSingleJobResult {
   dateRecency: string;
@@ -107,7 +108,7 @@ interface JsonResponse {
   totalSize: number;
   estimatedTotalSize: number;
   jobResults: JsonSingleJobResult[] | []; // empty[] if totalSize: 0 (no jobs found)
-};
+}
 
 
 function generateError(msg: string): never {
@@ -174,7 +175,7 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
     // all errors occuring inside of processResults will also be caught here
     _responseFingerprint = processResults(responseData);
 
-    if (_responseFingerprint.pageOffset !== undefined && _responseFingerprint.pageSize !== undefined) {
+    if (_responseFingerprint.pageOffset !== -1 && _responseFingerprint.pageSize !== -1) {
       if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
         showLoadMore();
       }
@@ -291,8 +292,8 @@ function processResults(data: JsonResponse): ProcessedData {
   let response: ProcessedData = {
     searchTerm: "",
     searchLocation: "",
-    pageOffset: data.jobRequest?.offset, // ?. == optional chaining, ES2020
-    pageSize: data.jobRequest?.pageSize,
+    pageOffset: data.jobRequest ? data.jobRequest.offset : -1,
+    pageSize: data.jobRequest ? data.jobRequest.pageSize : -1,
     totalResults: data.estimatedTotalSize
   };
 
@@ -324,7 +325,7 @@ function processResults(data: JsonResponse): ProcessedData {
   jHelpers.outText(globEl.messages, ", total results: ");
   jHelpers.outTextBr(globEl.messages, response.totalResults.toString(), true);
 
-  if (response.pageOffset !== undefined) {
+  if (response.pageOffset !== -1) {
     jHelpers.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
   }
 
@@ -402,7 +403,7 @@ function searchClick(ev: Event) {
  * @description "Load more" button click handler
  */
 function loadMoreClick(): void {
-  const pOffset: number = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
+  const pOffset: number = (_responseFingerprint.pageOffset !== -1) ? _responseFingerprint.pageOffset : 0;
   console.log("loading more jobs...");
   showLoadMore(false);
   searchJobs( _responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize );

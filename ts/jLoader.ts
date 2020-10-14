@@ -15,7 +15,7 @@ let _loaderDiv: HTMLElement;
 
 interface StyleList {
   [keyName: string]: string;
-};
+}
 
 const LOADERSTYLE_PARENT: StyleList = {
   position: "fixed",

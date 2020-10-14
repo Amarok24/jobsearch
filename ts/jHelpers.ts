@@ -76,7 +76,7 @@ export function removeHtmlTags(str: string): string {
 
 interface GenericObject {
   [keyName: string]: any;
-};
+}
 
 /**
  * Returns a sanitized copy of obj, string numbers become pure numbers and string values "null" become null.
@@ -150,7 +150,7 @@ export function typeCheck(obj: any, typeName: string): boolean {
 
 interface ColorList {
   [keyName: string]: string;
-};
+}
 
 /**
  *
