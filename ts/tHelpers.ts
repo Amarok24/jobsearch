@@ -165,3 +165,21 @@ export function setCSSrootColors(colors: ColorList) {
     rootElem.style.setProperty(colorName, colors[colorName]);
   }
 }
+
+
+export function generateError(msg: string): never {
+  throw {
+    message: msg,
+    from: "index.ts generateError()"
+  };
+}
+
+/**
+ * This function gets rid of awkward JS type union (HTMLElement | null)
+ * in getElementById's return value. Better to use try..catch blocks.
+ */
+export function getElem(elem: string): HTMLElement {
+  const maybeElem = document.getElementById(elem);
+  if (maybeElem === null) generateError(`getElem: could not find element ${elem}`);
+  return maybeElem;
+}

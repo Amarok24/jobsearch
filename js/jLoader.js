@@ -1,5 +1,4 @@
 let _loaderDiv;
-;
 const LOADERSTYLE_PARENT = {
     position: "fixed",
     zIndex: "100",

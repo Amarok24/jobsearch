@@ -11,9 +11,9 @@
  *
  */
 
+import * as t from "./tHelpers.js";
 import * as jXhr from "./jXhr.js";
 import * as jLoader from "./jLoader.js";
-import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
 
@@ -36,7 +36,7 @@ const darkTheme = {
   "--color_10": "#bababa",
   "--color_11": "#303030",
   "--color_12": "darkred"
-  };
+};
 
 interface GlobalElements {
   messages: HTMLElement;
@@ -111,24 +111,6 @@ interface JsonResponse {
 }
 
 
-function generateError(msg: string): never {
-  throw {
-    message: msg,
-    from: "index.ts generateError()"
-  };
-}
-
-/**
- * This function gets rid of awkward JS type union (HTMLElement | null)
- * in getElementById's return value. Better to use try..catch blocks.
- */
-function getElem(elem: string): HTMLElement {
-  const maybeElem = document.getElementById(elem);
-  if (maybeElem === null) generateError(`getElem: could not find element ${elem}`);
-  return maybeElem;
-}
-
-
 function queryHTMLElem(elem: string): HTMLElement | null {
   return document.querySelector(elem);
 }
@@ -182,9 +164,9 @@ async function searchJobs(searchTerm: string, searchLocation: string, pageOffset
     }
   } catch (error) {
     console.error("catch block here, details: ", error);
-    jHelpers.outTextBr(globEl.messages, "An ERROR occured:");
-    jHelpers.outTextBr(globEl.messages, error.message);
-    jHelpers.outTextBr(globEl.messages, error.details);
+    t.outTextBr(globEl.messages, "An ERROR occured:");
+    t.outTextBr(globEl.messages, error.message);
+    t.outTextBr(globEl.messages, error.details);
   } finally {
     jLoader.hideLoader();
   }
@@ -254,8 +236,8 @@ function viewJob(id: string): number {
   try {
     globEl.rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
   } catch (error) {
-    jHelpers.outTextBr(globEl.messages);
-    jHelpers.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
+    t.outTextBr(globEl.messages);
+    t.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
     console.log(_currentResults[foundIndex].jobPosting.description);
     console.error(error);
   }
@@ -302,12 +284,12 @@ function processResults(data: JsonResponse): ProcessedData {
   console.log("processResults here, data:", data);
 
   if (!data) {
-    jHelpers.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
-    generateError("Unusual error, 'data' in processResults undefined.");
+    t.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
+    t.generateError("Unusual error, 'data' in processResults undefined.");
   }
 
   if (response.totalResults === 0) {
-    jHelpers.outTextBr(globEl.messages, "0 jobs found");
+    t.outTextBr(globEl.messages, "0 jobs found");
     return response;
   }
 
@@ -316,20 +298,20 @@ function processResults(data: JsonResponse): ProcessedData {
     response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
   }
 
-  jHelpers.removeChildrenOf(globEl.messages);
-  jHelpers.outText(globEl.messages, response.searchTerm, true);
+  t.removeChildrenOf(globEl.messages);
+  t.outText(globEl.messages, response.searchTerm, true);
   if (response.searchLocation.length !== 0) {
-    jHelpers.outText(globEl.messages, " in ");
-    jHelpers.outText(globEl.messages, response.searchLocation, true);
+    t.outText(globEl.messages, " in ");
+    t.outText(globEl.messages, response.searchLocation, true);
   }
-  jHelpers.outText(globEl.messages, ", total results: ");
-  jHelpers.outTextBr(globEl.messages, response.totalResults.toString(), true);
+  t.outText(globEl.messages, ", total results: ");
+  t.outTextBr(globEl.messages, response.totalResults.toString(), true);
 
   if (response.pageOffset !== -1) {
-    jHelpers.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
+    t.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
   }
 
-  jHelpers.outText(globEl.messages, " currently loaded");
+  t.outText(globEl.messages, " currently loaded");
 
   for (let i = 0; i < data.totalSize; i++) {
     // data.totalSize is the number of jobs returned in current pageOffset
@@ -346,7 +328,7 @@ function processResults(data: JsonResponse): ProcessedData {
     let jobID = data.jobResults[i].jobId;
 
     let summary = data.jobResults[i].jobPosting.description;
-    summary = jHelpers.removeHtmlTags(summary);
+    summary = t.removeHtmlTags(summary);
 
     job.firstElementChild?.setAttribute("data-jobid", jobID); // data-xx always lowercase
     job.querySelector("h3")!.textContent = data.jobResults[i].jobPosting.title;
@@ -386,14 +368,14 @@ function processResults(data: JsonResponse): ProcessedData {
  */
 function searchClick(ev: Event) {
   //let title = getInputElem("inputTitle").value;
-  let title = getElem("inputTitle") as HTMLInputElement;
-  let location = getElem("inputLocation") as HTMLInputElement;
-  let intro = getElem("intro");
+  let title = t.getElem("inputTitle") as HTMLInputElement;
+  let location = t.getElem("inputLocation") as HTMLInputElement;
+  let intro = t.getElem("intro");
   //console.log(ev.constructor.name); // 'MouseEvent' even if clicked via keyboard!
   ev.preventDefault();
   intro.style.display = "none";
-  jHelpers.removeChildrenOf(globEl.messages);
-  jHelpers.removeChildrenOf(globEl.searchResults);
+  t.removeChildrenOf(globEl.messages);
+  t.removeChildrenOf(globEl.searchResults);
 
   searchJobs(title.value, location.value);
   globEl.searchButton.blur(); // remove focus
@@ -436,15 +418,15 @@ function toggleResultsClick(ev?: Event): void {
 function gatherHTMLElements(): boolean {
   try {
     globEl = {
-      messages: getElem("messages"),
-      templateJob: getElem("templateJob") as HTMLTemplateElement,
-      searchResults: getElem("searchResults"),
-      jobHeader: getElem("jobHeader"),
-      rawJobData: getElem("rawJobData"),
-      searchButton: getElem("searchButton"),
-      loadMoreButton: getElem("loadMoreButton"),
-      countrySelectBox: getElem("countriesList") as HTMLSelectElement,
-      toggleResults: getElem("toggleResults")
+      messages: t.getElem("messages"),
+      templateJob: t.getElem("templateJob") as HTMLTemplateElement,
+      searchResults: t.getElem("searchResults"),
+      jobHeader: t.getElem("jobHeader"),
+      rawJobData: t.getElem("rawJobData"),
+      searchButton: t.getElem("searchButton"),
+      loadMoreButton: t.getElem("loadMoreButton"),
+      countrySelectBox: t.getElem("countriesList") as HTMLSelectElement,
+      toggleResults: t.getElem("toggleResults")
     };
     return true;
   } catch (err) {
@@ -455,7 +437,7 @@ function gatherHTMLElements(): boolean {
 
 
 function setDark() {
-  jHelpers.setCSSrootColors(darkTheme);
+  t.setCSSrootColors(darkTheme);
 }
 
 

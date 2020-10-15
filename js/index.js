@@ -1,6 +1,6 @@
+import * as t from "./tHelpers.js";
 import * as jXhr from "./jXhr.js";
 import * as jLoader from "./jLoader.js";
-import * as jHelpers from "./jHelpers.js";
 import * as sForms from "./styledForms.js";
 import APILIST from "./apiResources.js";
 const DUMMY_LOGO = "icons/logo-placeholder-optim.svg", SCREEN_MEDIUM = window.matchMedia("(min-width: 641px) and (max-width: 800px)").matches;
@@ -19,22 +19,8 @@ const darkTheme = {
     "--color_12": "darkred"
 };
 let globEl;
-let _currentResults = [];
 let _responseFingerprint;
-;
-;
-function generateError(msg) {
-    throw {
-        message: msg,
-        from: "index.ts generateError()"
-    };
-}
-function getElem(elem) {
-    const maybeElem = document.getElementById(elem);
-    if (maybeElem === null)
-        generateError(`getElem: could not find element ${elem}`);
-    return maybeElem;
-}
+let _currentResults = [];
 function queryHTMLElem(elem) {
     return document.querySelector(elem);
 }
@@ -64,7 +50,7 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
         responseData = await jXhr.sendXhrData("POST", APILIST[globEl.countrySelectBox.value].url, JSON.stringify(dataQuery), "json", "jobsearch request");
         console.log("responseData OK!");
         _responseFingerprint = processResults(responseData);
-        if (_responseFingerprint.pageOffset !== undefined && _responseFingerprint.pageSize !== undefined) {
+        if (_responseFingerprint.pageOffset !== -1 && _responseFingerprint.pageSize !== -1) {
             if (_responseFingerprint.totalResults > (_responseFingerprint.pageOffset + _responseFingerprint.pageSize)) {
                 showLoadMore();
             }
@@ -72,9 +58,9 @@ async function searchJobs(searchTerm, searchLocation, pageOffset = 0, pageSize =
     }
     catch (error) {
         console.error("catch block here, details: ", error);
-        jHelpers.outTextBr(globEl.messages, "An ERROR occured:");
-        jHelpers.outTextBr(globEl.messages, error.message);
-        jHelpers.outTextBr(globEl.messages, error.details);
+        t.outTextBr(globEl.messages, "An ERROR occured:");
+        t.outTextBr(globEl.messages, error.message);
+        t.outTextBr(globEl.messages, error.details);
     }
     finally {
         jLoader.hideLoader();
@@ -120,8 +106,8 @@ function viewJob(id) {
         globEl.rawJobData.innerHTML = makeXMLconform(_currentResults[foundIndex].jobPosting.description);
     }
     catch (error) {
-        jHelpers.outTextBr(globEl.messages);
-        jHelpers.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
+        t.outTextBr(globEl.messages);
+        t.outTextBr(globEl.messages, "Error in text structure, job cannot be displayed.");
         console.log(_currentResults[foundIndex].jobPosting.description);
         console.error(error);
     }
@@ -141,40 +127,40 @@ function jobClick(ev) {
     }
 }
 function processResults(data) {
-    var _a, _b, _c, _d;
+    var _a, _b;
     let response = {
         searchTerm: "",
         searchLocation: "",
-        pageOffset: (_a = data.jobRequest) === null || _a === void 0 ? void 0 : _a.offset,
-        pageSize: (_b = data.jobRequest) === null || _b === void 0 ? void 0 : _b.pageSize,
+        pageOffset: data.jobRequest ? data.jobRequest.offset : -1,
+        pageSize: data.jobRequest ? data.jobRequest.pageSize : -1,
         totalResults: data.estimatedTotalSize
     };
     let smallLogo;
     console.log("processResults here, data:", data);
     if (!data) {
-        jHelpers.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
-        generateError("Unusual error, 'data' in processResults undefined.");
+        t.outTextBr(globEl.messages, "Unusual error, 'data' in processResults undefined.");
+        t.generateError("Unusual error, 'data' in processResults undefined.");
     }
     if (response.totalResults === 0) {
-        jHelpers.outTextBr(globEl.messages, "0 jobs found");
+        t.outTextBr(globEl.messages, "0 jobs found");
         return response;
     }
     if (data.jobRequest) {
         response.searchTerm = data.jobRequest.jobQuery.query;
         response.searchLocation = data.jobRequest.jobQuery.locations[0].address;
     }
-    jHelpers.removeChildrenOf(globEl.messages);
-    jHelpers.outText(globEl.messages, response.searchTerm, true);
+    t.removeChildrenOf(globEl.messages);
+    t.outText(globEl.messages, response.searchTerm, true);
     if (response.searchLocation.length !== 0) {
-        jHelpers.outText(globEl.messages, " in ");
-        jHelpers.outText(globEl.messages, response.searchLocation, true);
+        t.outText(globEl.messages, " in ");
+        t.outText(globEl.messages, response.searchLocation, true);
     }
-    jHelpers.outText(globEl.messages, ", total results: ");
-    jHelpers.outTextBr(globEl.messages, response.totalResults.toString(), true);
-    if (response.pageOffset !== undefined) {
-        jHelpers.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
+    t.outText(globEl.messages, ", total results: ");
+    t.outTextBr(globEl.messages, response.totalResults.toString(), true);
+    if (response.pageOffset !== -1) {
+        t.outText(globEl.messages, response.pageOffset + data.totalSize + "", true);
     }
-    jHelpers.outText(globEl.messages, " currently loaded");
+    t.outText(globEl.messages, " currently loaded");
     for (let i = 0; i < data.totalSize; i++) {
         let job = document.importNode(globEl.templateJob.content, true);
         let postalCode = data.jobResults[i].jobPosting.jobLocation[0].address.postalCode;
@@ -184,8 +170,8 @@ function processResults(data) {
         let logo = data.jobResults[i].jobPosting.hiringOrganization.logo;
         let jobID = data.jobResults[i].jobId;
         let summary = data.jobResults[i].jobPosting.description;
-        summary = jHelpers.removeHtmlTags(summary);
-        (_c = job.firstElementChild) === null || _c === void 0 ? void 0 : _c.setAttribute("data-jobid", jobID);
+        summary = t.removeHtmlTags(summary);
+        (_a = job.firstElementChild) === null || _a === void 0 ? void 0 : _a.setAttribute("data-jobid", jobID);
         job.querySelector("h3").textContent = data.jobResults[i].jobPosting.title;
         if (!postalCode) {
             postalCode = "";
@@ -198,7 +184,7 @@ function processResults(data) {
             smallLogo = job.querySelector(".companyLogoSmall");
             smallLogo.src = logo;
         }
-        (_d = job.firstElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", jobClick);
+        (_b = job.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", jobClick);
         globEl.searchResults.append(job);
         _currentResults.push(data.jobResults[i]);
     }
@@ -209,18 +195,18 @@ function processResults(data) {
     return response;
 }
 function searchClick(ev) {
-    let title = getElem("inputTitle");
-    let location = getElem("inputLocation");
-    let intro = getElem("intro");
+    let title = t.getElem("inputTitle");
+    let location = t.getElem("inputLocation");
+    let intro = t.getElem("intro");
     ev.preventDefault();
     intro.style.display = "none";
-    jHelpers.removeChildrenOf(globEl.messages);
-    jHelpers.removeChildrenOf(globEl.searchResults);
+    t.removeChildrenOf(globEl.messages);
+    t.removeChildrenOf(globEl.searchResults);
     searchJobs(title.value, location.value);
     globEl.searchButton.blur();
 }
 function loadMoreClick() {
-    const pOffset = _responseFingerprint.pageOffset ? _responseFingerprint.pageOffset : 0;
+    const pOffset = (_responseFingerprint.pageOffset !== -1) ? _responseFingerprint.pageOffset : 0;
     console.log("loading more jobs...");
     showLoadMore(false);
     searchJobs(_responseFingerprint.searchTerm, _responseFingerprint.searchLocation, pOffset + 10, _responseFingerprint.pageSize);
@@ -241,18 +227,18 @@ function toggleResultsClick(ev) {
         queryHTMLElem(".jobContent").style.overflowY = "scroll";
     }
 }
-function gatherElements() {
+function gatherHTMLElements() {
     try {
         globEl = {
-            messages: getElem("messages"),
-            templateJob: getElem("templateJob"),
-            searchResults: getElem("searchResults"),
-            jobHeader: getElem("jobHeader"),
-            rawJobData: getElem("rawJobData"),
-            searchButton: getElem("searchButton"),
-            loadMoreButton: getElem("loadMoreButton"),
-            countrySelectBox: getElem("countriesList"),
-            toggleResults: getElem("toggleResults")
+            messages: t.getElem("messages"),
+            templateJob: t.getElem("templateJob"),
+            searchResults: t.getElem("searchResults"),
+            jobHeader: t.getElem("jobHeader"),
+            rawJobData: t.getElem("rawJobData"),
+            searchButton: t.getElem("searchButton"),
+            loadMoreButton: t.getElem("loadMoreButton"),
+            countrySelectBox: t.getElem("countriesList"),
+            toggleResults: t.getElem("toggleResults")
         };
         return true;
     }
@@ -262,10 +248,10 @@ function gatherElements() {
     }
 }
 function setDark() {
-    jHelpers.setCSSrootColors(darkTheme);
+    t.setCSSrootColors(darkTheme);
 }
 function main() {
-    if (!gatherElements())
+    if (!gatherHTMLElements())
         return false;
     console.info("All HTML elements found, let's get started...");
     globEl.searchButton.addEventListener("click", searchClick);

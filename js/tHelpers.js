@@ -31,7 +31,6 @@ export function removeHtmlTags(str) {
     return str.replace(/<(?:\/|\s)?(?:h.|p|ul|ol|li|strong|em|div|span|table|th|tr|td|br\/).*?>/gmi, " ");
     ;
 }
-;
 export function sanitizeJSONobject(obj) {
     let objCopy = Object.assign({}, obj);
     let keyName;
@@ -74,7 +73,6 @@ export function typeCheck(obj, typeName) {
     }
     return obj.constructor.name.toLowerCase() === typeName;
 }
-;
 export function setCSSrootColors(colors) {
     let rootElem = document.documentElement;
     let colorName;
@@ -83,4 +81,16 @@ export function setCSSrootColors(colors) {
         rootElem.style.setProperty(colorName, colors[colorName]);
     }
 }
-//# sourceMappingURL=jHelpers.js.map
+export function generateError(msg) {
+    throw {
+        message: msg,
+        from: "index.ts generateError()"
+    };
+}
+export function getElem(elem) {
+    const maybeElem = document.getElementById(elem);
+    if (maybeElem === null)
+        generateError(`getElem: could not find element ${elem}`);
+    return maybeElem;
+}
+//# sourceMappingURL=tHelpers.js.map

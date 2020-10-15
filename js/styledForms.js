@@ -1,6 +1,4 @@
 const TOUCHSCREEN = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-;
-;
 export function styleSelectbox(selectElem, setup) {
     var _a;
     const { textContents = [], selectIndex, individualStyles, eachStyle, classForSelected = "selected" } = setup;
